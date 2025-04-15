@@ -20,12 +20,13 @@ User _$UserFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$User {
+  @JsonKey(name: '_id')
   String get id => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
-  String get hashedPassword => throw _privateConstructorUsedError;
-  bool get isActive => throw _privateConstructorUsedError;
+  @JsonKey(name: 'created_at')
   DateTime get createdAt => throw _privateConstructorUsedError;
+  @JsonKey(name: 'updated_at')
   DateTime get updatedAt => throw _privateConstructorUsedError;
 
   /// Serializes this User to a JSON map.
@@ -43,13 +44,11 @@ abstract class $UserCopyWith<$Res> {
       _$UserCopyWithImpl<$Res, User>;
   @useResult
   $Res call(
-      {String id,
+      {@JsonKey(name: '_id') String id,
       String email,
       String name,
-      String hashedPassword,
-      bool isActive,
-      DateTime createdAt,
-      DateTime updatedAt});
+      @JsonKey(name: 'created_at') DateTime createdAt,
+      @JsonKey(name: 'updated_at') DateTime updatedAt});
 }
 
 /// @nodoc
@@ -70,8 +69,6 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
     Object? id = null,
     Object? email = null,
     Object? name = null,
-    Object? hashedPassword = null,
-    Object? isActive = null,
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
@@ -88,14 +85,6 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      hashedPassword: null == hashedPassword
-          ? _value.hashedPassword
-          : hashedPassword // ignore: cast_nullable_to_non_nullable
-              as String,
-      isActive: null == isActive
-          ? _value.isActive
-          : isActive // ignore: cast_nullable_to_non_nullable
-              as bool,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -116,13 +105,11 @@ abstract class _$$UserImplCopyWith<$Res> implements $UserCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String id,
+      {@JsonKey(name: '_id') String id,
       String email,
       String name,
-      String hashedPassword,
-      bool isActive,
-      DateTime createdAt,
-      DateTime updatedAt});
+      @JsonKey(name: 'created_at') DateTime createdAt,
+      @JsonKey(name: 'updated_at') DateTime updatedAt});
 }
 
 /// @nodoc
@@ -140,8 +127,6 @@ class __$$UserImplCopyWithImpl<$Res>
     Object? id = null,
     Object? email = null,
     Object? name = null,
-    Object? hashedPassword = null,
-    Object? isActive = null,
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
@@ -158,14 +143,6 @@ class __$$UserImplCopyWithImpl<$Res>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      hashedPassword: null == hashedPassword
-          ? _value.hashedPassword
-          : hashedPassword // ignore: cast_nullable_to_non_nullable
-              as String,
-      isActive: null == isActive
-          ? _value.isActive
-          : isActive // ignore: cast_nullable_to_non_nullable
-              as bool,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -182,36 +159,32 @@ class __$$UserImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$UserImpl implements _User {
   const _$UserImpl(
-      {required this.id,
+      {@JsonKey(name: '_id') required this.id,
       required this.email,
       required this.name,
-      required this.hashedPassword,
-      this.isActive = true,
-      required this.createdAt,
-      required this.updatedAt});
+      @JsonKey(name: 'created_at') required this.createdAt,
+      @JsonKey(name: 'updated_at') required this.updatedAt});
 
   factory _$UserImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserImplFromJson(json);
 
   @override
+  @JsonKey(name: '_id')
   final String id;
   @override
   final String email;
   @override
   final String name;
   @override
-  final String hashedPassword;
-  @override
-  @JsonKey()
-  final bool isActive;
-  @override
+  @JsonKey(name: 'created_at')
   final DateTime createdAt;
   @override
+  @JsonKey(name: 'updated_at')
   final DateTime updatedAt;
 
   @override
   String toString() {
-    return 'User(id: $id, email: $email, name: $name, hashedPassword: $hashedPassword, isActive: $isActive, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'User(id: $id, email: $email, name: $name, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -222,10 +195,6 @@ class _$UserImpl implements _User {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.email, email) || other.email == email) &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.hashedPassword, hashedPassword) ||
-                other.hashedPassword == hashedPassword) &&
-            (identical(other.isActive, isActive) ||
-                other.isActive == isActive) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
@@ -234,8 +203,8 @@ class _$UserImpl implements _User {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, email, name, hashedPassword,
-      isActive, createdAt, updatedAt);
+  int get hashCode =>
+      Object.hash(runtimeType, id, email, name, createdAt, updatedAt);
 
   /// Create a copy of User
   /// with the given fields replaced by the non-null parameter values.
@@ -255,29 +224,27 @@ class _$UserImpl implements _User {
 
 abstract class _User implements User {
   const factory _User(
-      {required final String id,
-      required final String email,
-      required final String name,
-      required final String hashedPassword,
-      final bool isActive,
-      required final DateTime createdAt,
-      required final DateTime updatedAt}) = _$UserImpl;
+          {@JsonKey(name: '_id') required final String id,
+          required final String email,
+          required final String name,
+          @JsonKey(name: 'created_at') required final DateTime createdAt,
+          @JsonKey(name: 'updated_at') required final DateTime updatedAt}) =
+      _$UserImpl;
 
   factory _User.fromJson(Map<String, dynamic> json) = _$UserImpl.fromJson;
 
   @override
+  @JsonKey(name: '_id')
   String get id;
   @override
   String get email;
   @override
   String get name;
   @override
-  String get hashedPassword;
-  @override
-  bool get isActive;
-  @override
+  @JsonKey(name: 'created_at')
   DateTime get createdAt;
   @override
+  @JsonKey(name: 'updated_at')
   DateTime get updatedAt;
 
   /// Create a copy of User

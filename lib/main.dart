@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'modules/auth/widgets/auth_wrapper.dart';
+import 'modules/user/screens/login/view.dart';
+import 'modules/user/screens/register/view.dart';
+import 'modules/user/screens/forgot_password/view.dart';
+import 'modules/user/screens/forgot_password/check_digit/view.dart';
+import 'modules/user/screens/forgot_password/new_pass/view.dart';
+import 'modules/user/screens/forgot_password/success_pass/view.dart';
 import 'core/constants/theme_constants.dart';
 
 void main() {
@@ -30,7 +35,15 @@ class CinemateApp extends StatelessWidget {
           elevation: 0,
         ),
       ),
-      home: const AuthWrapper(),
+      initialRoute: '/login',
+      routes: {
+        '/login': (context) => const LoginView(),
+        '/register': (context) => const RegisterView(),
+        '/forgot-password': (context) => const ForgotPasswordView(),
+        '/check-digit': (context) => const CheckDigitView(),
+        '/new-password': (context) => const NewPasswordView(),
+        '/success-password': (context) => const SuccessPasswordView(),
+      },
     );
   }
 }

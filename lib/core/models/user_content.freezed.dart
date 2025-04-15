@@ -20,8 +20,11 @@ UserContent _$UserContentFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$UserContent {
+  @JsonKey(name: '_id')
   String get id => throw _privateConstructorUsedError;
+  @JsonKey(name: 'user_id')
   String get userId => throw _privateConstructorUsedError;
+  @JsonKey(name: 'content_id')
   String get contentId => throw _privateConstructorUsedError;
   bool get isLiked => throw _privateConstructorUsedError;
   bool get isWatched => throw _privateConstructorUsedError;
@@ -46,9 +49,9 @@ abstract class $UserContentCopyWith<$Res> {
       _$UserContentCopyWithImpl<$Res, UserContent>;
   @useResult
   $Res call(
-      {String id,
-      String userId,
-      String contentId,
+      {@JsonKey(name: '_id') String id,
+      @JsonKey(name: 'user_id') String userId,
+      @JsonKey(name: 'content_id') String contentId,
       bool isLiked,
       bool isWatched,
       bool inWatchlist,
@@ -126,9 +129,9 @@ abstract class _$$UserContentImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String id,
-      String userId,
-      String contentId,
+      {@JsonKey(name: '_id') String id,
+      @JsonKey(name: 'user_id') String userId,
+      @JsonKey(name: 'content_id') String contentId,
       bool isLiked,
       bool isWatched,
       bool inWatchlist,
@@ -199,9 +202,9 @@ class __$$UserContentImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$UserContentImpl implements _UserContent {
   const _$UserContentImpl(
-      {required this.id,
-      required this.userId,
-      required this.contentId,
+      {@JsonKey(name: '_id') required this.id,
+      @JsonKey(name: 'user_id') required this.userId,
+      @JsonKey(name: 'content_id') required this.contentId,
       this.isLiked = false,
       this.isWatched = false,
       this.inWatchlist = false,
@@ -212,10 +215,13 @@ class _$UserContentImpl implements _UserContent {
       _$$UserContentImplFromJson(json);
 
   @override
+  @JsonKey(name: '_id')
   final String id;
   @override
+  @JsonKey(name: 'user_id')
   final String userId;
   @override
+  @JsonKey(name: 'content_id')
   final String contentId;
   @override
   @JsonKey()
@@ -278,9 +284,9 @@ class _$UserContentImpl implements _UserContent {
 
 abstract class _UserContent implements UserContent {
   const factory _UserContent(
-      {required final String id,
-      required final String userId,
-      required final String contentId,
+      {@JsonKey(name: '_id') required final String id,
+      @JsonKey(name: 'user_id') required final String userId,
+      @JsonKey(name: 'content_id') required final String contentId,
       final bool isLiked,
       final bool isWatched,
       final bool inWatchlist,
@@ -291,10 +297,13 @@ abstract class _UserContent implements UserContent {
       _$UserContentImpl.fromJson;
 
   @override
+  @JsonKey(name: '_id')
   String get id;
   @override
+  @JsonKey(name: 'user_id')
   String get userId;
   @override
+  @JsonKey(name: 'content_id')
   String get contentId;
   @override
   bool get isLiked;

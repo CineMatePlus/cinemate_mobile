@@ -81,9 +81,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       ),
                     ),
           const SearchScreen(),
-          const Center(
-              child: Text('Profil',
-                  style: TextStyle(color: ThemeConstants.textColor))),
+          // const UserScreen(),
         ],
       ),
       bottomNavigationBar: CustomBottomNav(

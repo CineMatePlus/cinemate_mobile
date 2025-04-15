@@ -8,9 +8,9 @@ part of 'user_content.dart';
 
 _$UserContentImpl _$$UserContentImplFromJson(Map<String, dynamic> json) =>
     _$UserContentImpl(
-      id: json['id'] as String,
-      userId: json['userId'] as String,
-      contentId: json['contentId'] as String,
+      id: json['_id'] as String,
+      userId: json['user_id'] as String,
+      contentId: json['content_id'] as String,
       isLiked: json['isLiked'] as bool? ?? false,
       isWatched: json['isWatched'] as bool? ?? false,
       inWatchlist: json['inWatchlist'] as bool? ?? false,
@@ -20,9 +20,9 @@ _$UserContentImpl _$$UserContentImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$UserContentImplToJson(_$UserContentImpl instance) =>
     <String, dynamic>{
-      'id': instance.id,
-      'userId': instance.userId,
-      'contentId': instance.contentId,
+      '_id': instance.id,
+      'user_id': instance.userId,
+      'content_id': instance.contentId,
       'isLiked': instance.isLiked,
       'isWatched': instance.isWatched,
       'inWatchlist': instance.inWatchlist,

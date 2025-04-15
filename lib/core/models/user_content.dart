@@ -6,9 +6,9 @@ part 'user_content.g.dart';
 @freezed
 class UserContent with _$UserContent {
   const factory UserContent({
-    required String id,
-    required String userId,
-    required String contentId,
+    @JsonKey(name: '_id') required String id,
+    @JsonKey(name: 'user_id') required String userId,
+    @JsonKey(name: 'content_id') required String contentId,
     @Default(false) bool isLiked,
     @Default(false) bool isWatched,
     @Default(false) bool inWatchlist,
