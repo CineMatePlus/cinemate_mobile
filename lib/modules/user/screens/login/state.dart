@@ -1,41 +1,50 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/models/user.dart';
-import '../../service/service.dart';
+import 'package:cinemate_mobile/modules/user/service/service.dart';
+import 'package:cinemate_mobile/modules/user/state.dart';
+
+enum LoginStatus {
+  initial,
+  loading,
+  success,
+  error,
+}
 
 class LoginState {
+  final LoginStatus status;
+  final String? error;
   final String email;
   final String password;
-  final bool isLoading;
-  final String? errorMessage;
-  final bool isObscure;
+  bool isObscure;
 
   LoginState({
+    this.status = LoginStatus.initial,
+    this.error,
     this.email = '',
     this.password = '',
-    this.isLoading = false,
-    this.errorMessage,
     this.isObscure = true,
   });
 
   LoginState copyWith({
+    LoginStatus? status,
+    String? error,
     String? email,
     String? password,
-    bool? isLoading,
-    String? errorMessage,
     bool? isObscure,
   }) {
     return LoginState(
+      status: status ?? this.status,
+      error: error ?? this.error,
       email: email ?? this.email,
       password: password ?? this.password,
-      isLoading: isLoading ?? this.isLoading,
-      errorMessage: errorMessage,
       isObscure: isObscure ?? this.isObscure,
     );
   }
 }
 
 class LoginNotifier extends StateNotifier<LoginState> {
-  LoginNotifier() : super(LoginState());
+  final UserNotifier _userNotifier;
+
+  LoginNotifier(this._userNotifier) : super(LoginState());
 
   void updateEmail(String email) {
     state = state.copyWith(email: email);
@@ -49,19 +58,34 @@ class LoginNotifier extends StateNotifier<LoginState> {
     state = state.copyWith(isObscure: !state.isObscure);
   }
 
-  Future<User> login() async {
-    state = state.copyWith(isLoading: true);
+  Future<void> login() async {
     try {
-      final user = await UserService().login(state.email, state.password);
-      state = state.copyWith(isLoading: false);
-      return user;
-    } catch (error) {
-      state = state.copyWith(isLoading: false, errorMessage: error.toString());
-      rethrow;
+      state = state.copyWith(
+        status: LoginStatus.loading,
+        error: null,
+      );
+
+      final response = await UserService().login(
+        state.email,
+        state.password,
+      );
+      final user = response['user'];
+      final token = response['access_token'];
+
+      await _userNotifier.login(user, token);
+
+      state = state.copyWith(
+        status: LoginStatus.success,
+      );
+    } catch (e) {
+      state = state.copyWith(
+        status: LoginStatus.error,
+        error: e.toString(),
+      );
     }
   }
 }
 
 final loginProvider = StateNotifierProvider<LoginNotifier, LoginState>(
-  (ref) => LoginNotifier(),
+  (ref) => LoginNotifier(ref.watch(userProvider.notifier)),
 );

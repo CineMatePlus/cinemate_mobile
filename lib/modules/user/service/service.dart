@@ -7,9 +7,10 @@ class UserService {
   UserService({ApiService? apiService})
       : _apiService = apiService ?? ApiService();
 
-  Future<User> login(String email, String password) async {
+  Future<Map<String, dynamic>> login(String email, String password) async {
     try {
-      final response = await _apiService.post(
+      final response = await _apiService.request(
+        'POST',
         '/auth/login',
         data: {
           'email': email,
@@ -18,7 +19,10 @@ class UserService {
       );
 
       if (response.statusCode == 200) {
-        return User.fromJson(response.data);
+        return {
+          'user': User.fromJson(response.data['user']),
+          'access_token': response.data['access_token'],
+        };
       } else {
         throw Exception('Giriş başarısız');
       }
@@ -27,9 +31,11 @@ class UserService {
     }
   }
 
-  Future<User> register(String email, String password, String name) async {
+  Future<Map<String, dynamic>> register(
+      String email, String password, String name) async {
     try {
-      final response = await _apiService.post(
+      final response = await _apiService.request(
+        'POST',
         '/auth/register',
         data: {
           'email': email,
@@ -39,7 +45,10 @@ class UserService {
       );
 
       if (response.statusCode == 200) {
-        return User.fromJson(response.data);
+        return {
+          'user': User.fromJson(response.data['user']),
+          'access_token': response.data['access_token'],
+        };
       } else {
         throw Exception('Kayıt başarısız');
       }
@@ -50,7 +59,8 @@ class UserService {
 
   Future<void> forgotPassword(String email) async {
     try {
-      final response = await _apiService.post(
+      final response = await _apiService.request(
+        'POST',
         '/auth/forgot-password',
         data: {
           'email': email,
@@ -67,7 +77,8 @@ class UserService {
 
   Future<bool> verifyResetCode(String email, String code) async {
     try {
-      final response = await _apiService.post(
+      final response = await _apiService.request(
+        'POST',
         '/auth/verify-reset-code',
         data: {
           'email': email,
@@ -88,7 +99,8 @@ class UserService {
   Future<void> resetPassword(
       String email, String code, String newPassword) async {
     try {
-      final response = await _apiService.post(
+      final response = await _apiService.request(
+        'POST',
         '/auth/reset-password',
         data: {
           'email': email,

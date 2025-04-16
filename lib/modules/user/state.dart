@@ -1,59 +1,117 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../core/models/user.dart';
+import 'package:cinemate_mobile/core/utils/utils.dart';
+import 'package:cinemate_mobile/core/models/user.dart';
 
+// State'ler için enum
+enum UserStatus {
+  initial,
+  loading,
+  authenticated,
+  unauthenticated,
+  error,
+}
+
+// User state modeli
 class UserState {
-  String? accessToken;
-  User? user;
-  bool? isLoggedIn;
+  final UserStatus status;
+  final User? user;
+  final String? token;
+  final String? error;
 
-  UserState({this.accessToken, this.user, this.isLoggedIn});
+  const UserState({
+    this.status = UserStatus.initial,
+    this.user,
+    this.token,
+    this.error,
+  });
 
-  UserState copyWith({String? accessToken, User? user, bool? isLoggedIn}) {
+  UserState copyWith({
+    UserStatus? status,
+    User? user,
+    String? token,
+    String? error,
+  }) {
     return UserState(
-        accessToken: accessToken ?? this.accessToken,
-        user: user ?? this.user,
-        isLoggedIn: isLoggedIn ?? this.isLoggedIn);
-  }
-
-  UserState copyWithAccessToken(String accessToken) {
-    return copyWith(accessToken: accessToken);
-  }
-
-  UserState copyWithUser(User user) {
-    return copyWith(user: user, isLoggedIn: true);
-  }
-
-  UserState copyWithIsLoggedIn(bool isLoggedIn) {
-    return copyWith(isLoggedIn: isLoggedIn);
+      status: status ?? this.status,
+      user: user ?? this.user,
+      token: token ?? this.token,
+      error: error ?? this.error,
+    );
   }
 }
 
-class UserStateNotifier extends StateNotifier<UserState> {
-  UserStateNotifier() : super(UserState());
-
-  void setAccessToken(String accessToken) {
-    state = state.copyWithAccessToken(accessToken);
+// User state notifier
+class UserNotifier extends StateNotifier<UserState> {
+  UserNotifier() : super(const UserState()) {
+    checkAuth();
   }
 
-  void setUser(User user) {
-    state = state.copyWithUser(user);
+  // Auth durumunu kontrol et
+  Future<void> checkAuth() async {
+    try {
+      state = state.copyWith(status: UserStatus.loading);
+      final token = await SecureStorageUtils.getToken();
+
+      if (token == null) {
+        state = state.copyWith(
+          status: UserStatus.unauthenticated,
+          user: null,
+          token: null,
+        );
+        return;
+      }
+
+      state = state.copyWith(
+        status: UserStatus.authenticated,
+        token: token,
+      );
+    } catch (e) {
+      state = state.copyWith(
+        status: UserStatus.error,
+        error: e.toString(),
+        token: null,
+      );
+    }
   }
 
-  void setIsLoggedIn(bool isLoggedIn) {
-    state = state.copyWithIsLoggedIn(isLoggedIn);
+  // Kullanıcı bilgilerini ve token'ı ayarla
+  Future<void> login(User user, String token) async {
+    try {
+      await SecureStorageUtils.saveToken(token);
+      state = state.copyWith(
+        status: UserStatus.authenticated,
+        user: user,
+        token: token,
+      );
+    } catch (e) {
+      state = state.copyWith(
+        status: UserStatus.error,
+        error: e.toString(),
+      );
+    }
   }
 
-  void login(String accessToken, User user) {
-    setAccessToken(accessToken);
-    setUser(user);
-    setIsLoggedIn(true);
-  }
+  // Çıkış yap
+  Future<void> logout() async {
+    try {
+      state = state.copyWith(status: UserStatus.loading);
+      await SecureStorageUtils.deleteToken();
 
-  void logout() {
-    state = UserState(accessToken: null, user: null, isLoggedIn: false);
+      state = state.copyWith(
+        status: UserStatus.unauthenticated,
+        user: null,
+        token: null,
+      );
+    } catch (e) {
+      state = state.copyWith(
+        status: UserStatus.error,
+        error: e.toString(),
+      );
+    }
   }
 }
 
-final userStateProvider = StateNotifierProvider<UserStateNotifier, UserState>(
-  (ref) => UserStateNotifier(),
-);
+// Provider'lar
+final userProvider = StateNotifierProvider<UserNotifier, UserState>((ref) {
+  return UserNotifier();
+});

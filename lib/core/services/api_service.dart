@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:io' show Platform;
@@ -5,17 +6,15 @@ import 'dart:io' show Platform;
 class ApiConfig {
   static String get baseUrl {
     if (Platform.isAndroid) {
-      return 'http://10.0.2.2:8000'; // Android emulator için
+      return 'http://10.0.2.2:8000';
     } else if (Platform.isIOS) {
-      return 'http://localhost:8000'; // iOS simulator için
+      return 'http://localhost:8000';
     } else {
-      return 'http://127.0.0.1:8000'; // Diğer platformlar için
+      return 'http://127.0.0.1:8000';
     }
   }
 
   static const String apiPrefix = '/api/v1';
-  static const Duration connectTimeout = Duration(seconds: 5);
-  static const Duration receiveTimeout = Duration(seconds: 3);
 }
 
 class ApiService {
@@ -26,15 +25,16 @@ class ApiService {
       : _dio = Dio(
           BaseOptions(
             baseUrl: ApiConfig.baseUrl,
-            connectTimeout: ApiConfig.connectTimeout,
-            receiveTimeout: ApiConfig.receiveTimeout,
+            contentType: Headers.jsonContentType,
+            responseType: ResponseType.json,
+            validateStatus: (status) => status! < 500,
           ),
         ),
         _storage = const FlutterSecureStorage() {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
-          final token = await _storage.read(key: 'access_token');
+          final token = await _storage.read(key: 'token');
           if (token != null) {
             options.headers['Authorization'] = 'Bearer $token';
           }
@@ -43,8 +43,7 @@ class ApiService {
         },
         onError: (error, handler) async {
           if (error.response?.statusCode == 401) {
-            await _storage.delete(key: 'access_token');
-            // TODO: Navigate to login screen
+            await _storage.delete(key: 'token');
           }
           return handler.next(error);
         },
@@ -56,45 +55,33 @@ class ApiService {
     return path == '/health' ? path : '${ApiConfig.apiPrefix}$path';
   }
 
-  Future<Response> get(String path) async {
+  Future<Response> request(
+    String method,
+    String path, {
+    Map<String, dynamic>? data,
+    Map<String, dynamic>? headers,
+  }) async {
     try {
-      final response = await _dio.get(path);
-      return response;
-    } on DioException catch (e) {
-      throw _handleError(e);
-    } catch (e) {
-      throw Exception('İstek sırasında beklenmeyen bir hata oluştu: $e');
-    }
-  }
+      if (headers != null) {
+        _dio.options.headers.addAll(headers);
+      }
 
-  Future<Response> post(String path,
-      {required Map<String, dynamic> data}) async {
-    try {
-      final response = await _dio.post(path, data: data);
-      return response;
-    } on DioException catch (e) {
-      throw _handleError(e);
-    } catch (e) {
-      throw Exception('İstek sırasında beklenmeyen bir hata oluştu: $e');
-    }
-  }
+      if (data != null) {
+        log('Giden veri: ${data.toString()}');
+      }
 
-  Future<Response> put(String path,
-      {required Map<String, dynamic> data}) async {
-    try {
-      final response = await _dio.put(path, data: data);
-      return response;
-    } on DioException catch (e) {
-      throw _handleError(e);
-    } catch (e) {
-      throw Exception('İstek sırasında beklenmeyen bir hata oluştu: $e');
-    }
-  }
-
-  Future<Response> delete(String path) async {
-    try {
-      final response = await _dio.delete(path);
-      return response;
+      switch (method.toUpperCase()) {
+        case 'GET':
+          return await _dio.get(path);
+        case 'POST':
+          return await _dio.post(path, data: data);
+        case 'PUT':
+          return await _dio.put(path, data: data);
+        case 'DELETE':
+          return await _dio.delete(path);
+        default:
+          return await _dio.get(path);
+      }
     } on DioException catch (e) {
       throw _handleError(e);
     } catch (e) {
