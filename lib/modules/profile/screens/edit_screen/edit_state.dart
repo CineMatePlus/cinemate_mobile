@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../../../core/models/user.dart';
-import '../../service/service.dart';
+import '../../../user/service/service.dart';
 
 class EditProfileState {
   final User? user;
@@ -39,8 +39,7 @@ class EditProfileNotifier extends StateNotifier<EditProfileState> {
   Future<void> _loadUserProfile() async {
     state = state.copyWith(isLoading: true);
     try {
-      final user =
-          await ProfileService().me(); // Aynı sample user'ı kullanıyoruz
+      final user = await UserService().me(); // Aynı sample user'ı kullanıyoruz
       state = state.copyWith(user: user, isLoading: false);
     } catch (e) {
       state = state.copyWith(

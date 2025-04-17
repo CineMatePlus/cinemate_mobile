@@ -57,6 +57,22 @@ class UserService {
     }
   }
 
+  Future<User> me() async {
+    try {
+      final response = await _apiService.request(
+        'GET',
+        '/auth/me',
+      );
+      if (response.statusCode == 200) {
+        return User.fromJson(response.data);
+      } else {
+        throw Exception('Profil yüklenirken bir hata oluştu');
+      }
+    } catch (e) {
+      throw Exception('Profil yüklenirken bir hata oluştu: $e');
+    }
+  }
+
   Future<void> forgotPassword(String email) async {
     try {
       final response = await _apiService.request(

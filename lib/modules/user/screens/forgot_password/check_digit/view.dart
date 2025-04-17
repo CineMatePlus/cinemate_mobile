@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../../core/constants/theme_constants.dart';
 import 'state.dart';
 
 class CheckDigitView extends ConsumerStatefulWidget {
@@ -25,11 +26,24 @@ class _CheckDigitViewState extends ConsumerState<CheckDigitView> {
     final checkDigitState = ref.watch(checkDigitProvider);
     final checkDigitNotifier = ref.read(checkDigitProvider.notifier);
 
+    // Tema renklerini doğrudan almak
+    final backgroundColor = ThemeConstants.getBackgroundColor(ref);
+    final primaryColor = ThemeConstants.getPrimaryColor(ref);
+    final textColor = ThemeConstants.getTextColor(ref);
+    final surfaceColor = ThemeConstants.getSurfaceColor(ref);
+
     checkDigitNotifier.updateEmail(email);
 
     return Scaffold(
+      backgroundColor: backgroundColor,
       appBar: AppBar(
-        title: const Text('Doğrulama Kodu'),
+        backgroundColor: backgroundColor,
+        title: Text(
+          'Doğrulama Kodu',
+          style: TextStyle(color: primaryColor),
+        ),
+        iconTheme: IconThemeData(color: primaryColor),
+        elevation: 0,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -38,18 +52,35 @@ class _CheckDigitViewState extends ConsumerState<CheckDigitView> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
+              Text(
                 'E-posta adresinize gönderilen doğrulama kodunu girin',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16),
+                style: TextStyle(fontSize: 16, color: textColor),
               ),
               const SizedBox(height: 24),
               TextFormField(
                 controller: _codeController,
                 onChanged: checkDigitNotifier.updateCode,
-                decoration: const InputDecoration(
+                style: TextStyle(color: textColor),
+                cursorColor: primaryColor,
+                decoration: InputDecoration(
                   labelText: 'Doğrulama Kodu',
-                  border: OutlineInputBorder(),
+                  labelStyle: TextStyle(color: textColor.withOpacity(0.7)),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: primaryColor.withOpacity(0.3)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: primaryColor),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red.shade300),
+                  ),
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red.shade400),
+                  ),
+                  filled: true,
+                  fillColor: surfaceColor,
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -89,15 +120,26 @@ class _CheckDigitViewState extends ConsumerState<CheckDigitView> {
                           }
                         }
                       },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: primaryColor,
+                  foregroundColor: Colors.white,
+                  minimumSize: const Size(double.infinity, 48),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
                 child: checkDigitState.isLoading
-                    ? const CircularProgressIndicator()
-                    : const Text('Doğrula'),
+                    ? const CircularProgressIndicator(color: Colors.white)
+                    : const Text('Doğrula', style: TextStyle(fontSize: 16)),
               ),
               const SizedBox(height: 16),
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
+                style: TextButton.styleFrom(
+                  foregroundColor: primaryColor,
+                ),
                 child: const Text('Geri dön'),
               ),
             ],

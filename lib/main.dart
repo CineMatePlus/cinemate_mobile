@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'modules/onboarding/splash.view.dart';
+import 'core/constants/theme_constants.dart';
+import 'core/providers/theme_provider.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Tema modu provider'ını izle
+    final themeMode = ref.watch(themeProvider);
+
     return MaterialApp(
       title: 'CineMate',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      themeMode: themeMode, // Sistem ayarı veya kullanıcı seçimi
+      theme: ThemeConstants.lightTheme, // Light tema
+      darkTheme: ThemeConstants.darkTheme, // Dark tema
       home: const SplashScreen(),
     );
   }

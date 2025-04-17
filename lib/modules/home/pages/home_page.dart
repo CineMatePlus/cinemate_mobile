@@ -1,25 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/constants/theme_constants.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Tema renklerini doğrudan almak:
+    final textColor = ThemeConstants.getTextColor(ref);
+
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildSection('Tüm İçerikler', _buildHorizontalList()),
+          _buildSection('Tüm İçerikler', _buildHorizontalList(ref), textColor),
           const SizedBox(height: 20),
-          _buildSection('Filmler', _buildHorizontalList()),
+          _buildSection('Filmler', _buildHorizontalList(ref), textColor),
           const SizedBox(height: 20),
-          _buildSection('Diziler', _buildHorizontalList()),
+          _buildSection('Diziler', _buildHorizontalList(ref), textColor),
         ],
       ),
     );
   }
 
-  Widget _buildSection(String title, Widget content) {
+  Widget _buildSection(String title, Widget content, Color textColor) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -27,9 +32,10 @@ class HomePage extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
             title,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
+              color: textColor,
             ),
           ),
         ),
@@ -39,7 +45,10 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildHorizontalList() {
+  Widget _buildHorizontalList(WidgetRef ref) {
+    final cardColor = ThemeConstants.getSurfaceColor(ref);
+    final textColor = ThemeConstants.getTextColor(ref);
+
     return SizedBox(
       height: 200,
       child: ListView.builder(
@@ -50,11 +59,14 @@ class HomePage extends StatelessWidget {
             width: 150,
             margin: const EdgeInsets.symmetric(horizontal: 8),
             decoration: BoxDecoration(
-              color: Colors.grey[300],
+              color: cardColor,
               borderRadius: BorderRadius.circular(8),
             ),
             child: Center(
-              child: Text('İçerik ${index + 1}'),
+              child: Text(
+                'İçerik ${index + 1}',
+                style: TextStyle(color: textColor),
+              ),
             ),
           );
         },

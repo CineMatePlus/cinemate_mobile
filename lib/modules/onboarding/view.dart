@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../core/constants/theme_constants.dart';
+import '../../core/providers/theme_provider.dart';
 
 import 'splash.view.dart';
 import 'state.dart';
@@ -63,26 +65,44 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     final onboardingState = ref.watch(onboardingStateProvider);
+    final isDarkMode = ref.watch(themeProvider) == ThemeMode.dark;
+
+    // Tema'ya göre renkleri ayarla
+    final backgroundColor = isDarkMode
+        ? ThemeConstants.darkBackgroundColor
+        : ThemeConstants.lightBackgroundColor;
+    final primaryColor = isDarkMode
+        ? ThemeConstants.darkPrimaryColor
+        : ThemeConstants.lightPrimaryColor;
+    final textColor = isDarkMode
+        ? ThemeConstants.darkTextColor
+        : ThemeConstants.lightTextColor;
 
     if (onboardingState.isLoading) {
-      return const Scaffold(
+      return Scaffold(
+        backgroundColor: backgroundColor,
         body: Center(
-          child: CircularProgressIndicator(),
+          child: CircularProgressIndicator(color: primaryColor),
         ),
       );
     }
 
     if (onboardingState.error != null) {
       return Scaffold(
+        backgroundColor: backgroundColor,
         body: Center(
-          child: Text('Hata: ${onboardingState.error}'),
+          child: Text(
+            'Hata: ${onboardingState.error}',
+            style: TextStyle(color: textColor),
+          ),
         ),
       );
     }
 
     return Scaffold(
+      backgroundColor: backgroundColor,
       body: onboardingState.items.isEmpty
-          ? const Center(child: CircularProgressIndicator())
+          ? Center(child: CircularProgressIndicator(color: primaryColor))
           : Column(
               children: [
                 Expanded(
@@ -104,19 +124,19 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                             Text(
                               item.title,
                               textAlign: TextAlign.center,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 27,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black,
+                                color: textColor,
                               ),
                             ),
                             const SizedBox(height: 30),
                             Text(
                               item.subtitle,
                               textAlign: TextAlign.center,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 16,
-                                color: Colors.black54,
+                                color: textColor.withOpacity(0.7),
                                 height: 1.8,
                               ),
                             ),
@@ -133,9 +153,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     children: [
                       TextButton(
                         onPressed: _skip,
-                        child: const Text(
+                        child: Text(
                           'Skip',
-                          style: TextStyle(color: Colors.black, fontSize: 16),
+                          style: TextStyle(color: textColor, fontSize: 16),
                         ),
                       ),
                       Row(
@@ -150,8 +170,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               color: onboardingState.currentPage == index
-                                  ? Colors.black
-                                  : Colors.grey,
+                                  ? primaryColor
+                                  : textColor.withOpacity(0.3),
                             ),
                           ),
                         ),
@@ -163,8 +183,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                                   onboardingState.items.length - 1
                               ? 'Finish'
                               : 'Next',
-                          style: const TextStyle(
-                            color: Colors.black,
+                          style: TextStyle(
+                            color: textColor,
                             fontSize: 16,
                           ),
                         ),

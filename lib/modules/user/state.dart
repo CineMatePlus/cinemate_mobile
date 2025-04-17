@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cinemate_mobile/core/utils/utils.dart';
 import 'package:cinemate_mobile/core/models/user.dart';
+import './service/service.dart';
 
 // State'ler için enum
 enum UserStatus {
@@ -61,14 +62,36 @@ class UserNotifier extends StateNotifier<UserState> {
         return;
       }
 
-      state = state.copyWith(
-        status: UserStatus.authenticated,
-        token: token,
-      );
+      // Token var, kullanıcı bilgilerini getir
+      try {
+        final userService = UserService();
+        final user = await userService.me();
+
+        // Kullanıcı bilgileri başarıyla alındı, token geçerli
+        state = state.copyWith(
+          status: UserStatus.authenticated,
+          token: token,
+          user: user,
+          error: null,
+        );
+      } catch (e) {
+        // Token geçersiz veya kullanıcı bilgileri alınamadı
+        await SecureStorageUtils.deleteToken(); // Geçersiz token'ı sil
+
+        // Bu bir hata durumu değil, kullanıcı yeniden giriş yapmalı
+        state = state.copyWith(
+          status: UserStatus.unauthenticated,
+          user: null,
+          token: null,
+          error:
+              "Oturum süresi dolmuş veya geçersiz. Lütfen tekrar giriş yapın.",
+        );
+      }
     } catch (e) {
+      // Beklenmeyen bir hata oluştu (ağ hatası, storage hatası vb.)
       state = state.copyWith(
         status: UserStatus.error,
-        error: e.toString(),
+        error: "Beklenmeyen bir hata oluştu: ${e.toString()}",
         token: null,
       );
     }
@@ -82,11 +105,12 @@ class UserNotifier extends StateNotifier<UserState> {
         status: UserStatus.authenticated,
         user: user,
         token: token,
+        error: null,
       );
     } catch (e) {
       state = state.copyWith(
         status: UserStatus.error,
-        error: e.toString(),
+        error: "Giriş bilgileri kaydedilirken hata oluştu: ${e.toString()}",
       );
     }
   }
@@ -101,11 +125,12 @@ class UserNotifier extends StateNotifier<UserState> {
         status: UserStatus.unauthenticated,
         user: null,
         token: null,
+        error: null,
       );
     } catch (e) {
       state = state.copyWith(
         status: UserStatus.error,
-        error: e.toString(),
+        error: "Çıkış yaparken hata oluştu: ${e.toString()}",
       );
     }
   }

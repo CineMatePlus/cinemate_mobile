@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cinemate_mobile/modules/user/screens/login/state.dart';
 import 'package:cinemate_mobile/core/constants/theme_constants.dart';
+import 'package:cinemate_mobile/core/widgets/app_button.dart';
+import 'package:cinemate_mobile/core/widgets/custom_text_field.dart';
 
 import '../../../home/view.dart';
 
@@ -47,34 +49,65 @@ class _LoginViewState extends ConsumerState<LoginView> {
   Widget build(BuildContext context) {
     final loginState = ref.watch(loginProvider);
 
+    // Tema renklerini al
+    final backgroundColor = ThemeConstants.getBackgroundColor(ref);
+    final primaryColor = ThemeConstants.getPrimaryColor(ref);
+    final textColor = ThemeConstants.getTextColor(ref);
+    final surfaceColor = ThemeConstants.getSurfaceColor(ref);
+
     return Scaffold(
-      backgroundColor: ThemeConstants.backgroundColor,
+      backgroundColor: backgroundColor,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(ThemeConstants.defaultPadding),
             child: Form(
               key: _formKey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Text(
+                  Text(
                     'Giriş Yap',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: textColor,
                     ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 32),
                   TextFormField(
                     controller: _emailController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'E-posta',
-                      border: OutlineInputBorder(),
+                      labelStyle: TextStyle(color: textColor.withOpacity(0.7)),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: primaryColor.withOpacity(0.3)),
+                        borderRadius:
+                            BorderRadius.circular(ThemeConstants.defaultRadius),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: primaryColor),
+                        borderRadius:
+                            BorderRadius.circular(ThemeConstants.defaultRadius),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red.shade300),
+                        borderRadius:
+                            BorderRadius.circular(ThemeConstants.defaultRadius),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red.shade400),
+                        borderRadius:
+                            BorderRadius.circular(ThemeConstants.defaultRadius),
+                      ),
+                      filled: true,
+                      fillColor: surfaceColor,
                     ),
+                    style: TextStyle(color: textColor),
+                    cursorColor: primaryColor,
                     keyboardType: TextInputType.emailAddress,
                     onChanged: ref.read(loginProvider.notifier).updateEmail,
                     validator: (value) {
@@ -92,10 +125,34 @@ class _LoginViewState extends ConsumerState<LoginView> {
                     controller: _passwordController,
                     decoration: InputDecoration(
                       labelText: 'Şifre',
-                      border: const OutlineInputBorder(),
+                      labelStyle: TextStyle(color: textColor.withOpacity(0.7)),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: primaryColor.withOpacity(0.3)),
+                        borderRadius:
+                            BorderRadius.circular(ThemeConstants.defaultRadius),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: primaryColor),
+                        borderRadius:
+                            BorderRadius.circular(ThemeConstants.defaultRadius),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red.shade300),
+                        borderRadius:
+                            BorderRadius.circular(ThemeConstants.defaultRadius),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red.shade400),
+                        borderRadius:
+                            BorderRadius.circular(ThemeConstants.defaultRadius),
+                      ),
+                      filled: true,
+                      fillColor: surfaceColor,
                       suffixIcon: IconButton(
                         icon: Icon(
                           _isObscure ? Icons.visibility : Icons.visibility_off,
+                          color: primaryColor,
                         ),
                         onPressed: () {
                           setState(() {
@@ -104,6 +161,8 @@ class _LoginViewState extends ConsumerState<LoginView> {
                         },
                       ),
                     ),
+                    style: TextStyle(color: textColor),
+                    cursorColor: primaryColor,
                     obscureText: _isObscure,
                     onChanged: ref.read(loginProvider.notifier).updatePassword,
                     validator: (value) {
@@ -132,13 +191,28 @@ class _LoginViewState extends ConsumerState<LoginView> {
                         : _login,
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
-                      backgroundColor: ThemeConstants.primaryColor,
+                      backgroundColor: primaryColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(ThemeConstants.defaultRadius),
+                      ),
                     ),
                     child: loginState.status == LoginStatus.loading
-                        ? const CircularProgressIndicator()
-                        : const Text(
+                        ? SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(
+                              color: textColor,
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : Text(
                             'Giriş Yap',
-                            style: TextStyle(fontSize: 16),
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                   ),
                   const SizedBox(height: 16),
@@ -146,12 +220,18 @@ class _LoginViewState extends ConsumerState<LoginView> {
                     onPressed: () {
                       Navigator.of(context).pushNamed('/forgot-password');
                     },
+                    style: TextButton.styleFrom(
+                      foregroundColor: primaryColor,
+                    ),
                     child: const Text('Şifremi Unuttum'),
                   ),
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).pushNamed('/register');
                     },
+                    style: TextButton.styleFrom(
+                      foregroundColor: primaryColor,
+                    ),
                     child: const Text('Hesabım Yok, Kayıt Ol'),
                   ),
                 ],

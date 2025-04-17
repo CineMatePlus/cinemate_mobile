@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/constants/theme_constants.dart';
+import '../../../../core/providers/theme_provider.dart';
 import 'edit_state.dart';
 
 class EditProfileView extends ConsumerStatefulWidget {
@@ -27,14 +29,35 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = ref.watch(themeProvider) == ThemeMode.dark;
+
+    // Tema'ya göre renkleri ayarla
+    final backgroundColor = isDarkMode
+        ? ThemeConstants.darkBackgroundColor
+        : ThemeConstants.lightBackgroundColor;
+    final primaryColor = isDarkMode
+        ? ThemeConstants.darkPrimaryColor
+        : ThemeConstants.lightPrimaryColor;
+    final textColor = isDarkMode
+        ? ThemeConstants.darkTextColor
+        : ThemeConstants.lightTextColor;
+    final surfaceColor = isDarkMode
+        ? ThemeConstants.darkSurfaceColor
+        : ThemeConstants.lightSurfaceColor;
+
     return Scaffold(
+      backgroundColor: backgroundColor,
       appBar: AppBar(
+        backgroundColor: backgroundColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
+          icon: Icon(Icons.arrow_back_ios, color: primaryColor),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text('Profili Düzenle'),
+        title: Text(
+          'Profili Düzenle',
+          style: TextStyle(color: primaryColor, fontWeight: FontWeight.bold),
+        ),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -44,10 +67,11 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Center(
+              Center(
                 child: CircleAvatar(
                   radius: 60,
-                  child: Icon(Icons.person, size: 60),
+                  backgroundColor: primaryColor.withOpacity(0.2),
+                  child: Icon(Icons.person, size: 60, color: primaryColor),
                 ),
               ),
               const SizedBox(height: 32),
@@ -55,24 +79,32 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
                 controller: _nameController,
                 label: 'Ad Soyad',
                 icon: Icons.person_outline,
+                textColor: textColor,
+                surfaceColor: surfaceColor,
+                primaryColor: primaryColor,
               ),
               const SizedBox(height: 20),
               _buildTextField(
                 controller: _emailController,
                 label: 'E-posta',
                 icon: Icons.email_outlined,
+                textColor: textColor,
+                surfaceColor: surfaceColor,
+                primaryColor: primaryColor,
               ),
               const SizedBox(height: 40),
               ElevatedButton(
                 onPressed: _saveProfile,
                 style: ElevatedButton.styleFrom(
+                  backgroundColor: primaryColor,
+                  foregroundColor: Colors.white,
                   minimumSize: const Size(double.infinity, 56),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
                   elevation: 0,
                 ),
-                child: const Text('Kaydet'),
+                child: const Text('Kaydet', style: TextStyle(fontSize: 16)),
               ),
             ],
           ),
@@ -85,6 +117,9 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
     required TextEditingController controller,
     required String label,
     required IconData icon,
+    required Color textColor,
+    required Color surfaceColor,
+    required Color primaryColor,
     TextInputType? keyboardType,
   }) {
     return Column(
@@ -92,23 +127,26 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
       children: [
         Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w700,
+            color: textColor,
           ),
         ),
         const SizedBox(height: 8),
         Container(
           decoration: BoxDecoration(
-            color: Colors.grey[50],
+            color: surfaceColor,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: Colors.grey[200]!),
+            border: Border.all(color: primaryColor.withOpacity(0.3)),
           ),
           child: TextField(
             controller: controller,
             keyboardType: keyboardType,
+            style: TextStyle(color: textColor),
+            cursorColor: primaryColor,
             decoration: InputDecoration(
-              prefixIcon: Icon(icon, color: Colors.grey[600], size: 20),
+              prefixIcon: Icon(icon, color: primaryColor, size: 20),
               border: InputBorder.none,
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
