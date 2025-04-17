@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../profile/screens/profile_view.dart';
 import 'pages/home_page.dart';
-import 'pages/profile_page.dart';
 import 'pages/search_page.dart';
 import 'state.dart';
 import 'widgets/custom_navbar.dart';
@@ -19,7 +19,8 @@ class HomeScreen extends ConsumerWidget {
         children: const [
           HomePage(),
           SearchPage(),
-          ProfilePage(),
+          // ProfilePage()
+          ProfileView(),
         ],
       ),
       bottomNavigationBar: const CustomNavbar(),

@@ -65,6 +65,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
         error: null,
       );
 
+      //TODO: riverpod kullanılabilir.
       final response = await UserService().login(
         state.email,
         state.password,

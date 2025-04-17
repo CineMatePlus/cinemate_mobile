@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cinemate_mobile/modules/user/screens/login/state.dart';
 import 'package:cinemate_mobile/core/constants/theme_constants.dart';
 
+import '../../../home/view.dart';
+
 class LoginView extends ConsumerStatefulWidget {
   const LoginView({super.key});
 
@@ -31,7 +33,11 @@ class _LoginViewState extends ConsumerState<LoginView> {
         final loginState = ref.read(loginProvider);
         if (loginState.status == LoginStatus.success) {
           // Başarılı giriş sonrası yönlendirme
-          Navigator.of(context).pushReplacementNamed('/home');
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (context) => const HomeScreen(),
+            ),
+          );
         }
       }
     }
