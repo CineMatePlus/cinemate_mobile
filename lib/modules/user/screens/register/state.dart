@@ -1,45 +1,54 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/models/user.dart';
 import '../../service/service.dart';
+import '../../state.dart';
+
+enum RegisterStatus {
+  initial,
+  loading,
+  success,
+  error,
+}
 
 class RegisterState {
+  final RegisterStatus status;
+  final String? errorMessage;
   final String email;
   final String password;
   final String name;
-  final bool isLoading;
-  final String? errorMessage;
   final bool isObscure;
 
   RegisterState({
+    this.status = RegisterStatus.initial,
+    this.errorMessage,
     this.email = '',
     this.password = '',
     this.name = '',
-    this.isLoading = false,
-    this.errorMessage,
     this.isObscure = true,
   });
 
   RegisterState copyWith({
+    RegisterStatus? status,
+    String? errorMessage,
     String? email,
     String? password,
     String? name,
-    bool? isLoading,
-    String? errorMessage,
     bool? isObscure,
   }) {
     return RegisterState(
+      status: status ?? this.status,
+      errorMessage: errorMessage,
       email: email ?? this.email,
       password: password ?? this.password,
       name: name ?? this.name,
-      isLoading: isLoading ?? this.isLoading,
-      errorMessage: errorMessage,
       isObscure: isObscure ?? this.isObscure,
     );
   }
 }
 
 class RegisterNotifier extends StateNotifier<RegisterState> {
-  RegisterNotifier() : super(RegisterState());
+  final UserNotifier _userNotifier;
+
+  RegisterNotifier(this._userNotifier) : super(RegisterState());
 
   void updateEmail(String email) {
     state = state.copyWith(email: email);
@@ -57,19 +66,30 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
     state = state.copyWith(isObscure: !state.isObscure);
   }
 
-  Future<User> register() async {
-    state = state.copyWith(isLoading: true);
+  Future<void> register() async {
     try {
-      final user = await UserService().register(
+      state = state.copyWith(
+        status: RegisterStatus.loading,
+        errorMessage: null,
+      );
+
+      final response = await UserService().register(
         state.email,
         state.password,
         state.name,
       );
-      state = state.copyWith(isLoading: false);
-      return user;
+
+      final user = response['user'];
+      final token = response['access_token'];
+
+      await _userNotifier.login(user, token);
+
+      state = state.copyWith(
+        status: RegisterStatus.success,
+      );
     } catch (error) {
       state = state.copyWith(
-        isLoading: false,
+        status: RegisterStatus.error,
         errorMessage: error.toString(),
       );
       rethrow;
@@ -78,5 +98,5 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
 }
 
 final registerProvider = StateNotifierProvider<RegisterNotifier, RegisterState>(
-  (ref) => RegisterNotifier(),
+  (ref) => RegisterNotifier(ref.watch(userProvider.notifier)),
 );

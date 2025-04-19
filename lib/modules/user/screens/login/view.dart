@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cinemate_mobile/modules/user/screens/login/state.dart';
 import 'package:cinemate_mobile/core/constants/theme_constants.dart';
-import 'package:cinemate_mobile/core/widgets/app_button.dart';
-import 'package:cinemate_mobile/core/widgets/custom_text_field.dart';
 
 import '../../../home/view.dart';
+import '../register/view.dart';
 
 class LoginView extends ConsumerStatefulWidget {
   const LoginView({super.key});
@@ -227,7 +226,11 @@ class _LoginViewState extends ConsumerState<LoginView> {
                   ),
                   TextButton(
                     onPressed: () {
-                      Navigator.of(context).pushNamed('/register');
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const RegisterView(),
+                        ),
+                      );
                     },
                     style: TextButton.styleFrom(
                       foregroundColor: primaryColor,
