@@ -18,6 +18,7 @@ class Content with _$Content {
     required int numComments,
     required DateTime createdAt,
     required DateTime updatedAt,
+    required bool type, // true: dizi, false: film
   }) = _Content;
 
   factory Content.fromJson(Map<String, dynamic> json) =>

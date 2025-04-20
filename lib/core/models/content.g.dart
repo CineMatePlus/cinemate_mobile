@@ -21,6 +21,7 @@ _$ContentImpl _$$ContentImplFromJson(Map<String, dynamic> json) =>
       numComments: (json['numComments'] as num).toInt(),
       createdAt: DateTime.parse(json['createdAt'] as String),
       updatedAt: DateTime.parse(json['updatedAt'] as String),
+      type: json['type'] as bool,
     );
 
 Map<String, dynamic> _$$ContentImplToJson(_$ContentImpl instance) =>
@@ -37,4 +38,5 @@ Map<String, dynamic> _$$ContentImplToJson(_$ContentImpl instance) =>
       'numComments': instance.numComments,
       'createdAt': instance.createdAt.toIso8601String(),
       'updatedAt': instance.updatedAt.toIso8601String(),
+      'type': instance.type,
     };
