@@ -8,11 +8,13 @@ import '../../modules/home/state/content_state.dart';
 class ContentList extends ConsumerWidget {
   final List<Content> contents;
   final ContentLoadingStatus status;
+  final String sectionId;
 
   const ContentList({
     super.key,
     required this.contents,
     required this.status,
+    required this.sectionId,
   });
 
   @override
@@ -60,7 +62,11 @@ class ContentList extends ConsumerWidget {
         padding: const EdgeInsets.symmetric(horizontal: 8),
         itemCount: contents.length,
         itemBuilder: (context, index) {
-          return ContentCard(content: contents[index]);
+          return ContentCard(
+            content: contents[index],
+            index: index,
+            sectionId: sectionId,
+          );
         },
       ),
     );

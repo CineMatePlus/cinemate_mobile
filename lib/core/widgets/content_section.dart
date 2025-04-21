@@ -9,12 +9,14 @@ class ContentSection extends ConsumerWidget {
   final String title;
   final List<Content> contents;
   final ContentLoadingStatus status;
+  final String sectionId;
 
   const ContentSection({
     super.key,
     required this.title,
     required this.contents,
     required this.status,
+    required this.sectionId,
   });
 
   @override
@@ -39,6 +41,7 @@ class ContentSection extends ConsumerWidget {
         ContentList(
           contents: contents,
           status: status,
+          sectionId: sectionId,
         ),
       ],
     );
