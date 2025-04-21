@@ -79,11 +79,7 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
           CircleAvatar(
             radius: 60,
             backgroundColor: primaryColor.withOpacity(0.2),
-            child: const CircleAvatar(
-              radius: 58,
-              backgroundImage: NetworkImage(
-                  'https://avatars.githubusercontent.com/u/203699449?v=4'),
-            ),
+            child: _buildUserAvatar(user, 58),
           ),
           const SizedBox(height: 16),
           Text(
@@ -102,6 +98,38 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
         ],
       ),
     );
+  }
+
+  Widget _buildUserAvatar(UserState userState, double radius) {
+    final user = userState.user;
+
+    // Avatar URL kontrolü
+    if (user?.avatarUrl?.isNotEmpty ?? false) {
+      return CircleAvatar(
+        radius: radius,
+        backgroundImage: NetworkImage(user!.avatarUrl!),
+      );
+    }
+
+    // Cinsiyet bazlı asset seçimi
+    final int gender = user?.gender ?? 2;
+
+    // Erkek veya kadın ise asset kullan, diğer durumlarda icon
+    return gender <= 1
+        ? CircleAvatar(
+            radius: radius,
+            backgroundImage: AssetImage(gender == 0
+                ? 'assets/images/woman_icon.png'
+                : 'assets/images/man_icon.png'),
+          )
+        : CircleAvatar(
+            radius: radius,
+            child: Icon(
+              Icons.person,
+              size: radius * 1.2,
+              color: Colors.grey[400],
+            ),
+          );
   }
 
   Widget _buildSettingsList(
