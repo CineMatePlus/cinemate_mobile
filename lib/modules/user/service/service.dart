@@ -32,7 +32,8 @@ class UserService {
   }
 
   Future<Map<String, dynamic>> register(
-      String email, String password, String name) async {
+      String email, String password, String name,
+      {int? gender}) async {
     try {
       final response = await _apiService.request(
         'POST',
@@ -41,6 +42,7 @@ class UserService {
           'email': email,
           'password': password,
           'name': name,
+          'gender': gender,
         },
       );
 

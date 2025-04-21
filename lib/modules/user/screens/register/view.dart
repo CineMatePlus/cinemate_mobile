@@ -28,6 +28,15 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
 
   Future<void> _register() async {
     if (_formKey.currentState?.validate() ?? false) {
+      if (ref.read(registerProvider).gender == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Lütfen cinsiyet seçin'),
+            backgroundColor: ThemeConstants.errorColor,
+          ),
+        );
+        return;
+      }
       try {
         await ref.read(registerProvider.notifier).register();
         if (mounted) {
@@ -218,6 +227,75 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                       }
                       return null;
                     },
+                  ),
+                  const SizedBox(height: 24),
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: primaryColor.withOpacity(0.3),
+                      ),
+                      borderRadius:
+                          BorderRadius.circular(ThemeConstants.defaultRadius),
+                      color: surfaceColor,
+                    ),
+                    padding: const EdgeInsets.all(12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8, bottom: 8),
+                          child: Text(
+                            'Cinsiyet',
+                            style: TextStyle(
+                              color: textColor.withOpacity(0.7),
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                        RadioListTile<int>(
+                          title: Text(
+                            'Erkek',
+                            style: TextStyle(color: textColor),
+                          ),
+                          value: 1,
+                          groupValue: registerState.gender,
+                          onChanged: (value) {
+                            if (value != null) {
+                              registerNotifier.updateGender(value);
+                            }
+                          },
+                          activeColor: primaryColor,
+                        ),
+                        RadioListTile<int>(
+                          title: Text(
+                            'Kadın',
+                            style: TextStyle(color: textColor),
+                          ),
+                          value: 0,
+                          groupValue: registerState.gender,
+                          onChanged: (value) {
+                            if (value != null) {
+                              registerNotifier.updateGender(value);
+                            }
+                          },
+                          activeColor: primaryColor,
+                        ),
+                        RadioListTile<int>(
+                          title: Text(
+                            'Diğer',
+                            style: TextStyle(color: textColor),
+                          ),
+                          value: 2,
+                          groupValue: registerState.gender,
+                          onChanged: (value) {
+                            if (value != null) {
+                              registerNotifier.updateGender(value);
+                            }
+                          },
+                          activeColor: primaryColor,
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 24),
                   if (registerState.errorMessage != null)
