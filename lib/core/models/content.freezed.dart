@@ -32,7 +32,9 @@ mixin _$Content {
   int? get numComments => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
   DateTime? get updatedAt => throw _privateConstructorUsedError;
-  bool? get type => throw _privateConstructorUsedError;
+  bool? get type =>
+      throw _privateConstructorUsedError; // true: dizi, false: film
+  String? get imageUrl => throw _privateConstructorUsedError;
 
   /// Serializes this Content to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -61,7 +63,8 @@ abstract class $ContentCopyWith<$Res> {
       int? numComments,
       DateTime? createdAt,
       DateTime? updatedAt,
-      bool? type});
+      bool? type,
+      String? imageUrl});
 }
 
 /// @nodoc
@@ -92,6 +95,7 @@ class _$ContentCopyWithImpl<$Res, $Val extends Content>
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
     Object? type = freezed,
+    Object? imageUrl = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -146,6 +150,10 @@ class _$ContentCopyWithImpl<$Res, $Val extends Content>
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as bool?,
+      imageUrl: freezed == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -170,7 +178,8 @@ abstract class _$$ContentImplCopyWith<$Res> implements $ContentCopyWith<$Res> {
       int? numComments,
       DateTime? createdAt,
       DateTime? updatedAt,
-      bool? type});
+      bool? type,
+      String? imageUrl});
 }
 
 /// @nodoc
@@ -199,6 +208,7 @@ class __$$ContentImplCopyWithImpl<$Res>
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
     Object? type = freezed,
+    Object? imageUrl = freezed,
   }) {
     return _then(_$ContentImpl(
       id: freezed == id
@@ -253,6 +263,10 @@ class __$$ContentImplCopyWithImpl<$Res>
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as bool?,
+      imageUrl: freezed == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -273,7 +287,8 @@ class _$ContentImpl implements _Content {
       this.numComments,
       this.createdAt,
       this.updatedAt,
-      this.type})
+      this.type,
+      this.imageUrl})
       : _genres = genres;
 
   factory _$ContentImpl.fromJson(Map<String, dynamic> json) =>
@@ -313,10 +328,13 @@ class _$ContentImpl implements _Content {
   final DateTime? updatedAt;
   @override
   final bool? type;
+// true: dizi, false: film
+  @override
+  final String? imageUrl;
 
   @override
   String toString() {
-    return 'Content(id: $id, title: $title, description: $description, genres: $genres, year: $year, averageRating: $averageRating, numLikes: $numLikes, numWatches: $numWatches, numRatings: $numRatings, numComments: $numComments, createdAt: $createdAt, updatedAt: $updatedAt, type: $type)';
+    return 'Content(id: $id, title: $title, description: $description, genres: $genres, year: $year, averageRating: $averageRating, numLikes: $numLikes, numWatches: $numWatches, numRatings: $numRatings, numComments: $numComments, createdAt: $createdAt, updatedAt: $updatedAt, type: $type, imageUrl: $imageUrl)';
   }
 
   @override
@@ -344,7 +362,9 @@ class _$ContentImpl implements _Content {
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
                 other.updatedAt == updatedAt) &&
-            (identical(other.type, type) || other.type == type));
+            (identical(other.type, type) || other.type == type) &&
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -363,7 +383,8 @@ class _$ContentImpl implements _Content {
       numComments,
       createdAt,
       updatedAt,
-      type);
+      type,
+      imageUrl);
 
   /// Create a copy of Content
   /// with the given fields replaced by the non-null parameter values.
@@ -395,7 +416,8 @@ abstract class _Content implements Content {
       final int? numComments,
       final DateTime? createdAt,
       final DateTime? updatedAt,
-      final bool? type}) = _$ContentImpl;
+      final bool? type,
+      final String? imageUrl}) = _$ContentImpl;
 
   factory _Content.fromJson(Map<String, dynamic> json) = _$ContentImpl.fromJson;
 
@@ -424,7 +446,9 @@ abstract class _Content implements Content {
   @override
   DateTime? get updatedAt;
   @override
-  bool? get type;
+  bool? get type; // true: dizi, false: film
+  @override
+  String? get imageUrl;
 
   /// Create a copy of Content
   /// with the given fields replaced by the non-null parameter values.

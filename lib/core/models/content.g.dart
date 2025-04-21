@@ -26,6 +26,7 @@ _$ContentImpl _$$ContentImplFromJson(Map<String, dynamic> json) =>
           ? null
           : DateTime.parse(json['updatedAt'] as String),
       type: json['type'] as bool?,
+      imageUrl: json['imageUrl'] as String?,
     );
 
 Map<String, dynamic> _$$ContentImplToJson(_$ContentImpl instance) =>
@@ -43,4 +44,5 @@ Map<String, dynamic> _$$ContentImplToJson(_$ContentImpl instance) =>
       'createdAt': instance.createdAt?.toIso8601String(),
       'updatedAt': instance.updatedAt?.toIso8601String(),
       'type': instance.type,
+      'imageUrl': instance.imageUrl,
     };

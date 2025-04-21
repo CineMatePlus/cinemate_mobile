@@ -19,6 +19,7 @@ class Content with _$Content {
     DateTime? createdAt,
     DateTime? updatedAt,
     bool? type, // true: dizi, false: film
+    String? imageUrl,
   }) = _Content;
 
   factory Content.fromJson(Map<String, dynamic> json) =>
