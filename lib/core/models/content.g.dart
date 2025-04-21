@@ -8,41 +8,41 @@ part of 'content.dart';
 
 _$ContentImpl _$$ContentImplFromJson(Map<String, dynamic> json) =>
     _$ContentImpl(
-      id: json['id'] as String?,
+      id: json['_id'] as String?,
       title: json['title'] as String?,
       description: json['description'] as String?,
       genres:
           (json['genres'] as List<dynamic>?)?.map((e) => e as String).toList(),
       year: (json['year'] as num?)?.toInt(),
-      averageRating: (json['averageRating'] as num?)?.toDouble(),
-      numLikes: (json['numLikes'] as num?)?.toInt(),
-      numWatches: (json['numWatches'] as num?)?.toInt(),
-      numRatings: (json['numRatings'] as num?)?.toInt(),
-      numComments: (json['numComments'] as num?)?.toInt(),
-      createdAt: json['createdAt'] == null
+      averageRating: (json['average_rating'] as num?)?.toDouble(),
+      numLikes: (json['num_likes'] as num?)?.toInt(),
+      numWatches: (json['num_watches'] as num?)?.toInt(),
+      numRatings: (json['num_ratings'] as num?)?.toInt(),
+      numComments: (json['num_comments'] as num?)?.toInt(),
+      createdAt: json['created_at'] == null
           ? null
-          : DateTime.parse(json['createdAt'] as String),
-      updatedAt: json['updatedAt'] == null
+          : DateTime.parse(json['created_at'] as String),
+      updatedAt: json['updated_at'] == null
           ? null
-          : DateTime.parse(json['updatedAt'] as String),
+          : DateTime.parse(json['updated_at'] as String),
       type: json['type'] as bool?,
-      imageUrl: json['imageUrl'] as String?,
+      imageUrl: json['image_url'] as String?,
     );
 
 Map<String, dynamic> _$$ContentImplToJson(_$ContentImpl instance) =>
     <String, dynamic>{
-      'id': instance.id,
+      '_id': instance.id,
       'title': instance.title,
       'description': instance.description,
       'genres': instance.genres,
       'year': instance.year,
-      'averageRating': instance.averageRating,
-      'numLikes': instance.numLikes,
-      'numWatches': instance.numWatches,
-      'numRatings': instance.numRatings,
-      'numComments': instance.numComments,
-      'createdAt': instance.createdAt?.toIso8601String(),
-      'updatedAt': instance.updatedAt?.toIso8601String(),
+      'average_rating': instance.averageRating,
+      'num_likes': instance.numLikes,
+      'num_watches': instance.numWatches,
+      'num_ratings': instance.numRatings,
+      'num_comments': instance.numComments,
+      'created_at': instance.createdAt?.toIso8601String(),
+      'updated_at': instance.updatedAt?.toIso8601String(),
       'type': instance.type,
-      'imageUrl': instance.imageUrl,
+      'image_url': instance.imageUrl,
     };

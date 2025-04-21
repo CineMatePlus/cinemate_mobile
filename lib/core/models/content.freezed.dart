@@ -20,20 +20,29 @@ Content _$ContentFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Content {
+  @JsonKey(name: '_id')
   String? get id => throw _privateConstructorUsedError;
   String? get title => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
   List<String>? get genres => throw _privateConstructorUsedError;
   int? get year => throw _privateConstructorUsedError;
+  @JsonKey(name: 'average_rating')
   double? get averageRating => throw _privateConstructorUsedError;
+  @JsonKey(name: 'num_likes')
   int? get numLikes => throw _privateConstructorUsedError;
+  @JsonKey(name: 'num_watches')
   int? get numWatches => throw _privateConstructorUsedError;
+  @JsonKey(name: 'num_ratings')
   int? get numRatings => throw _privateConstructorUsedError;
+  @JsonKey(name: 'num_comments')
   int? get numComments => throw _privateConstructorUsedError;
+  @JsonKey(name: 'created_at')
   DateTime? get createdAt => throw _privateConstructorUsedError;
+  @JsonKey(name: 'updated_at')
   DateTime? get updatedAt => throw _privateConstructorUsedError;
   bool? get type =>
       throw _privateConstructorUsedError; // true: dizi, false: film
+  @JsonKey(name: 'image_url')
   String? get imageUrl => throw _privateConstructorUsedError;
 
   /// Serializes this Content to a JSON map.
@@ -51,20 +60,20 @@ abstract class $ContentCopyWith<$Res> {
       _$ContentCopyWithImpl<$Res, Content>;
   @useResult
   $Res call(
-      {String? id,
+      {@JsonKey(name: '_id') String? id,
       String? title,
       String? description,
       List<String>? genres,
       int? year,
-      double? averageRating,
-      int? numLikes,
-      int? numWatches,
-      int? numRatings,
-      int? numComments,
-      DateTime? createdAt,
-      DateTime? updatedAt,
+      @JsonKey(name: 'average_rating') double? averageRating,
+      @JsonKey(name: 'num_likes') int? numLikes,
+      @JsonKey(name: 'num_watches') int? numWatches,
+      @JsonKey(name: 'num_ratings') int? numRatings,
+      @JsonKey(name: 'num_comments') int? numComments,
+      @JsonKey(name: 'created_at') DateTime? createdAt,
+      @JsonKey(name: 'updated_at') DateTime? updatedAt,
       bool? type,
-      String? imageUrl});
+      @JsonKey(name: 'image_url') String? imageUrl});
 }
 
 /// @nodoc
@@ -166,20 +175,20 @@ abstract class _$$ContentImplCopyWith<$Res> implements $ContentCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String? id,
+      {@JsonKey(name: '_id') String? id,
       String? title,
       String? description,
       List<String>? genres,
       int? year,
-      double? averageRating,
-      int? numLikes,
-      int? numWatches,
-      int? numRatings,
-      int? numComments,
-      DateTime? createdAt,
-      DateTime? updatedAt,
+      @JsonKey(name: 'average_rating') double? averageRating,
+      @JsonKey(name: 'num_likes') int? numLikes,
+      @JsonKey(name: 'num_watches') int? numWatches,
+      @JsonKey(name: 'num_ratings') int? numRatings,
+      @JsonKey(name: 'num_comments') int? numComments,
+      @JsonKey(name: 'created_at') DateTime? createdAt,
+      @JsonKey(name: 'updated_at') DateTime? updatedAt,
       bool? type,
-      String? imageUrl});
+      @JsonKey(name: 'image_url') String? imageUrl});
 }
 
 /// @nodoc
@@ -275,26 +284,27 @@ class __$$ContentImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ContentImpl implements _Content {
   const _$ContentImpl(
-      {this.id,
+      {@JsonKey(name: '_id') this.id,
       this.title,
       this.description,
       final List<String>? genres,
       this.year,
-      this.averageRating,
-      this.numLikes,
-      this.numWatches,
-      this.numRatings,
-      this.numComments,
-      this.createdAt,
-      this.updatedAt,
+      @JsonKey(name: 'average_rating') this.averageRating,
+      @JsonKey(name: 'num_likes') this.numLikes,
+      @JsonKey(name: 'num_watches') this.numWatches,
+      @JsonKey(name: 'num_ratings') this.numRatings,
+      @JsonKey(name: 'num_comments') this.numComments,
+      @JsonKey(name: 'created_at') this.createdAt,
+      @JsonKey(name: 'updated_at') this.updatedAt,
       this.type,
-      this.imageUrl})
+      @JsonKey(name: 'image_url') this.imageUrl})
       : _genres = genres;
 
   factory _$ContentImpl.fromJson(Map<String, dynamic> json) =>
       _$$ContentImplFromJson(json);
 
   @override
+  @JsonKey(name: '_id')
   final String? id;
   @override
   final String? title;
@@ -313,23 +323,31 @@ class _$ContentImpl implements _Content {
   @override
   final int? year;
   @override
+  @JsonKey(name: 'average_rating')
   final double? averageRating;
   @override
+  @JsonKey(name: 'num_likes')
   final int? numLikes;
   @override
+  @JsonKey(name: 'num_watches')
   final int? numWatches;
   @override
+  @JsonKey(name: 'num_ratings')
   final int? numRatings;
   @override
+  @JsonKey(name: 'num_comments')
   final int? numComments;
   @override
+  @JsonKey(name: 'created_at')
   final DateTime? createdAt;
   @override
+  @JsonKey(name: 'updated_at')
   final DateTime? updatedAt;
   @override
   final bool? type;
 // true: dizi, false: film
   @override
+  @JsonKey(name: 'image_url')
   final String? imageUrl;
 
   @override
@@ -404,24 +422,25 @@ class _$ContentImpl implements _Content {
 
 abstract class _Content implements Content {
   const factory _Content(
-      {final String? id,
+      {@JsonKey(name: '_id') final String? id,
       final String? title,
       final String? description,
       final List<String>? genres,
       final int? year,
-      final double? averageRating,
-      final int? numLikes,
-      final int? numWatches,
-      final int? numRatings,
-      final int? numComments,
-      final DateTime? createdAt,
-      final DateTime? updatedAt,
+      @JsonKey(name: 'average_rating') final double? averageRating,
+      @JsonKey(name: 'num_likes') final int? numLikes,
+      @JsonKey(name: 'num_watches') final int? numWatches,
+      @JsonKey(name: 'num_ratings') final int? numRatings,
+      @JsonKey(name: 'num_comments') final int? numComments,
+      @JsonKey(name: 'created_at') final DateTime? createdAt,
+      @JsonKey(name: 'updated_at') final DateTime? updatedAt,
       final bool? type,
-      final String? imageUrl}) = _$ContentImpl;
+      @JsonKey(name: 'image_url') final String? imageUrl}) = _$ContentImpl;
 
   factory _Content.fromJson(Map<String, dynamic> json) = _$ContentImpl.fromJson;
 
   @override
+  @JsonKey(name: '_id')
   String? get id;
   @override
   String? get title;
@@ -432,22 +451,30 @@ abstract class _Content implements Content {
   @override
   int? get year;
   @override
+  @JsonKey(name: 'average_rating')
   double? get averageRating;
   @override
+  @JsonKey(name: 'num_likes')
   int? get numLikes;
   @override
+  @JsonKey(name: 'num_watches')
   int? get numWatches;
   @override
+  @JsonKey(name: 'num_ratings')
   int? get numRatings;
   @override
+  @JsonKey(name: 'num_comments')
   int? get numComments;
   @override
+  @JsonKey(name: 'created_at')
   DateTime? get createdAt;
   @override
+  @JsonKey(name: 'updated_at')
   DateTime? get updatedAt;
   @override
   bool? get type; // true: dizi, false: film
   @override
+  @JsonKey(name: 'image_url')
   String? get imageUrl;
 
   /// Create a copy of Content
