@@ -24,6 +24,9 @@ mixin _$User {
   String get id => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
+  @JsonKey(name: 'avatar_url')
+  String? get avatarUrl => throw _privateConstructorUsedError;
+  int get gender => throw _privateConstructorUsedError;
   @JsonKey(name: 'created_at')
   DateTime get createdAt => throw _privateConstructorUsedError;
   @JsonKey(name: 'updated_at')
@@ -47,6 +50,8 @@ abstract class $UserCopyWith<$Res> {
       {@JsonKey(name: '_id') String id,
       String email,
       String name,
+      @JsonKey(name: 'avatar_url') String? avatarUrl,
+      int gender,
       @JsonKey(name: 'created_at') DateTime createdAt,
       @JsonKey(name: 'updated_at') DateTime updatedAt});
 }
@@ -69,6 +74,8 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
     Object? id = null,
     Object? email = null,
     Object? name = null,
+    Object? avatarUrl = freezed,
+    Object? gender = null,
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
@@ -85,6 +92,14 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
+      avatarUrl: freezed == avatarUrl
+          ? _value.avatarUrl
+          : avatarUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      gender: null == gender
+          ? _value.gender
+          : gender // ignore: cast_nullable_to_non_nullable
+              as int,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -108,6 +123,8 @@ abstract class _$$UserImplCopyWith<$Res> implements $UserCopyWith<$Res> {
       {@JsonKey(name: '_id') String id,
       String email,
       String name,
+      @JsonKey(name: 'avatar_url') String? avatarUrl,
+      int gender,
       @JsonKey(name: 'created_at') DateTime createdAt,
       @JsonKey(name: 'updated_at') DateTime updatedAt});
 }
@@ -127,6 +144,8 @@ class __$$UserImplCopyWithImpl<$Res>
     Object? id = null,
     Object? email = null,
     Object? name = null,
+    Object? avatarUrl = freezed,
+    Object? gender = null,
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
@@ -143,6 +162,14 @@ class __$$UserImplCopyWithImpl<$Res>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
+      avatarUrl: freezed == avatarUrl
+          ? _value.avatarUrl
+          : avatarUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      gender: null == gender
+          ? _value.gender
+          : gender // ignore: cast_nullable_to_non_nullable
+              as int,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -162,6 +189,8 @@ class _$UserImpl implements _User {
       {@JsonKey(name: '_id') required this.id,
       required this.email,
       required this.name,
+      @JsonKey(name: 'avatar_url') this.avatarUrl,
+      required this.gender,
       @JsonKey(name: 'created_at') required this.createdAt,
       @JsonKey(name: 'updated_at') required this.updatedAt});
 
@@ -176,6 +205,11 @@ class _$UserImpl implements _User {
   @override
   final String name;
   @override
+  @JsonKey(name: 'avatar_url')
+  final String? avatarUrl;
+  @override
+  final int gender;
+  @override
   @JsonKey(name: 'created_at')
   final DateTime createdAt;
   @override
@@ -184,7 +218,7 @@ class _$UserImpl implements _User {
 
   @override
   String toString() {
-    return 'User(id: $id, email: $email, name: $name, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'User(id: $id, email: $email, name: $name, avatarUrl: $avatarUrl, gender: $gender, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -195,6 +229,9 @@ class _$UserImpl implements _User {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.email, email) || other.email == email) &&
             (identical(other.name, name) || other.name == name) &&
+            (identical(other.avatarUrl, avatarUrl) ||
+                other.avatarUrl == avatarUrl) &&
+            (identical(other.gender, gender) || other.gender == gender) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
@@ -203,8 +240,8 @@ class _$UserImpl implements _User {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, email, name, createdAt, updatedAt);
+  int get hashCode => Object.hash(
+      runtimeType, id, email, name, avatarUrl, gender, createdAt, updatedAt);
 
   /// Create a copy of User
   /// with the given fields replaced by the non-null parameter values.
@@ -227,6 +264,8 @@ abstract class _User implements User {
           {@JsonKey(name: '_id') required final String id,
           required final String email,
           required final String name,
+          @JsonKey(name: 'avatar_url') final String? avatarUrl,
+          required final int gender,
           @JsonKey(name: 'created_at') required final DateTime createdAt,
           @JsonKey(name: 'updated_at') required final DateTime updatedAt}) =
       _$UserImpl;
@@ -240,6 +279,11 @@ abstract class _User implements User {
   String get email;
   @override
   String get name;
+  @override
+  @JsonKey(name: 'avatar_url')
+  String? get avatarUrl;
+  @override
+  int get gender;
   @override
   @JsonKey(name: 'created_at')
   DateTime get createdAt;

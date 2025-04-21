@@ -9,6 +9,8 @@ class User with _$User {
     @JsonKey(name: '_id') required String id,
     required String email,
     required String name,
+    @JsonKey(name: 'avatar_url') String? avatarUrl,
+    required int gender,
     @JsonKey(name: 'created_at') required DateTime createdAt,
     @JsonKey(name: 'updated_at') required DateTime updatedAt,
   }) = _User;
