@@ -6,19 +6,19 @@ part 'content.g.dart';
 @freezed
 class Content with _$Content {
   const factory Content({
-    required String id,
-    required String title,
-    required String description,
-    required List<String> genres,
-    required int year,
-    required double averageRating,
-    required int numLikes,
-    required int numWatches,
-    required int numRatings,
-    required int numComments,
-    required DateTime createdAt,
-    required DateTime updatedAt,
-    required bool type, // true: dizi, false: film
+    String? id,
+    String? title,
+    String? description,
+    List<String>? genres,
+    int? year,
+    double? averageRating,
+    int? numLikes,
+    int? numWatches,
+    int? numRatings,
+    int? numComments,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    bool? type, // true: dizi, false: film
   }) = _Content;
 
   factory Content.fromJson(Map<String, dynamic> json) =>

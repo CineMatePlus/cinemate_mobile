@@ -20,19 +20,19 @@ Content _$ContentFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Content {
-  String get id => throw _privateConstructorUsedError;
-  String get title => throw _privateConstructorUsedError;
-  String get description => throw _privateConstructorUsedError;
-  List<String> get genres => throw _privateConstructorUsedError;
-  int get year => throw _privateConstructorUsedError;
-  double get averageRating => throw _privateConstructorUsedError;
-  int get numLikes => throw _privateConstructorUsedError;
-  int get numWatches => throw _privateConstructorUsedError;
-  int get numRatings => throw _privateConstructorUsedError;
-  int get numComments => throw _privateConstructorUsedError;
-  DateTime get createdAt => throw _privateConstructorUsedError;
-  DateTime get updatedAt => throw _privateConstructorUsedError;
-  bool get type => throw _privateConstructorUsedError;
+  String? get id => throw _privateConstructorUsedError;
+  String? get title => throw _privateConstructorUsedError;
+  String? get description => throw _privateConstructorUsedError;
+  List<String>? get genres => throw _privateConstructorUsedError;
+  int? get year => throw _privateConstructorUsedError;
+  double? get averageRating => throw _privateConstructorUsedError;
+  int? get numLikes => throw _privateConstructorUsedError;
+  int? get numWatches => throw _privateConstructorUsedError;
+  int? get numRatings => throw _privateConstructorUsedError;
+  int? get numComments => throw _privateConstructorUsedError;
+  DateTime? get createdAt => throw _privateConstructorUsedError;
+  DateTime? get updatedAt => throw _privateConstructorUsedError;
+  bool? get type => throw _privateConstructorUsedError;
 
   /// Serializes this Content to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -49,19 +49,19 @@ abstract class $ContentCopyWith<$Res> {
       _$ContentCopyWithImpl<$Res, Content>;
   @useResult
   $Res call(
-      {String id,
-      String title,
-      String description,
-      List<String> genres,
-      int year,
-      double averageRating,
-      int numLikes,
-      int numWatches,
-      int numRatings,
-      int numComments,
-      DateTime createdAt,
-      DateTime updatedAt,
-      bool type});
+      {String? id,
+      String? title,
+      String? description,
+      List<String>? genres,
+      int? year,
+      double? averageRating,
+      int? numLikes,
+      int? numWatches,
+      int? numRatings,
+      int? numComments,
+      DateTime? createdAt,
+      DateTime? updatedAt,
+      bool? type});
 }
 
 /// @nodoc
@@ -79,73 +79,73 @@ class _$ContentCopyWithImpl<$Res, $Val extends Content>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
-    Object? title = null,
-    Object? description = null,
-    Object? genres = null,
-    Object? year = null,
-    Object? averageRating = null,
-    Object? numLikes = null,
-    Object? numWatches = null,
-    Object? numRatings = null,
-    Object? numComments = null,
-    Object? createdAt = null,
-    Object? updatedAt = null,
-    Object? type = null,
+    Object? id = freezed,
+    Object? title = freezed,
+    Object? description = freezed,
+    Object? genres = freezed,
+    Object? year = freezed,
+    Object? averageRating = freezed,
+    Object? numLikes = freezed,
+    Object? numWatches = freezed,
+    Object? numRatings = freezed,
+    Object? numComments = freezed,
+    Object? createdAt = freezed,
+    Object? updatedAt = freezed,
+    Object? type = freezed,
   }) {
     return _then(_value.copyWith(
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      title: null == title
+              as String?,
+      title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      description: null == description
+              as String?,
+      description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
-              as String,
-      genres: null == genres
+              as String?,
+      genres: freezed == genres
           ? _value.genres
           : genres // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      year: null == year
+              as List<String>?,
+      year: freezed == year
           ? _value.year
           : year // ignore: cast_nullable_to_non_nullable
-              as int,
-      averageRating: null == averageRating
+              as int?,
+      averageRating: freezed == averageRating
           ? _value.averageRating
           : averageRating // ignore: cast_nullable_to_non_nullable
-              as double,
-      numLikes: null == numLikes
+              as double?,
+      numLikes: freezed == numLikes
           ? _value.numLikes
           : numLikes // ignore: cast_nullable_to_non_nullable
-              as int,
-      numWatches: null == numWatches
+              as int?,
+      numWatches: freezed == numWatches
           ? _value.numWatches
           : numWatches // ignore: cast_nullable_to_non_nullable
-              as int,
-      numRatings: null == numRatings
+              as int?,
+      numRatings: freezed == numRatings
           ? _value.numRatings
           : numRatings // ignore: cast_nullable_to_non_nullable
-              as int,
-      numComments: null == numComments
+              as int?,
+      numComments: freezed == numComments
           ? _value.numComments
           : numComments // ignore: cast_nullable_to_non_nullable
-              as int,
-      createdAt: null == createdAt
+              as int?,
+      createdAt: freezed == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      updatedAt: null == updatedAt
+              as DateTime?,
+      updatedAt: freezed == updatedAt
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      type: null == type
+              as DateTime?,
+      type: freezed == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
-              as bool,
+              as bool?,
     ) as $Val);
   }
 }
@@ -158,19 +158,19 @@ abstract class _$$ContentImplCopyWith<$Res> implements $ContentCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String id,
-      String title,
-      String description,
-      List<String> genres,
-      int year,
-      double averageRating,
-      int numLikes,
-      int numWatches,
-      int numRatings,
-      int numComments,
-      DateTime createdAt,
-      DateTime updatedAt,
-      bool type});
+      {String? id,
+      String? title,
+      String? description,
+      List<String>? genres,
+      int? year,
+      double? averageRating,
+      int? numLikes,
+      int? numWatches,
+      int? numRatings,
+      int? numComments,
+      DateTime? createdAt,
+      DateTime? updatedAt,
+      bool? type});
 }
 
 /// @nodoc
@@ -186,73 +186,73 @@ class __$$ContentImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
-    Object? title = null,
-    Object? description = null,
-    Object? genres = null,
-    Object? year = null,
-    Object? averageRating = null,
-    Object? numLikes = null,
-    Object? numWatches = null,
-    Object? numRatings = null,
-    Object? numComments = null,
-    Object? createdAt = null,
-    Object? updatedAt = null,
-    Object? type = null,
+    Object? id = freezed,
+    Object? title = freezed,
+    Object? description = freezed,
+    Object? genres = freezed,
+    Object? year = freezed,
+    Object? averageRating = freezed,
+    Object? numLikes = freezed,
+    Object? numWatches = freezed,
+    Object? numRatings = freezed,
+    Object? numComments = freezed,
+    Object? createdAt = freezed,
+    Object? updatedAt = freezed,
+    Object? type = freezed,
   }) {
     return _then(_$ContentImpl(
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      title: null == title
+              as String?,
+      title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      description: null == description
+              as String?,
+      description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
-              as String,
-      genres: null == genres
+              as String?,
+      genres: freezed == genres
           ? _value._genres
           : genres // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      year: null == year
+              as List<String>?,
+      year: freezed == year
           ? _value.year
           : year // ignore: cast_nullable_to_non_nullable
-              as int,
-      averageRating: null == averageRating
+              as int?,
+      averageRating: freezed == averageRating
           ? _value.averageRating
           : averageRating // ignore: cast_nullable_to_non_nullable
-              as double,
-      numLikes: null == numLikes
+              as double?,
+      numLikes: freezed == numLikes
           ? _value.numLikes
           : numLikes // ignore: cast_nullable_to_non_nullable
-              as int,
-      numWatches: null == numWatches
+              as int?,
+      numWatches: freezed == numWatches
           ? _value.numWatches
           : numWatches // ignore: cast_nullable_to_non_nullable
-              as int,
-      numRatings: null == numRatings
+              as int?,
+      numRatings: freezed == numRatings
           ? _value.numRatings
           : numRatings // ignore: cast_nullable_to_non_nullable
-              as int,
-      numComments: null == numComments
+              as int?,
+      numComments: freezed == numComments
           ? _value.numComments
           : numComments // ignore: cast_nullable_to_non_nullable
-              as int,
-      createdAt: null == createdAt
+              as int?,
+      createdAt: freezed == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      updatedAt: null == updatedAt
+              as DateTime?,
+      updatedAt: freezed == updatedAt
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      type: null == type
+              as DateTime?,
+      type: freezed == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
-              as bool,
+              as bool?,
     ));
   }
 }
@@ -261,56 +261,58 @@ class __$$ContentImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ContentImpl implements _Content {
   const _$ContentImpl(
-      {required this.id,
-      required this.title,
-      required this.description,
-      required final List<String> genres,
-      required this.year,
-      required this.averageRating,
-      required this.numLikes,
-      required this.numWatches,
-      required this.numRatings,
-      required this.numComments,
-      required this.createdAt,
-      required this.updatedAt,
-      required this.type})
+      {this.id,
+      this.title,
+      this.description,
+      final List<String>? genres,
+      this.year,
+      this.averageRating,
+      this.numLikes,
+      this.numWatches,
+      this.numRatings,
+      this.numComments,
+      this.createdAt,
+      this.updatedAt,
+      this.type})
       : _genres = genres;
 
   factory _$ContentImpl.fromJson(Map<String, dynamic> json) =>
       _$$ContentImplFromJson(json);
 
   @override
-  final String id;
+  final String? id;
   @override
-  final String title;
+  final String? title;
   @override
-  final String description;
-  final List<String> _genres;
+  final String? description;
+  final List<String>? _genres;
   @override
-  List<String> get genres {
+  List<String>? get genres {
+    final value = _genres;
+    if (value == null) return null;
     if (_genres is EqualUnmodifiableListView) return _genres;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_genres);
+    return EqualUnmodifiableListView(value);
   }
 
   @override
-  final int year;
+  final int? year;
   @override
-  final double averageRating;
+  final double? averageRating;
   @override
-  final int numLikes;
+  final int? numLikes;
   @override
-  final int numWatches;
+  final int? numWatches;
   @override
-  final int numRatings;
+  final int? numRatings;
   @override
-  final int numComments;
+  final int? numComments;
   @override
-  final DateTime createdAt;
+  final DateTime? createdAt;
   @override
-  final DateTime updatedAt;
+  final DateTime? updatedAt;
   @override
-  final bool type;
+  final bool? type;
 
   @override
   String toString() {
@@ -381,48 +383,48 @@ class _$ContentImpl implements _Content {
 
 abstract class _Content implements Content {
   const factory _Content(
-      {required final String id,
-      required final String title,
-      required final String description,
-      required final List<String> genres,
-      required final int year,
-      required final double averageRating,
-      required final int numLikes,
-      required final int numWatches,
-      required final int numRatings,
-      required final int numComments,
-      required final DateTime createdAt,
-      required final DateTime updatedAt,
-      required final bool type}) = _$ContentImpl;
+      {final String? id,
+      final String? title,
+      final String? description,
+      final List<String>? genres,
+      final int? year,
+      final double? averageRating,
+      final int? numLikes,
+      final int? numWatches,
+      final int? numRatings,
+      final int? numComments,
+      final DateTime? createdAt,
+      final DateTime? updatedAt,
+      final bool? type}) = _$ContentImpl;
 
   factory _Content.fromJson(Map<String, dynamic> json) = _$ContentImpl.fromJson;
 
   @override
-  String get id;
+  String? get id;
   @override
-  String get title;
+  String? get title;
   @override
-  String get description;
+  String? get description;
   @override
-  List<String> get genres;
+  List<String>? get genres;
   @override
-  int get year;
+  int? get year;
   @override
-  double get averageRating;
+  double? get averageRating;
   @override
-  int get numLikes;
+  int? get numLikes;
   @override
-  int get numWatches;
+  int? get numWatches;
   @override
-  int get numRatings;
+  int? get numRatings;
   @override
-  int get numComments;
+  int? get numComments;
   @override
-  DateTime get createdAt;
+  DateTime? get createdAt;
   @override
-  DateTime get updatedAt;
+  DateTime? get updatedAt;
   @override
-  bool get type;
+  bool? get type;
 
   /// Create a copy of Content
   /// with the given fields replaced by the non-null parameter values.
