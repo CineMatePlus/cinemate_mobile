@@ -184,7 +184,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                   children: [
                     Center(
                       child: Icon(
-                        content.type ? Icons.tv : Icons.movie,
+                        content.type == true ? Icons.tv : Icons.movie,
                         color: textColor.withOpacity(0.5),
                         size: 32,
                       ),
@@ -198,13 +198,13 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                           vertical: 2,
                         ),
                         decoration: BoxDecoration(
-                          color: content.type
+                          color: content.type == true
                               ? Colors.blue.withOpacity(0.8)
                               : Colors.orange.withOpacity(0.8),
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: Text(
-                          content.type ? 'Dizi' : 'Film',
+                          content.type == true ? 'Dizi' : 'Film',
                           style: const TextStyle(
                             fontSize: 8,
                             color: Colors.white,
@@ -223,7 +223,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      content.title,
+                      content.title ?? '',
                       style: TextStyle(
                         color: textColor,
                         fontSize: 18,
@@ -241,7 +241,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                     Wrap(
                       spacing: 6,
                       runSpacing: 6,
-                      children: content.genres.map((genre) {
+                      children: content.genres!.map((genre) {
                         return Chip(
                           label: Text(
                             genre,
@@ -270,7 +270,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          content.averageRating.toStringAsFixed(1),
+                          content.averageRating?.toStringAsFixed(1) ?? '',
                           style: TextStyle(
                             color: textColor,
                             fontSize: 14,
