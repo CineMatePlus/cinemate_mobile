@@ -217,15 +217,6 @@ class _LoginViewState extends ConsumerState<LoginView> {
                   const SizedBox(height: 16),
                   TextButton(
                     onPressed: () {
-                      Navigator.of(context).pushNamed('/forgot-password');
-                    },
-                    style: TextButton.styleFrom(
-                      foregroundColor: primaryColor,
-                    ),
-                    child: const Text('Şifremi Unuttum'),
-                  ),
-                  TextButton(
-                    onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => const RegisterView(),
