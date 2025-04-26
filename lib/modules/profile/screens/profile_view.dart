@@ -6,6 +6,8 @@ import '../../../modules/common/widgets/theme_switch.dart';
 import '../../user/state.dart';
 import 'edit_screen/edit_view.dart';
 import 'profil_state.dart';
+import 'collections_view.dart';
+import 'content_list_view.dart';
 
 class ProfileView extends ConsumerStatefulWidget {
   const ProfileView({super.key});
@@ -14,12 +16,22 @@ class ProfileView extends ConsumerStatefulWidget {
   ConsumerState<ProfileView> createState() => _ProfileViewState();
 }
 
-class _ProfileViewState extends ConsumerState<ProfileView> {
+class _ProfileViewState extends ConsumerState<ProfileView>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
   @override
   void initState() {
     super.initState();
-    Future.microtask(
-        () => ref.read(profileProvider.notifier).loadUserProfile());
+    Future.microtask(() {
+      ref.read(profileProvider.notifier).loadUserProfile();
+    });
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   @override
@@ -34,38 +46,76 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
 
     return Scaffold(
       backgroundColor: backgroundColor,
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: backgroundColor,
-        title: Text(
-          'Profil',
-          style: TextStyle(
-            color: primaryColor,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.edit, color: primaryColor),
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const EditProfileView()),
-            ),
-          ),
-        ],
-      ),
       body: profileState.isLoading
           ? Center(
               child: CircularProgressIndicator(color: primaryColor),
             )
-          : SingleChildScrollView(
-              child: Column(
-                children: [
-                  _buildProfileInfo(userState, primaryColor, textColor),
-                  Divider(color: Colors.grey.withOpacity(0.3)),
-                  _buildSettingsList(userState, primaryColor, textColor),
-                ],
-              ),
+          : CustomScrollView(
+              slivers: [
+                SliverAppBar(
+                  expandedHeight: 200,
+                  pinned: true,
+                  backgroundColor: backgroundColor,
+                  flexibleSpace: FlexibleSpaceBar(
+                    background: Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            primaryColor.withOpacity(0.8),
+                            backgroundColor,
+                          ],
+                        ),
+                      ),
+                      child:
+                          _buildProfileInfo(userState, primaryColor, textColor),
+                    ),
+                  ),
+                  actions: [
+                    IconButton(
+                      icon: Icon(Icons.edit, color: primaryColor),
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const EditProfileView()),
+                      ),
+                    ),
+                  ],
+                ),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 24.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'İçerik Listeleri',
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: textColor,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        _buildContentLists(primaryColor, textColor),
+                        const SizedBox(height: 32),
+                        Text(
+                          'Ayarlar',
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: textColor,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        _buildSettingsList(userState, primaryColor, textColor),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
     );
   }
@@ -75,25 +125,29 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
           CircleAvatar(
-            radius: 60,
+            radius: 50,
             backgroundColor: primaryColor.withOpacity(0.2),
-            child: _buildUserAvatar(user, 58),
+            child: _buildUserAvatar(user, 48),
           ),
           const SizedBox(height: 16),
           Text(
             user.user?.name ?? 'Ad Soyad',
             style: TextStyle(
-              fontSize: 22,
+              fontSize: 24,
               fontWeight: FontWeight.bold,
-              color: primaryColor,
+              color: textColor,
             ),
           ),
           const SizedBox(height: 4),
           Text(
             user.user?.email ?? 'email@example.com',
-            style: TextStyle(fontSize: 16, color: textColor.withOpacity(0.7)),
+            style: TextStyle(
+              fontSize: 16,
+              color: textColor.withOpacity(0.7),
+            ),
           ),
         ],
       ),
@@ -132,9 +186,162 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
           );
   }
 
+  Widget _buildContentLists(Color primaryColor, Color textColor) {
+    return Container(
+      height: 180,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: [
+          _buildListCard(
+            title: 'Beğenilenler',
+            icon: Icons.favorite,
+            backgroundColor: Colors.red.shade400,
+            count: 0,
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const ContentListView(
+                  title: 'Beğenilenler',
+                  source: ContentSource.liked,
+                ),
+              ),
+            ),
+          ),
+          _buildListCard(
+            title: 'İzlenenler',
+            icon: Icons.visibility,
+            backgroundColor: Colors.blue.shade400,
+            count: 0,
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const ContentListView(
+                  title: 'İzlenenler',
+                  source: ContentSource.watched,
+                ),
+              ),
+            ),
+          ),
+          _buildListCard(
+            title: 'İzlenecekler',
+            icon: Icons.bookmark,
+            backgroundColor: Colors.purple.shade400,
+            count: 0,
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const ContentListView(
+                  title: 'İzlenecekler',
+                  source: ContentSource.watchlist,
+                ),
+              ),
+            ),
+          ),
+          _buildListCard(
+            title: 'Koleksiyonlar',
+            icon: Icons.folder,
+            backgroundColor: Colors.amber.shade700,
+            count: 0,
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const CollectionsView()),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildListCard({
+    required String title,
+    required IconData icon,
+    required Color backgroundColor,
+    required int count,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 140,
+        margin: const EdgeInsets.only(right: 16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              backgroundColor,
+              backgroundColor.withOpacity(0.7),
+            ],
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: backgroundColor.withOpacity(0.4),
+              blurRadius: 8,
+              offset: Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Stack(
+          children: [
+            Positioned(
+              top: -15,
+              right: -15,
+              child: Icon(
+                icon,
+                size: 80,
+                color: Colors.white.withOpacity(0.2),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Icon(
+                    icon,
+                    color: Colors.white,
+                    size: 32,
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    title,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.3),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      '$count',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildSettingsList(
       UserState user, Color primaryColor, Color textColor) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         _settingTile(
           icon: Icons.dark_mode,

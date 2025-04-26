@@ -3,8 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/theme_constants.dart';
 import '../../../core/constants/hero_constants.dart';
 import '../../../core/models/content.dart';
+import '../providers/user_content_provider.dart';
 
-class ContentDetailPage extends ConsumerWidget {
+class ContentDetailPage extends ConsumerStatefulWidget {
   final Content content;
   final String contentId;
   final String sourceTag;
@@ -17,12 +18,22 @@ class ContentDetailPage extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ContentDetailPage> createState() => _ContentDetailPageState();
+}
+
+class _ContentDetailPageState extends ConsumerState<ContentDetailPage> {
+  @override
+  void initState() {
+    super.initState();
+    ref
+        .read(userContentProvider.notifier)
+        .loadUserContentStatus(widget.contentId);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final textColor = ThemeConstants.getTextColor(ref);
     final primaryColor = ThemeConstants.getPrimaryColor(ref);
-
-    // Hero tag HeroConstants ile oluşturuluyor
-    final heroTag = HeroConstants.contentImageTag(contentId, sourceTag);
 
     return Scaffold(
       appBar: _buildAppBar(context, textColor),
@@ -30,7 +41,7 @@ class ContentDetailPage extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildHeaderImage(heroTag, textColor, primaryColor),
+            _buildHeaderImage(textColor, primaryColor),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -42,10 +53,11 @@ class ContentDetailPage extends ConsumerWidget {
                   const SizedBox(height: 24),
                   _buildDescriptionSection(textColor),
                   const SizedBox(height: 24),
-                  if (content.genres != null && content.genres!.isNotEmpty)
+                  if (widget.content.genres != null &&
+                      widget.content.genres!.isNotEmpty)
                     _buildGenresSection(textColor, primaryColor),
                   const SizedBox(height: 24),
-                  _buildActionButtons(context, textColor),
+                  _ActionButtons(contentId: widget.contentId),
                 ],
               ),
             ),
@@ -55,11 +67,10 @@ class ContentDetailPage extends ConsumerWidget {
     );
   }
 
-  /// Uygulama çubuğu
   AppBar _buildAppBar(BuildContext context, Color textColor) {
     return AppBar(
       title: Text(
-        content.title ?? 'İçerik Detayı',
+        widget.content.title ?? 'İçerik Detayı',
         style: TextStyle(color: textColor),
       ),
       iconTheme: IconThemeData(color: textColor),
@@ -68,43 +79,44 @@ class ContentDetailPage extends ConsumerWidget {
     );
   }
 
-  /// İçerik resmi/afişi
-  Widget _buildHeaderImage(
-      String heroTag, Color textColor, Color primaryColor) {
+  Widget _buildHeaderImage(Color textColor, Color primaryColor) {
+    final heroTag =
+        HeroConstants.contentImageTag(widget.contentId, widget.sourceTag);
+
     return Container(
       height: 250,
       width: double.infinity,
       color: Colors.grey.shade800,
-      child: content.imageUrl != null && content.imageUrl!.isNotEmpty
-          ? Hero(
-              tag: heroTag,
-              child: Image.network(
-                content.imageUrl!,
-                fit: BoxFit.cover,
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return Center(
-                    child: CircularProgressIndicator(
-                      color: primaryColor,
-                      value: loadingProgress.expectedTotalBytes != null
-                          ? loadingProgress.cumulativeBytesLoaded /
-                              loadingProgress.expectedTotalBytes!
-                          : null,
-                    ),
-                  );
-                },
-                errorBuilder: (context, error, stackTrace) {
-                  return _buildPlaceholderIcon(textColor, 96);
-                },
-              ),
-            )
-          : _buildPlaceholderIcon(textColor, 96),
+      child:
+          widget.content.imageUrl != null && widget.content.imageUrl!.isNotEmpty
+              ? Hero(
+                  tag: heroTag,
+                  child: Image.network(
+                    widget.content.imageUrl!,
+                    fit: BoxFit.cover,
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return Center(
+                        child: CircularProgressIndicator(
+                          color: primaryColor,
+                          value: loadingProgress.expectedTotalBytes != null
+                              ? loadingProgress.cumulativeBytesLoaded /
+                                  loadingProgress.expectedTotalBytes!
+                              : null,
+                        ),
+                      );
+                    },
+                    errorBuilder: (context, error, stackTrace) {
+                      return _buildPlaceholderIcon(textColor, 96);
+                    },
+                  ),
+                )
+              : _buildPlaceholderIcon(textColor, 96),
     );
   }
 
-  /// Başlık ve tür etiketi
   Widget _buildTitleSection(Color textColor) {
-    final bool isDizi = content.type == true;
+    final bool isDizi = widget.content.type == true;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,7 +126,7 @@ class ContentDetailPage extends ConsumerWidget {
           children: [
             Expanded(
               child: Text(
-                content.title ?? '',
+                widget.content.title ?? '',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -146,7 +158,7 @@ class ContentDetailPage extends ConsumerWidget {
         ),
         const SizedBox(height: 8),
         Text(
-          'Yapım Yılı: ${content.year}',
+          'Yapım Yılı: ${widget.content.year}',
           style: TextStyle(
             fontSize: 16,
             color: textColor.withOpacity(0.7),
@@ -156,28 +168,27 @@ class ContentDetailPage extends ConsumerWidget {
     );
   }
 
-  /// İstatistikler (Puan, Beğeni, İzlenme)
   Widget _buildStatisticsSection(Color textColor, Color primaryColor) {
     return Row(
       children: [
         _buildStatistic(
           Icons.star,
           Colors.amber,
-          content.averageRating?.toStringAsFixed(1) ?? '-',
+          widget.content.averageRating?.toStringAsFixed(1) ?? '-',
           'Puan',
           textColor,
         ),
         _buildStatistic(
           Icons.favorite,
           Colors.red,
-          '${content.numLikes ?? 0}',
+          '${widget.content.numLikes ?? 0}',
           'Beğeni',
           textColor,
         ),
         _buildStatistic(
           Icons.visibility,
           primaryColor,
-          '${content.numWatches ?? 0}',
+          '${widget.content.numWatches ?? 0}',
           'İzlenme',
           textColor,
         ),
@@ -185,7 +196,6 @@ class ContentDetailPage extends ConsumerWidget {
     );
   }
 
-  /// Açıklama bölümü
   Widget _buildDescriptionSection(Color textColor) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -200,7 +210,7 @@ class ContentDetailPage extends ConsumerWidget {
         ),
         const SizedBox(height: 8),
         Text(
-          content.description ?? 'Açıklama bulunmamaktadır.',
+          widget.content.description ?? 'Açıklama bulunmamaktadır.',
           style: TextStyle(
             fontSize: 16,
             color: textColor.withOpacity(0.9),
@@ -210,7 +220,6 @@ class ContentDetailPage extends ConsumerWidget {
     );
   }
 
-  /// Türler bölümü
   Widget _buildGenresSection(Color textColor, Color primaryColor) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -227,7 +236,7 @@ class ContentDetailPage extends ConsumerWidget {
         Wrap(
           spacing: 8,
           runSpacing: 8,
-          children: content.genres!.map((genre) {
+          children: widget.content.genres!.map((genre) {
             return Container(
               padding: const EdgeInsets.symmetric(
                 horizontal: 12,
@@ -254,55 +263,12 @@ class ContentDetailPage extends ConsumerWidget {
     );
   }
 
-  /// İşlem butonları
-  Widget _buildActionButtons(BuildContext context, Color textColor) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        _buildActionButton(
-          Icons.favorite_border,
-          'Beğen',
-          textColor,
-          onTap: () => _showSnackBar(context, 'İçerik beğenildi', Colors.green),
-        ),
-        _buildActionButton(
-          Icons.visibility,
-          'İzledim',
-          textColor,
-          onTap: () =>
-              _showSnackBar(context, 'İzlendi olarak işaretlendi', Colors.blue),
-        ),
-        _buildActionButton(
-          Icons.list_alt,
-          'Listeme Ekle',
-          textColor,
-          onTap: () =>
-              _showSnackBar(context, 'Listenize eklendi', Colors.purple),
-        ),
-      ],
-    );
-  }
-
-  // Yardımcı metodlar
-
-  /// Placeholder ikon
   Widget _buildPlaceholderIcon(Color textColor, double size) {
     return Center(
       child: Icon(
-        content.type == true ? Icons.tv : Icons.movie,
+        widget.content.type == true ? Icons.tv : Icons.movie,
         color: textColor.withOpacity(0.3),
         size: size,
-      ),
-    );
-  }
-
-  /// Snackbar gösterme yardımcı metodu
-  void _showSnackBar(
-      BuildContext context, String message, Color backgroundColor) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: backgroundColor,
       ),
     );
   }
@@ -344,31 +310,94 @@ class ContentDetailPage extends ConsumerWidget {
       ),
     );
   }
+}
 
-  Widget _buildActionButton(
-    IconData icon,
-    String label,
-    Color textColor, {
+class _ActionButtons extends ConsumerWidget {
+  final String contentId;
+
+  const _ActionButtons({
+    required this.contentId,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final textColor = ThemeConstants.getTextColor(ref);
+    final userContentState = ref.watch(userContentProvider);
+    final isLiked = userContentState?.isLiked ?? false;
+    final isWatched = userContentState?.isWatched ?? false;
+    final isInWatchlist = userContentState?.isInWatchlist ?? false;
+    final isLoading = userContentState == null;
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        _buildActionButton(
+          icon: isLoading
+              ? Icons.hourglass_empty
+              : (isLiked ? Icons.favorite : Icons.favorite_border),
+          label: 'Beğen',
+          color: isLoading
+              ? textColor.withOpacity(0.5)
+              : (isLiked ? Colors.red : textColor),
+          onTap: () {
+            if (!isLoading) {
+              ref.read(userContentProvider.notifier).toggleLike(contentId);
+            }
+          },
+        ),
+        _buildActionButton(
+          icon: isLoading
+              ? Icons.hourglass_empty
+              : (isWatched ? Icons.visibility : Icons.visibility_outlined),
+          label: 'İzledim',
+          color: isLoading
+              ? textColor.withOpacity(0.5)
+              : (isWatched ? Colors.blue : textColor),
+          onTap: () {
+            if (!isLoading) {
+              ref.read(userContentProvider.notifier).toggleWatch(contentId);
+            }
+          },
+        ),
+        _buildActionButton(
+          icon: isLoading
+              ? Icons.hourglass_empty
+              : (isInWatchlist ? Icons.bookmark : Icons.bookmark_border),
+          label: 'Listeme Ekle',
+          color: isLoading
+              ? textColor.withOpacity(0.5)
+              : (isInWatchlist ? Colors.purple : textColor),
+          onTap: () {
+            if (!isLoading) {
+              ref.read(userContentProvider.notifier).toggleWatchlist(contentId);
+            }
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildActionButton({
+    required IconData icon,
+    required String label,
+    required Color color,
     required VoidCallback onTap,
   }) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(8),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: 8.0,
-          horizontal: 16.0,
-        ),
-        child: Column(
-          children: [
-            Icon(icon, color: textColor),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: TextStyle(color: textColor, fontSize: 12),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, color: color, size: 28),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: TextStyle(
+              color: color,
+              fontSize: 12,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

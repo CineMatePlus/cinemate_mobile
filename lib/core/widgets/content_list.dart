@@ -32,7 +32,7 @@ class ContentList extends ConsumerWidget {
     }
 
     if (status == ContentLoadingStatus.error) {
-      return SizedBox(
+      return const SizedBox(
         height: 200,
         child: Center(
           child: Text(
