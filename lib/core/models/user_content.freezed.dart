@@ -21,16 +21,21 @@ UserContent _$UserContentFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$UserContent {
   @JsonKey(name: '_id')
-  String get id => throw _privateConstructorUsedError;
+  String? get id => throw _privateConstructorUsedError;
   @JsonKey(name: 'user_id')
   String get userId => throw _privateConstructorUsedError;
   @JsonKey(name: 'content_id')
   String get contentId => throw _privateConstructorUsedError;
-  bool get isLiked => throw _privateConstructorUsedError;
-  bool get isWatched => throw _privateConstructorUsedError;
-  bool get inWatchlist => throw _privateConstructorUsedError;
+  @JsonKey(name: 'is_liked')
+  bool? get isLiked => throw _privateConstructorUsedError;
+  @JsonKey(name: 'is_watched')
+  bool? get isWatched => throw _privateConstructorUsedError;
+  @JsonKey(name: 'in_watchlist')
+  bool? get isInWatchlist => throw _privateConstructorUsedError;
+  @JsonKey(name: 'rated')
   int? get rated => throw _privateConstructorUsedError;
-  DateTime get lastInteractedAt => throw _privateConstructorUsedError;
+  @JsonKey(name: 'last_interacted_at')
+  DateTime? get lastInteractedAt => throw _privateConstructorUsedError;
 
   /// Serializes this UserContent to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -49,14 +54,14 @@ abstract class $UserContentCopyWith<$Res> {
       _$UserContentCopyWithImpl<$Res, UserContent>;
   @useResult
   $Res call(
-      {@JsonKey(name: '_id') String id,
+      {@JsonKey(name: '_id') String? id,
       @JsonKey(name: 'user_id') String userId,
       @JsonKey(name: 'content_id') String contentId,
-      bool isLiked,
-      bool isWatched,
-      bool inWatchlist,
-      int? rated,
-      DateTime lastInteractedAt});
+      @JsonKey(name: 'is_liked') bool? isLiked,
+      @JsonKey(name: 'is_watched') bool? isWatched,
+      @JsonKey(name: 'in_watchlist') bool? isInWatchlist,
+      @JsonKey(name: 'rated') int? rated,
+      @JsonKey(name: 'last_interacted_at') DateTime? lastInteractedAt});
 }
 
 /// @nodoc
@@ -74,20 +79,20 @@ class _$UserContentCopyWithImpl<$Res, $Val extends UserContent>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
+    Object? id = freezed,
     Object? userId = null,
     Object? contentId = null,
-    Object? isLiked = null,
-    Object? isWatched = null,
-    Object? inWatchlist = null,
+    Object? isLiked = freezed,
+    Object? isWatched = freezed,
+    Object? isInWatchlist = freezed,
     Object? rated = freezed,
-    Object? lastInteractedAt = null,
+    Object? lastInteractedAt = freezed,
   }) {
     return _then(_value.copyWith(
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       userId: null == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
@@ -96,26 +101,26 @@ class _$UserContentCopyWithImpl<$Res, $Val extends UserContent>
           ? _value.contentId
           : contentId // ignore: cast_nullable_to_non_nullable
               as String,
-      isLiked: null == isLiked
+      isLiked: freezed == isLiked
           ? _value.isLiked
           : isLiked // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isWatched: null == isWatched
+              as bool?,
+      isWatched: freezed == isWatched
           ? _value.isWatched
           : isWatched // ignore: cast_nullable_to_non_nullable
-              as bool,
-      inWatchlist: null == inWatchlist
-          ? _value.inWatchlist
-          : inWatchlist // ignore: cast_nullable_to_non_nullable
-              as bool,
+              as bool?,
+      isInWatchlist: freezed == isInWatchlist
+          ? _value.isInWatchlist
+          : isInWatchlist // ignore: cast_nullable_to_non_nullable
+              as bool?,
       rated: freezed == rated
           ? _value.rated
           : rated // ignore: cast_nullable_to_non_nullable
               as int?,
-      lastInteractedAt: null == lastInteractedAt
+      lastInteractedAt: freezed == lastInteractedAt
           ? _value.lastInteractedAt
           : lastInteractedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as DateTime?,
     ) as $Val);
   }
 }
@@ -129,14 +134,14 @@ abstract class _$$UserContentImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@JsonKey(name: '_id') String id,
+      {@JsonKey(name: '_id') String? id,
       @JsonKey(name: 'user_id') String userId,
       @JsonKey(name: 'content_id') String contentId,
-      bool isLiked,
-      bool isWatched,
-      bool inWatchlist,
-      int? rated,
-      DateTime lastInteractedAt});
+      @JsonKey(name: 'is_liked') bool? isLiked,
+      @JsonKey(name: 'is_watched') bool? isWatched,
+      @JsonKey(name: 'in_watchlist') bool? isInWatchlist,
+      @JsonKey(name: 'rated') int? rated,
+      @JsonKey(name: 'last_interacted_at') DateTime? lastInteractedAt});
 }
 
 /// @nodoc
@@ -152,20 +157,20 @@ class __$$UserContentImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
+    Object? id = freezed,
     Object? userId = null,
     Object? contentId = null,
-    Object? isLiked = null,
-    Object? isWatched = null,
-    Object? inWatchlist = null,
+    Object? isLiked = freezed,
+    Object? isWatched = freezed,
+    Object? isInWatchlist = freezed,
     Object? rated = freezed,
-    Object? lastInteractedAt = null,
+    Object? lastInteractedAt = freezed,
   }) {
     return _then(_$UserContentImpl(
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       userId: null == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
@@ -174,26 +179,26 @@ class __$$UserContentImplCopyWithImpl<$Res>
           ? _value.contentId
           : contentId // ignore: cast_nullable_to_non_nullable
               as String,
-      isLiked: null == isLiked
+      isLiked: freezed == isLiked
           ? _value.isLiked
           : isLiked // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isWatched: null == isWatched
+              as bool?,
+      isWatched: freezed == isWatched
           ? _value.isWatched
           : isWatched // ignore: cast_nullable_to_non_nullable
-              as bool,
-      inWatchlist: null == inWatchlist
-          ? _value.inWatchlist
-          : inWatchlist // ignore: cast_nullable_to_non_nullable
-              as bool,
+              as bool?,
+      isInWatchlist: freezed == isInWatchlist
+          ? _value.isInWatchlist
+          : isInWatchlist // ignore: cast_nullable_to_non_nullable
+              as bool?,
       rated: freezed == rated
           ? _value.rated
           : rated // ignore: cast_nullable_to_non_nullable
               as int?,
-      lastInteractedAt: null == lastInteractedAt
+      lastInteractedAt: freezed == lastInteractedAt
           ? _value.lastInteractedAt
           : lastInteractedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as DateTime?,
     ));
   }
 }
@@ -202,21 +207,21 @@ class __$$UserContentImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$UserContentImpl implements _UserContent {
   const _$UserContentImpl(
-      {@JsonKey(name: '_id') required this.id,
+      {@JsonKey(name: '_id') this.id,
       @JsonKey(name: 'user_id') required this.userId,
       @JsonKey(name: 'content_id') required this.contentId,
-      this.isLiked = false,
-      this.isWatched = false,
-      this.inWatchlist = false,
-      this.rated,
-      required this.lastInteractedAt});
+      @JsonKey(name: 'is_liked') this.isLiked,
+      @JsonKey(name: 'is_watched') this.isWatched,
+      @JsonKey(name: 'in_watchlist') this.isInWatchlist,
+      @JsonKey(name: 'rated') this.rated,
+      @JsonKey(name: 'last_interacted_at') this.lastInteractedAt});
 
   factory _$UserContentImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserContentImplFromJson(json);
 
   @override
   @JsonKey(name: '_id')
-  final String id;
+  final String? id;
   @override
   @JsonKey(name: 'user_id')
   final String userId;
@@ -224,22 +229,24 @@ class _$UserContentImpl implements _UserContent {
   @JsonKey(name: 'content_id')
   final String contentId;
   @override
-  @JsonKey()
-  final bool isLiked;
+  @JsonKey(name: 'is_liked')
+  final bool? isLiked;
   @override
-  @JsonKey()
-  final bool isWatched;
+  @JsonKey(name: 'is_watched')
+  final bool? isWatched;
   @override
-  @JsonKey()
-  final bool inWatchlist;
+  @JsonKey(name: 'in_watchlist')
+  final bool? isInWatchlist;
   @override
+  @JsonKey(name: 'rated')
   final int? rated;
   @override
-  final DateTime lastInteractedAt;
+  @JsonKey(name: 'last_interacted_at')
+  final DateTime? lastInteractedAt;
 
   @override
   String toString() {
-    return 'UserContent(id: $id, userId: $userId, contentId: $contentId, isLiked: $isLiked, isWatched: $isWatched, inWatchlist: $inWatchlist, rated: $rated, lastInteractedAt: $lastInteractedAt)';
+    return 'UserContent(id: $id, userId: $userId, contentId: $contentId, isLiked: $isLiked, isWatched: $isWatched, isInWatchlist: $isInWatchlist, rated: $rated, lastInteractedAt: $lastInteractedAt)';
   }
 
   @override
@@ -254,8 +261,8 @@ class _$UserContentImpl implements _UserContent {
             (identical(other.isLiked, isLiked) || other.isLiked == isLiked) &&
             (identical(other.isWatched, isWatched) ||
                 other.isWatched == isWatched) &&
-            (identical(other.inWatchlist, inWatchlist) ||
-                other.inWatchlist == inWatchlist) &&
+            (identical(other.isInWatchlist, isInWatchlist) ||
+                other.isInWatchlist == isInWatchlist) &&
             (identical(other.rated, rated) || other.rated == rated) &&
             (identical(other.lastInteractedAt, lastInteractedAt) ||
                 other.lastInteractedAt == lastInteractedAt));
@@ -264,7 +271,7 @@ class _$UserContentImpl implements _UserContent {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, userId, contentId, isLiked,
-      isWatched, inWatchlist, rated, lastInteractedAt);
+      isWatched, isInWatchlist, rated, lastInteractedAt);
 
   /// Create a copy of UserContent
   /// with the given fields replaced by the non-null parameter values.
@@ -284,21 +291,22 @@ class _$UserContentImpl implements _UserContent {
 
 abstract class _UserContent implements UserContent {
   const factory _UserContent(
-      {@JsonKey(name: '_id') required final String id,
+      {@JsonKey(name: '_id') final String? id,
       @JsonKey(name: 'user_id') required final String userId,
       @JsonKey(name: 'content_id') required final String contentId,
-      final bool isLiked,
-      final bool isWatched,
-      final bool inWatchlist,
-      final int? rated,
-      required final DateTime lastInteractedAt}) = _$UserContentImpl;
+      @JsonKey(name: 'is_liked') final bool? isLiked,
+      @JsonKey(name: 'is_watched') final bool? isWatched,
+      @JsonKey(name: 'in_watchlist') final bool? isInWatchlist,
+      @JsonKey(name: 'rated') final int? rated,
+      @JsonKey(name: 'last_interacted_at')
+      final DateTime? lastInteractedAt}) = _$UserContentImpl;
 
   factory _UserContent.fromJson(Map<String, dynamic> json) =
       _$UserContentImpl.fromJson;
 
   @override
   @JsonKey(name: '_id')
-  String get id;
+  String? get id;
   @override
   @JsonKey(name: 'user_id')
   String get userId;
@@ -306,15 +314,20 @@ abstract class _UserContent implements UserContent {
   @JsonKey(name: 'content_id')
   String get contentId;
   @override
-  bool get isLiked;
+  @JsonKey(name: 'is_liked')
+  bool? get isLiked;
   @override
-  bool get isWatched;
+  @JsonKey(name: 'is_watched')
+  bool? get isWatched;
   @override
-  bool get inWatchlist;
+  @JsonKey(name: 'in_watchlist')
+  bool? get isInWatchlist;
   @override
+  @JsonKey(name: 'rated')
   int? get rated;
   @override
-  DateTime get lastInteractedAt;
+  @JsonKey(name: 'last_interacted_at')
+  DateTime? get lastInteractedAt;
 
   /// Create a copy of UserContent
   /// with the given fields replaced by the non-null parameter values.
