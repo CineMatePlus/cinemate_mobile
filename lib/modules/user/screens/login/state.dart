@@ -19,8 +19,8 @@ class LoginState {
   LoginState({
     this.status = LoginStatus.initial,
     this.error,
-    this.email = '',
-    this.password = '',
+    this.email = 'string@gmail.com',
+    this.password = 'string',
     this.isObscure = true,
   });
 
