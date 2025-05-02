@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../../core/constants/hero_constants.dart';
 import '../../../../../core/models/content.dart';
-import '../../../../detail/screens/content_detail_page.dart';
+import '../../../../detail/view.dart';
 import '../../../../user_content/user_content_list_provider.dart';
 import '../collection_provider.dart';
 import '../content_list_view.dart';
