@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../core/models/user.dart';
-import '../../onboarding/splash.view.dart';
-import '../../user/service/service.dart';
+import '../../onboarding/splash/splash.view.dart';
+import '../../auth/service/service.dart';
 
 class ProfileState {
   final User? user;

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../core/constants/theme_constants.dart';
-import '../../../core/models/collection.dart';
-import '../providers/collection_provider.dart';
+import '../../../../core/constants/theme_constants.dart';
+import '../../../../core/models/collection.dart';
+import 'collection_provider.dart';
 import 'content_list_view.dart';
 
 class CollectionsView extends ConsumerStatefulWidget {

@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/constants/theme_constants.dart';
 import '../../core/providers/theme_provider.dart';
 
-import 'splash.view.dart';
+import 'splash/splash.view.dart';
 import 'state.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {

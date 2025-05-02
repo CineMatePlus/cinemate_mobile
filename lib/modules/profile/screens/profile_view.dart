@@ -2,12 +2,12 @@ import 'package:cinemate_mobile/core/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/theme_constants.dart';
-import '../../../modules/common/widgets/theme_switch.dart';
-import '../../user/state.dart';
+import '../../../core/widgets/theme_switch.dart';
+import '../../auth/state.dart';
 import 'edit_screen/edit_view.dart';
 import 'profil_state.dart';
-import 'collections_view.dart';
-import 'content_list_view.dart';
+import 'collections/collections_view.dart';
+import 'collections/content_list_view.dart';
 
 class ProfileView extends ConsumerStatefulWidget {
   const ProfileView({super.key});
@@ -187,8 +187,8 @@ class _ProfileViewState extends ConsumerState<ProfileView>
   }
 
   Widget _buildContentLists(Color primaryColor, Color textColor) {
-    return Container(
-      height: 180,
+    return SizedBox(
+      height: 140,
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: [
@@ -196,7 +196,6 @@ class _ProfileViewState extends ConsumerState<ProfileView>
             title: 'Beğenilenler',
             icon: Icons.favorite,
             backgroundColor: Colors.red.shade400,
-            count: 0,
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
@@ -211,7 +210,6 @@ class _ProfileViewState extends ConsumerState<ProfileView>
             title: 'İzlenenler',
             icon: Icons.visibility,
             backgroundColor: Colors.blue.shade400,
-            count: 0,
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
@@ -226,7 +224,6 @@ class _ProfileViewState extends ConsumerState<ProfileView>
             title: 'İzlenecekler',
             icon: Icons.bookmark,
             backgroundColor: Colors.purple.shade400,
-            count: 0,
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
@@ -241,7 +238,6 @@ class _ProfileViewState extends ConsumerState<ProfileView>
             title: 'Koleksiyonlar',
             icon: Icons.folder,
             backgroundColor: Colors.amber.shade700,
-            count: 0,
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const CollectionsView()),
@@ -256,7 +252,6 @@ class _ProfileViewState extends ConsumerState<ProfileView>
     required String title,
     required IconData icon,
     required Color backgroundColor,
-    required int count,
     required VoidCallback onTap,
   }) {
     return GestureDetector(
@@ -285,11 +280,11 @@ class _ProfileViewState extends ConsumerState<ProfileView>
         child: Stack(
           children: [
             Positioned(
-              top: -15,
-              right: -15,
+              top: 30,
+              right: 70,
               child: Icon(
                 icon,
-                size: 80,
+                size: 50,
                 color: Colors.white.withOpacity(0.2),
               ),
             ),
@@ -304,29 +299,13 @@ class _ProfileViewState extends ConsumerState<ProfileView>
                     color: Colors.white,
                     size: 32,
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 20),
                   Text(
                     title,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
-                    ),
-                  ),
-                  SizedBox(height: 8),
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.3),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Text(
-                      '$count',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
                     ),
                   ),
                 ],

@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../core/models/collection.dart';
-import '../../../core/models/content.dart';
-import '../../../core/services/collection_service.dart';
-import '../../../core/services/api_service.dart';
+import '../../../../core/models/collection.dart';
+import '../../../../core/models/content.dart';
+import 'service/collection_service.dart';
+import '../../../../core/services/api_service.dart';
 
 final collectionServiceProvider = Provider<CollectionService>((ref) {
   final apiService = ApiService();

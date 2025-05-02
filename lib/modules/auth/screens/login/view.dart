@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:cinemate_mobile/modules/user/screens/login/state.dart';
+import 'package:cinemate_mobile/modules/auth/screens/login/state.dart';
 import 'package:cinemate_mobile/core/constants/theme_constants.dart';
 
 import '../../../home/view.dart';

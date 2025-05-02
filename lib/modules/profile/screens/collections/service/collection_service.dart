@@ -1,6 +1,6 @@
-import '../models/collection.dart';
-import '../models/content.dart';
-import 'api_service.dart';
+import '../../../../../core/models/collection.dart';
+import '../../../../../core/models/content.dart';
+import '../../../../../core/services/api_service.dart';
 
 class CollectionService {
   final ApiService _apiService;

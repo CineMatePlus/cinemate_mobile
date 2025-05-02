@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:cinemate_mobile/modules/user/service/service.dart';
-import 'package:cinemate_mobile/modules/user/state.dart';
+import 'package:cinemate_mobile/modules/auth/service/service.dart';
+import 'package:cinemate_mobile/modules/auth/state.dart';
 
 enum LoginStatus {
   initial,

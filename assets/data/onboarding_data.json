@@ -1,19 +1,17 @@
 [
-    {
-      "title": "Welcome to Surf.",
-      "subtitle": "I provide essential stuff for your UI designs every Tuesday!",
-      "image": "assets/images/onboarding.png"
-  
-    },
-    {
-      "title": "Design Template uploads Every Tuesday!",
-      "subtitle": "Make sure to take a look my uplab profile every tuesday",
-      "image": "assets/images/onboarding.png"
-    },
-    {
-      "title": "Download now!",
-      "subtitle": "You can follow me if you wanted comment on any to get some freebies",
-      "image": "assets/images/onboarding.png"
-    }
-  ]
-  
+  {
+    "title": "Welcome to CineMate!",
+    "subtitle": "Your personal guide to discovering and tracking great movies.",
+    "image": "assets/images/onboarding.png"
+  },
+  {
+    "title": "Smart Movie Suggestions",
+    "subtitle": "Get tailored movie recommendations based on your taste.",
+    "image": "assets/images/onboarding.png"
+  },
+  {
+    "title": "Track. Discover. Enjoy.",
+    "subtitle": "Create your watchlist, mark favorites, and never miss a hit.",
+    "image": "assets/images/onboarding.png"
+  }
+]

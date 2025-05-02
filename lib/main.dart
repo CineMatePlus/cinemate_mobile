@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'modules/onboarding/splash.view.dart';
+import 'modules/onboarding/splash/splash.view.dart';
 import 'core/constants/theme_constants.dart';
 import 'core/providers/theme_provider.dart';
 

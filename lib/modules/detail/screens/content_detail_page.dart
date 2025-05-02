@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/theme_constants.dart';
 import '../../../core/constants/hero_constants.dart';
 import '../../../core/models/content.dart';
-import '../providers/user_content_provider.dart';
+import '../../user_content/user_content_provider.dart';
 
 class ContentDetailPage extends ConsumerStatefulWidget {
   final Content content;

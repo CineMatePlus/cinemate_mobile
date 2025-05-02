@@ -1,6 +1,6 @@
-import '../models/user_content.dart';
-import '../models/content.dart';
-import 'api_service.dart';
+import '../../core/models/user_content.dart';
+import '../../core/models/content.dart';
+import '../../core/services/api_service.dart';
 
 class UserContentService {
   final ApiService _apiService;

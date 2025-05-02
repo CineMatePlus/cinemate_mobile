@@ -3,7 +3,7 @@ import '../../core/constants/theme_constants.dart';
 import '../../core/constants/hero_constants.dart';
 import '../../core/models/content.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../modules/detail/pages/content_detail_page.dart';
+import '../../modules/detail/screens/content_detail_page.dart';
 
 class ContentCard extends ConsumerWidget {
   final Content content;

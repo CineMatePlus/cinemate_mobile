@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../core/models/content.dart';
-import '../../../core/services/user_content_service.dart';
-import '../../../core/services/api_service.dart';
+import '../../core/models/content.dart';
+import 'user_content_service.dart';
+import '../../core/services/api_service.dart';
 
 final userContentListServiceProvider = Provider<UserContentService>((ref) {
   final apiService = ApiService();
