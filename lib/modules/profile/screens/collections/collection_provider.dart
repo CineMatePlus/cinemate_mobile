@@ -139,7 +139,7 @@ class CollectionContentsNotifier
   }
 
   Future<void> loadContents({bool refresh = false}) async {
-    if (state is AsyncLoading && !refresh) {
+    if (!refresh && (state.isLoading || state is AsyncLoading)) {
       return; // Zaten yükleme yapılıyorsa tekrar başlatma
     }
 

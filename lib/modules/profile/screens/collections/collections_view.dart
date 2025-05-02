@@ -161,7 +161,7 @@ class _CollectionsViewState extends ConsumerState<CollectionsView> {
             context,
             MaterialPageRoute(
               builder: (context) => ContentListView(
-                title: collection.title,
+                title: collection.title ?? '',
                 source: ContentSource.collection,
                 collectionId: collection.id,
               ),
@@ -184,7 +184,7 @@ class _CollectionsViewState extends ConsumerState<CollectionsView> {
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      collection.title,
+                      collection.title ?? '',
                       style: TextStyle(
                         color: textColor,
                         fontSize: 18,
@@ -224,13 +224,15 @@ class _CollectionsViewState extends ConsumerState<CollectionsView> {
               Row(
                 children: [
                   Icon(
-                    collection.isPublic ? Icons.public : Icons.lock_outline,
+                    collection.isPublic ?? false
+                        ? Icons.public
+                        : Icons.lock_outline,
                     color: textColor.withOpacity(0.5),
                     size: 16,
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    collection.isPublic ? 'Herkese Açık' : 'Özel',
+                    collection.isPublic ?? false ? 'Herkese Açık' : 'Özel',
                     style: TextStyle(
                       color: textColor.withOpacity(0.5),
                       fontSize: 14,
@@ -238,7 +240,7 @@ class _CollectionsViewState extends ConsumerState<CollectionsView> {
                   ),
                   const Spacer(),
                   Text(
-                    '${collection.contentIds.length} içerik',
+                    '${collection.contentIds?.length ?? 0} içerik',
                     style: TextStyle(
                       color: textColor.withOpacity(0.7),
                       fontSize: 14,
@@ -319,13 +321,27 @@ class _CollectionsViewState extends ConsumerState<CollectionsView> {
                   onPressed: () {
                     final title = _newCollectionController.text.trim();
                     if (title.isNotEmpty) {
-                      ref
-                          .read(userCollectionsProvider.notifier)
+                      final notifier =
+                          ref.read(userCollectionsProvider.notifier);
+                      notifier
                           .createCollection(
-                            title: title,
-                            isPublic: isPublic,
+                        title: title,
+                        isPublic: isPublic,
+                      )
+                          .then((_) {
+                        Navigator.of(context).pop();
+                      }).catchError((error) {
+                        if (error.toString().contains(
+                            'Bu başlıkta bir koleksiyon zaten mevcut')) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                  'Bu isimde bir koleksiyon zaten mevcut.'),
+                              backgroundColor: Colors.red,
+                            ),
                           );
-                      Navigator.of(context).pop();
+                        }
+                      });
                     }
                   },
                 ),
@@ -345,7 +361,7 @@ class _CollectionsViewState extends ConsumerState<CollectionsView> {
   ) {
     final TextEditingController titleController =
         TextEditingController(text: collection.title);
-    bool isPublic = collection.isPublic;
+    bool isPublic = collection.isPublic ?? false;
 
     showDialog(
       context: context,
@@ -411,7 +427,7 @@ class _CollectionsViewState extends ConsumerState<CollectionsView> {
                       ref
                           .read(userCollectionsProvider.notifier)
                           .updateCollection(
-                            collectionId: collection.id,
+                            collectionId: collection.id ?? '',
                             title: title,
                             isPublic: isPublic,
                           );
@@ -463,7 +479,7 @@ class _CollectionsViewState extends ConsumerState<CollectionsView> {
               onPressed: () {
                 ref
                     .read(userCollectionsProvider.notifier)
-                    .deleteCollection(collection.id);
+                    .deleteCollection(collection.id ?? '');
                 Navigator.of(context).pop();
               },
             ),

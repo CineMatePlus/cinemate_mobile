@@ -47,7 +47,7 @@ class CollectionService {
   }) async {
     final response = await _apiService.request(
       'POST',
-      '/collections',
+      '/collections/',
       data: {
         'title': title,
         'isPublic': isPublic,

@@ -114,18 +114,6 @@ class _ContentListViewState extends ConsumerState<ContentListView> {
     // Yükleniyor mu kontrolü
     final bool isDataLoading = _isLoadingState();
 
-    // Özel koleksiyon için, içerik yüklemesi koleksiyon ilk açıldığında başlatılır
-    if (widget.source == ContentSource.collection &&
-        widget.collectionId != null &&
-        contents.isEmpty &&
-        !isDataLoading) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        ref
-            .read(collectionContentsProvider(widget.collectionId!).notifier)
-            .loadContents(refresh: true);
-      });
-    }
-
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
