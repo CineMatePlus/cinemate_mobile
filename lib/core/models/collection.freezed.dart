@@ -20,13 +20,19 @@ Collection _$CollectionFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Collection {
-  String get id => throw _privateConstructorUsedError;
-  String get userId => throw _privateConstructorUsedError;
-  String get title => throw _privateConstructorUsedError;
-  bool get isPublic => throw _privateConstructorUsedError;
-  List<String> get contentIds => throw _privateConstructorUsedError;
-  DateTime get createdAt => throw _privateConstructorUsedError;
-  DateTime get updatedAt => throw _privateConstructorUsedError;
+  @JsonKey(name: '_id')
+  String? get id => throw _privateConstructorUsedError;
+  @JsonKey(name: 'user_id')
+  String? get userId => throw _privateConstructorUsedError;
+  String? get title => throw _privateConstructorUsedError;
+  @JsonKey(name: 'is_public')
+  bool? get isPublic => throw _privateConstructorUsedError;
+  @JsonKey(name: 'content_ids')
+  List<String>? get contentIds => throw _privateConstructorUsedError;
+  @JsonKey(name: 'created_at')
+  DateTime? get createdAt => throw _privateConstructorUsedError;
+  @JsonKey(name: 'updated_at')
+  DateTime? get updatedAt => throw _privateConstructorUsedError;
 
   /// Serializes this Collection to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -45,13 +51,13 @@ abstract class $CollectionCopyWith<$Res> {
       _$CollectionCopyWithImpl<$Res, Collection>;
   @useResult
   $Res call(
-      {String id,
-      String userId,
-      String title,
-      bool isPublic,
-      List<String> contentIds,
-      DateTime createdAt,
-      DateTime updatedAt});
+      {@JsonKey(name: '_id') String? id,
+      @JsonKey(name: 'user_id') String? userId,
+      String? title,
+      @JsonKey(name: 'is_public') bool? isPublic,
+      @JsonKey(name: 'content_ids') List<String>? contentIds,
+      @JsonKey(name: 'created_at') DateTime? createdAt,
+      @JsonKey(name: 'updated_at') DateTime? updatedAt});
 }
 
 /// @nodoc
@@ -69,43 +75,43 @@ class _$CollectionCopyWithImpl<$Res, $Val extends Collection>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
-    Object? userId = null,
-    Object? title = null,
-    Object? isPublic = null,
-    Object? contentIds = null,
-    Object? createdAt = null,
-    Object? updatedAt = null,
+    Object? id = freezed,
+    Object? userId = freezed,
+    Object? title = freezed,
+    Object? isPublic = freezed,
+    Object? contentIds = freezed,
+    Object? createdAt = freezed,
+    Object? updatedAt = freezed,
   }) {
     return _then(_value.copyWith(
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      userId: null == userId
+              as String?,
+      userId: freezed == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as String,
-      title: null == title
+              as String?,
+      title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      isPublic: null == isPublic
+              as String?,
+      isPublic: freezed == isPublic
           ? _value.isPublic
           : isPublic // ignore: cast_nullable_to_non_nullable
-              as bool,
-      contentIds: null == contentIds
+              as bool?,
+      contentIds: freezed == contentIds
           ? _value.contentIds
           : contentIds // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      createdAt: null == createdAt
+              as List<String>?,
+      createdAt: freezed == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      updatedAt: null == updatedAt
+              as DateTime?,
+      updatedAt: freezed == updatedAt
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as DateTime?,
     ) as $Val);
   }
 }
@@ -119,13 +125,13 @@ abstract class _$$CollectionImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String id,
-      String userId,
-      String title,
-      bool isPublic,
-      List<String> contentIds,
-      DateTime createdAt,
-      DateTime updatedAt});
+      {@JsonKey(name: '_id') String? id,
+      @JsonKey(name: 'user_id') String? userId,
+      String? title,
+      @JsonKey(name: 'is_public') bool? isPublic,
+      @JsonKey(name: 'content_ids') List<String>? contentIds,
+      @JsonKey(name: 'created_at') DateTime? createdAt,
+      @JsonKey(name: 'updated_at') DateTime? updatedAt});
 }
 
 /// @nodoc
@@ -141,43 +147,43 @@ class __$$CollectionImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
-    Object? userId = null,
-    Object? title = null,
-    Object? isPublic = null,
-    Object? contentIds = null,
-    Object? createdAt = null,
-    Object? updatedAt = null,
+    Object? id = freezed,
+    Object? userId = freezed,
+    Object? title = freezed,
+    Object? isPublic = freezed,
+    Object? contentIds = freezed,
+    Object? createdAt = freezed,
+    Object? updatedAt = freezed,
   }) {
     return _then(_$CollectionImpl(
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      userId: null == userId
+              as String?,
+      userId: freezed == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as String,
-      title: null == title
+              as String?,
+      title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      isPublic: null == isPublic
+              as String?,
+      isPublic: freezed == isPublic
           ? _value.isPublic
           : isPublic // ignore: cast_nullable_to_non_nullable
-              as bool,
-      contentIds: null == contentIds
+              as bool?,
+      contentIds: freezed == contentIds
           ? _value._contentIds
           : contentIds // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      createdAt: null == createdAt
+              as List<String>?,
+      createdAt: freezed == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      updatedAt: null == updatedAt
+              as DateTime?,
+      updatedAt: freezed == updatedAt
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as DateTime?,
     ));
   }
 }
@@ -186,39 +192,46 @@ class __$$CollectionImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$CollectionImpl implements _Collection {
   const _$CollectionImpl(
-      {required this.id,
-      required this.userId,
-      required this.title,
-      this.isPublic = false,
-      required final List<String> contentIds,
-      required this.createdAt,
-      required this.updatedAt})
+      {@JsonKey(name: '_id') this.id,
+      @JsonKey(name: 'user_id') this.userId,
+      this.title,
+      @JsonKey(name: 'is_public') this.isPublic = false,
+      @JsonKey(name: 'content_ids') final List<String>? contentIds,
+      @JsonKey(name: 'created_at') this.createdAt,
+      @JsonKey(name: 'updated_at') this.updatedAt})
       : _contentIds = contentIds;
 
   factory _$CollectionImpl.fromJson(Map<String, dynamic> json) =>
       _$$CollectionImplFromJson(json);
 
   @override
-  final String id;
+  @JsonKey(name: '_id')
+  final String? id;
   @override
-  final String userId;
+  @JsonKey(name: 'user_id')
+  final String? userId;
   @override
-  final String title;
+  final String? title;
   @override
-  @JsonKey()
-  final bool isPublic;
-  final List<String> _contentIds;
+  @JsonKey(name: 'is_public')
+  final bool? isPublic;
+  final List<String>? _contentIds;
   @override
-  List<String> get contentIds {
+  @JsonKey(name: 'content_ids')
+  List<String>? get contentIds {
+    final value = _contentIds;
+    if (value == null) return null;
     if (_contentIds is EqualUnmodifiableListView) return _contentIds;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_contentIds);
+    return EqualUnmodifiableListView(value);
   }
 
   @override
-  final DateTime createdAt;
+  @JsonKey(name: 'created_at')
+  final DateTime? createdAt;
   @override
-  final DateTime updatedAt;
+  @JsonKey(name: 'updated_at')
+  final DateTime? updatedAt;
 
   @override
   String toString() {
@@ -266,31 +279,38 @@ class _$CollectionImpl implements _Collection {
 
 abstract class _Collection implements Collection {
   const factory _Collection(
-      {required final String id,
-      required final String userId,
-      required final String title,
-      final bool isPublic,
-      required final List<String> contentIds,
-      required final DateTime createdAt,
-      required final DateTime updatedAt}) = _$CollectionImpl;
+          {@JsonKey(name: '_id') final String? id,
+          @JsonKey(name: 'user_id') final String? userId,
+          final String? title,
+          @JsonKey(name: 'is_public') final bool? isPublic,
+          @JsonKey(name: 'content_ids') final List<String>? contentIds,
+          @JsonKey(name: 'created_at') final DateTime? createdAt,
+          @JsonKey(name: 'updated_at') final DateTime? updatedAt}) =
+      _$CollectionImpl;
 
   factory _Collection.fromJson(Map<String, dynamic> json) =
       _$CollectionImpl.fromJson;
 
   @override
-  String get id;
+  @JsonKey(name: '_id')
+  String? get id;
   @override
-  String get userId;
+  @JsonKey(name: 'user_id')
+  String? get userId;
   @override
-  String get title;
+  String? get title;
   @override
-  bool get isPublic;
+  @JsonKey(name: 'is_public')
+  bool? get isPublic;
   @override
-  List<String> get contentIds;
+  @JsonKey(name: 'content_ids')
+  List<String>? get contentIds;
   @override
-  DateTime get createdAt;
+  @JsonKey(name: 'created_at')
+  DateTime? get createdAt;
   @override
-  DateTime get updatedAt;
+  @JsonKey(name: 'updated_at')
+  DateTime? get updatedAt;
 
   /// Create a copy of Collection
   /// with the given fields replaced by the non-null parameter values.

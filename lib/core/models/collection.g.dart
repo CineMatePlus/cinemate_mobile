@@ -8,24 +8,28 @@ part of 'collection.dart';
 
 _$CollectionImpl _$$CollectionImplFromJson(Map<String, dynamic> json) =>
     _$CollectionImpl(
-      id: json['id'] as String,
-      userId: json['userId'] as String,
-      title: json['title'] as String,
-      isPublic: json['isPublic'] as bool? ?? false,
-      contentIds: (json['contentIds'] as List<dynamic>)
-          .map((e) => e as String)
+      id: json['_id'] as String?,
+      userId: json['user_id'] as String?,
+      title: json['title'] as String?,
+      isPublic: json['is_public'] as bool? ?? false,
+      contentIds: (json['content_ids'] as List<dynamic>?)
+          ?.map((e) => e as String)
           .toList(),
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: DateTime.parse(json['updatedAt'] as String),
+      createdAt: json['created_at'] == null
+          ? null
+          : DateTime.parse(json['created_at'] as String),
+      updatedAt: json['updated_at'] == null
+          ? null
+          : DateTime.parse(json['updated_at'] as String),
     );
 
 Map<String, dynamic> _$$CollectionImplToJson(_$CollectionImpl instance) =>
     <String, dynamic>{
-      'id': instance.id,
-      'userId': instance.userId,
+      '_id': instance.id,
+      'user_id': instance.userId,
       'title': instance.title,
-      'isPublic': instance.isPublic,
-      'contentIds': instance.contentIds,
-      'createdAt': instance.createdAt.toIso8601String(),
-      'updatedAt': instance.updatedAt.toIso8601String(),
+      'is_public': instance.isPublic,
+      'content_ids': instance.contentIds,
+      'created_at': instance.createdAt?.toIso8601String(),
+      'updated_at': instance.updatedAt?.toIso8601String(),
     };
