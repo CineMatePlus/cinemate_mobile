@@ -134,10 +134,15 @@ class CollectionContentsNotifier
 
   CollectionContentsNotifier(this._service, this._collectionId)
       : super(const AsyncValue.loading()) {
-    loadContents();
+    // Constructor içinde loadContents çağrılmamalı, kullanıcı arayüzünden tetiklenmeli
+    // Bu sayede sayfa açıldığında içeriğin yüklenmesi garantilenir
   }
 
   Future<void> loadContents({bool refresh = false}) async {
+    if (state is AsyncLoading && !refresh) {
+      return; // Zaten yükleme yapılıyorsa tekrar başlatma
+    }
+
     if (refresh) {
       _skip = 0;
       _hasMore = true;

@@ -38,15 +38,15 @@ class _ContentListViewState extends ConsumerState<ContentListView> {
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
-    _loadInitialData();
-  }
 
-  Future<void> _loadInitialData() async {
-    await _loadData(refresh: true);
+    // Sayfa açıldığında veri yüklemesi yap
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadData(refresh: true);
+    });
   }
 
   Future<void> _loadData({bool refresh = false}) async {
-    if (_isLoading) return;
+    if (_isLoading && !refresh) return;
 
     setState(() {
       _isLoading = true;
@@ -77,6 +77,8 @@ class _ContentListViewState extends ConsumerState<ContentListView> {
           }
           break;
       }
+    } catch (e) {
+      debugPrint("İçerik yükleme hatası: $e");
     } finally {
       if (mounted) {
         setState(() {
@@ -111,6 +113,18 @@ class _ContentListViewState extends ConsumerState<ContentListView> {
 
     // Yükleniyor mu kontrolü
     final bool isDataLoading = _isLoadingState();
+
+    // Özel koleksiyon için, içerik yüklemesi koleksiyon ilk açıldığında başlatılır
+    if (widget.source == ContentSource.collection &&
+        widget.collectionId != null &&
+        contents.isEmpty &&
+        !isDataLoading) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref
+            .read(collectionContentsProvider(widget.collectionId!).notifier)
+            .loadContents(refresh: true);
+      });
+    }
 
     return Scaffold(
       backgroundColor: backgroundColor,
