@@ -53,6 +53,9 @@ class CollectionsNotifier extends StateNotifier<AsyncValue<List<Collection>>> {
 
       if (newItems.isEmpty) {
         _hasMore = false;
+        if (_skip == 0 || refresh) {
+          state = const AsyncValue<List<Collection>>.data([]);
+        }
         return;
       }
 
@@ -160,6 +163,10 @@ class CollectionContentsNotifier
 
       if (newItems.isEmpty) {
         _hasMore = false;
+        // Eğer ilk sayfada veri yoksa veya refresh yapıyorsak boş liste durumunu güncelle
+        if (_skip == 0 || refresh) {
+          state = const AsyncValue<List<Content>>.data([]);
+        }
         return;
       }
 
