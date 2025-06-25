@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'modules/onboarding/splash/splash.view.dart';
-import 'core/constants/theme_constants.dart';
-import 'core/providers/theme_provider.dart';
+
+import 'core/routes/go_router_provider.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
@@ -13,15 +12,12 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Tema modu provider'ını izle
-    final themeMode = ref.watch(themeProvider);
+    final router = ref.watch(goRouterProvider);
 
-    return MaterialApp(
+    return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
       title: 'CineMate',
-      themeMode: themeMode, // Sistem ayarı veya kullanıcı seçimi
-      theme: ThemeConstants.lightTheme, // Light tema
-      darkTheme: ThemeConstants.darkTheme, // Dark tema
-      home: const SplashScreen(),
+      routerConfig: router,
     );
   }
 }

@@ -1,0 +1,17 @@
+[
+  {
+    "title": "Welcome to CineMate!",
+    "subtitle": "Your personal guide to discovering and tracking great movies.",
+    "image": "lib/core/constants/assets/images/onboarding.png"
+  },
+  {
+    "title": "Smart Movie Suggestions",
+    "subtitle": "Get tailored movie recommendations based on your taste.",
+    "image": "lib/core/constants/assets/images/onboarding.png"
+  },
+  {
+    "title": "Track. Discover. Enjoy.",
+    "subtitle": "Create your watchlist, mark favorites, and never miss a hit.",
+    "image": "lib/core/constants/assets/images/onboarding.png"
+  }
+]

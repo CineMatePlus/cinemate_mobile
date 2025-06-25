@@ -1,10 +1,10 @@
 import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-//import 'dart:io' show Platform;
+import 'dart:io' show Platform;
 
 class ApiConfig {
-  /* static String get baseUrl {
+  static String get baseUrl {
     if (Platform.isAndroid) {
       return 'http://10.0.2.2:8000';
     } else if (Platform.isIOS) {
@@ -13,8 +13,8 @@ class ApiConfig {
       return 'http://127.0.0.1:8000';
     }
   }
- */
-  static const String baseUrl = 'http://159.146.28.250:4816';
+
+  // static const String baseUrl = 'http://159.146.28.250:4816';
 
   static const String apiPrefix = '/api/v1';
 }
