@@ -43,7 +43,7 @@ class MoviesNotifier extends StateNotifier<AsyncValue<List<Movie>>> {
       state.whenData((currentMovies) {
         state = AsyncValue.data([...currentMovies, ...newMovies]);
       });
-    } catch (e, s) {
+    } catch (e) {
       //TODO: Handle error, maybe revert page count or show a snackbar
     } finally {
       _isLoading = false;

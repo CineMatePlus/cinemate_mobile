@@ -26,6 +26,27 @@ class MovieService {
       rethrow;
     }
   }
+
+  Future<Movie> getMovieById(String movieId) async {
+    try {
+      final response = await _apiService.request(
+        'GET',
+        '/movies/$movieId',
+      );
+      return Movie.fromJson(response.data);
+    } catch (e) {
+      // Hata yönetimi burada daha detaylı yapılabilir.
+      rethrow;
+    }
+  }
+
+  // İlgili filmleri getiren metod (şimdilik getMovies'i kullanıyor)
+  Future<List<Movie>> getRelatedMovies(String movieId,
+      {int skip = 0, int limit = 10}) async {
+    // Gerçek bir API'de burası /movies/{movieId}/related gibi bir endpoint olurdu.
+    // Şimdilik en popüler filmleri getirerek simüle ediyoruz.
+    return getMovies(skip: skip, limit: limit);
+  }
 }
 
 final movieServiceProvider = Provider<MovieService>((ref) {

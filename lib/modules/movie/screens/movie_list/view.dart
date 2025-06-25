@@ -1,4 +1,6 @@
 import 'package:cinemate_mobile/modules/movie/models/movie_model.dart';
+import 'package:cinemate_mobile/modules/movie/screens/movie_detail/view.dart';
+import 'package:cinemate_mobile/modules/movie/widgets/movie_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -54,61 +56,25 @@ class MovieListView extends ConsumerWidget {
     return SliverPadding(
       padding: const EdgeInsets.all(16),
       sliver: SliverGrid(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
+        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+          maxCrossAxisExtent: 200,
           crossAxisSpacing: 12,
           mainAxisSpacing: 12,
-          childAspectRatio: 0.7,
+          childAspectRatio: 2 / 3,
         ),
         delegate: SliverChildBuilderDelegate(
           (context, index) {
             final movie = movies[index];
-            final imageUrl =
-                'https://image.tmdb.org/t/p/w500${movie.posterPath}';
-
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.network(
-                    imageUrl,
-                    height: 200,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return const Center(child: CircularProgressIndicator());
-                    },
-                    errorBuilder: (context, error, stackTrace) {
-                      return const Icon(Icons.movie,
-                          size: 50, color: Colors.grey);
-                    },
+            return MovieCard(
+              movie: movie,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MovieDetailView(movieId: movie.id),
                   ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  movie.title,
-                  style: GoogleFonts.manrope(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: const Color(0xFF0F1417),
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                Expanded(
-                  child: Text(
-                    movie.overview,
-                    style: GoogleFonts.manrope(
-                      fontSize: 12,
-                      color: const Color(0xFF5C738A),
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ],
+                );
+              },
             );
           },
           childCount: movies.length,
