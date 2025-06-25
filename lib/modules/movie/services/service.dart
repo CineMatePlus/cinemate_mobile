@@ -40,12 +40,24 @@ class MovieService {
     }
   }
 
-  // İlgili filmleri getiren metod (şimdilik getMovies'i kullanıyor)
+  // İlgili filmleri getiren metod
   Future<List<Movie>> getRelatedMovies(String movieId,
       {int skip = 0, int limit = 10}) async {
-    // Gerçek bir API'de burası /movies/{movieId}/related gibi bir endpoint olurdu.
-    // Şimdilik en popüler filmleri getirerek simüle ediyoruz.
-    return getMovies(skip: skip, limit: limit);
+    try {
+      final response = await _apiService.request(
+        'GET',
+        '/movies/$movieId/similar?skip=$skip&limit=$limit',
+      );
+
+      if (response.data is List) {
+        final List<dynamic> data = response.data;
+        return data.map((movieJson) => Movie.fromJson(movieJson)).toList();
+      } else {
+        throw Exception('Unexpected response format for related movies');
+      }
+    } catch (e) {
+      rethrow;
+    }
   }
 }
 
