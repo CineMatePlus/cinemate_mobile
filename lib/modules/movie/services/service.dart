@@ -3,6 +3,12 @@ import 'package:cinemate_mobile/core/services/api_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/movie_model.dart';
 
+enum InteractionType {
+  like,
+  watched,
+  watchlist,
+}
+
 class MovieService {
   final ApiService _apiService;
 
@@ -36,6 +42,20 @@ class MovieService {
       return Movie.fromJson(response.data);
     } catch (e) {
       // Hata yönetimi burada daha detaylı yapılabilir.
+      rethrow;
+    }
+  }
+
+  Future<void> toggleInteraction(
+      String movieId, InteractionType interactionType) async {
+    try {
+      // İstek başarılı olursa bir şey döndürmesine gerek yok.
+      // Başarısız olursa ApiService katmanı hata fırlatacaktır.
+      await _apiService.request(
+        'POST',
+        '/interactions/$movieId/${interactionType.name}',
+      );
+    } catch (e) {
       rethrow;
     }
   }

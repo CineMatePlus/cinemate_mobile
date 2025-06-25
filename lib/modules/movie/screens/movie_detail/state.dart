@@ -55,60 +55,49 @@ class MovieDetailNotifier
     }
   }
 
-  // 3. Aksiyon Metodları (İskelet)
-  // Bu metodlar, butonlara tıklandığında çağrılacak
-
+  // 3. Aksiyon Metodları
   Future<void> toggleLike() async {
-    // Mevcut state'in data olduğundan ve içinde film olduğundan emin ol
     if (state.value?.movie == null) return;
+    final originalMovie = state.value!.movie!;
 
-    final currentMovie = state.value!.movie!;
-    final newStatus = !currentMovie.isLiked;
-
-    // UI'ı anında güncelle (iyimser güncelleme - optimistic update)
-    state = AsyncValue.data(
-      state.value!.copyWith(
-        movie: currentMovie.copyWith(isLiked: newStatus),
-      ),
-    );
-
+    state = AsyncValue.data(state.value!.copyWith(
+        movie: originalMovie.copyWith(isLiked: !originalMovie.isLiked)));
     try {
-      // API'ye isteği gönder
-      // await _movieService.likeMovie(currentMovie.id, isLiked: newStatus);
+      await _movieService.toggleInteraction(_movieId, InteractionType.like);
+      // Başarılı durumda state'i tekrar güncellemeye gerek yok, zaten doğru.
     } catch (e) {
-      // Hata olursa UI'ı eski haline geri döndür
-      state = AsyncValue.data(
-        state.value!.copyWith(
-          movie: currentMovie.copyWith(isLiked: !newStatus),
-        ),
-      );
+      // Hata durumunda geri al
+      state = AsyncValue.data(state.value!.copyWith(movie: originalMovie));
     }
   }
 
   Future<void> toggleWatched() async {
     if (state.value?.movie == null) return;
+    final originalMovie = state.value!.movie!;
 
-    final currentMovie = state.value!.movie!;
-    final newStatus = !currentMovie.isWatched;
+    state = AsyncValue.data(state.value!.copyWith(
+        movie: originalMovie.copyWith(isWatched: !originalMovie.isWatched)));
 
-    state = AsyncValue.data(
-      state.value!.copyWith(
-        movie: currentMovie.copyWith(isWatched: newStatus),
-      ),
-    );
-    // API isteği ve hata yönetimi eklenecek
+    try {
+      await _movieService.toggleInteraction(_movieId, InteractionType.watched);
+    } catch (e) {
+      state = AsyncValue.data(state.value!.copyWith(movie: originalMovie));
+    }
   }
 
   Future<void> toggleWatchlist() async {
     if (state.value?.movie == null) return;
+    final originalMovie = state.value!.movie!;
 
-    final currentMovie = state.value!.movie!;
-    final newStatus = !currentMovie.isInWatchlist;
-    state = AsyncValue.data(
-      state.value!.copyWith(
-        movie: currentMovie.copyWith(isInWatchlist: newStatus),
-      ),
-    );
-    // API isteği ve hata yönetimi eklenecek
+    state = AsyncValue.data(state.value!.copyWith(
+        movie: originalMovie.copyWith(
+            isInWatchlist: !originalMovie.isInWatchlist)));
+
+    try {
+      await _movieService.toggleInteraction(
+          _movieId, InteractionType.watchlist);
+    } catch (e) {
+      state = AsyncValue.data(state.value!.copyWith(movie: originalMovie));
+    }
   }
 }
