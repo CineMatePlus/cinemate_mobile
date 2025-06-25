@@ -209,6 +209,7 @@ class MovieDetailView extends ConsumerWidget {
                   aspectRatio: 2 / 3,
                   child: MovieCard(
                     movie: movie,
+                    titleFontSize: 12,
                     onTap: () {
                       Navigator.push(
                         context,

@@ -79,6 +79,27 @@ class MovieService {
       rethrow;
     }
   }
+
+  Future<List<Movie>> searchMovies(String query) async {
+    if (query.isEmpty) {
+      return [];
+    }
+    try {
+      final response = await _apiService.request(
+        'GET',
+        '/movies/search?query=$query',
+      );
+
+      if (response.data is List) {
+        final List<dynamic> data = response.data;
+        return data.map((movieJson) => Movie.fromJson(movieJson)).toList();
+      } else {
+        throw Exception('Unexpected response format for search');
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
 
 final movieServiceProvider = Provider<MovieService>((ref) {

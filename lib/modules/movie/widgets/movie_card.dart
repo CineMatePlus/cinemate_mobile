@@ -5,11 +5,13 @@ import 'package:google_fonts/google_fonts.dart';
 class MovieCard extends StatelessWidget {
   final Movie movie;
   final VoidCallback? onTap;
+  final double titleFontSize;
 
   const MovieCard({
     super.key,
     required this.movie,
     this.onTap,
+    this.titleFontSize = 16.0,
   });
 
   @override
@@ -61,7 +63,7 @@ class MovieCard extends StatelessWidget {
                   child: Text(
                     movie.title,
                     style: GoogleFonts.manrope(
-                      fontSize: 16,
+                      fontSize: titleFontSize,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                       shadows: [

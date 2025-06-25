@@ -1,7 +1,7 @@
-import 'package:cinemate_mobile/core/constants/colors.dart';
 import 'package:cinemate_mobile/core/constants/text_styles.dart';
 import 'package:cinemate_mobile/modules/movie/screens/movie_list/view.dart';
 import 'package:cinemate_mobile/modules/profile/screens/view.dart';
+import 'package:cinemate_mobile/modules/search/view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -17,7 +17,7 @@ class _HomeViewState extends State<HomeView> {
 
   static final List<Widget> _widgetOptions = <Widget>[
     const MovieListView(),
-    const Center(child: Text('Search Page - Coming Soon')),
+    const SearchView(),
     const Center(child: Text('Cinema Page - Coming Soon')),
     const Center(child: Text('Collections Page - Coming Soon')),
     const ProfileView(),
@@ -43,14 +43,7 @@ class _HomeViewState extends State<HomeView> {
               centerTitle: false,
               elevation: 0,
               backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-              actions: _selectedIndex == 0
-                  ? [
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.search, color: AppColors.black),
-                      ),
-                    ]
-                  : null,
+              actions: null,
               floating: true,
               snap: true,
             ),
