@@ -64,58 +64,97 @@ class CollectionDetailView extends ConsumerWidget {
                 ),
               ),
 
-              // Collection banner section
+              // Collection info section
               SliverToBoxAdapter(
                 child: Container(
-                  height: 270,
                   margin: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Stack(
-                    children: [
-                      // Background image
-                      Container(
-                        width: double.infinity,
-                        height: double.infinity,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          image: const DecorationImage(
-                            image: AssetImage(
-                                'assets/images/collection_placeholders/placeholder_1.png'),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        const Color(0xFF667EEA),
+                        const Color(0xFF764BA2),
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 20,
+                        offset: const Offset(0, 8),
                       ),
-                      // Gradient overlay
-                      Container(
-                        width: double.infinity,
-                        height: double.infinity,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          gradient: LinearGradient(
-                            begin: Alignment.bottomCenter,
-                            end: Alignment.topCenter,
-                            colors: [
-                              Colors.black.withOpacity(0.4),
-                              Colors.transparent,
-                            ],
-                            stops: const [0.0, 0.25],
-                          ),
-                        ),
-                      ),
-                      // Collection title
-                      Positioned(
-                        left: 16,
-                        bottom: 16,
-                        child: Text(
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Collection name
+                        Text(
                           collection?.name ?? 'Collection Name',
                           style: const TextStyle(
                             fontFamily: 'Manrope',
-                            fontWeight: FontWeight.w700,
-                            fontSize: 28,
+                            fontWeight: FontWeight.w800,
+                            fontSize: 32,
                             color: Colors.white,
+                            height: 1.2,
                           ),
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: 16),
+                        // Collection stats
+                        Row(
+                          children: [
+                            _buildStatCard(
+                              icon: Icons.movie_outlined,
+                              value: '${collection?.movieCount ?? 0}',
+                              label: 'Film',
+                            ),
+                            const SizedBox(width: 16),
+                            _buildStatCard(
+                              icon: Icons.person_outline,
+                              value: collection?.ownerName ?? 'Unknown',
+                              label: 'Oluşturan',
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        // Public/Private indicator
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                collection?.isPublic == true
+                                    ? Icons.public
+                                    : Icons.lock_outline,
+                                size: 16,
+                                color: Colors.white,
+                              ),
+                              const SizedBox(width: 6),
+                              Text(
+                                collection?.isPublic == true
+                                    ? 'Herkese Açık'
+                                    : 'Özel',
+                                style: const TextStyle(
+                                  fontFamily: 'Manrope',
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -327,6 +366,58 @@ class CollectionDetailView extends ConsumerWidget {
           overflow: TextOverflow.ellipsis,
         ),
       ],
+    );
+  }
+
+  Widget _buildStatCard({
+    required IconData icon,
+    required String value,
+    required String label,
+  }) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.15),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  icon,
+                  size: 20,
+                  color: Colors.white,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  label,
+                  style: const TextStyle(
+                    fontFamily: 'Manrope',
+                    fontWeight: FontWeight.w500,
+                    fontSize: 12,
+                    color: Colors.white70,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text(
+              value,
+              style: const TextStyle(
+                fontFamily: 'Manrope',
+                fontWeight: FontWeight.w700,
+                fontSize: 18,
+                color: Colors.white,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
+      ),
     );
   }
 
