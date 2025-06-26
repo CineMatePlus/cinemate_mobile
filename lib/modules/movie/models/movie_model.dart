@@ -14,6 +14,8 @@ class Movie with _$Movie {
     @JsonKey(name: 'vote_average') required double voteAverage,
     @JsonKey(name: 'release_date') required String releaseDate,
     required List<String> genres,
+    @JsonKey(name: 'num_likes') required int numLikes,
+    @JsonKey(name: 'num_watches') required int numWatches,
     @JsonKey(name: 'is_liked') required bool isLiked,
     @JsonKey(name: 'is_watched') required bool isWatched,
     @JsonKey(name: 'is_in_watchlist') required bool isInWatchlist,

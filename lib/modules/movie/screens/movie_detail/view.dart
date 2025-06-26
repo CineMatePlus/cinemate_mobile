@@ -14,34 +14,26 @@ class MovieDetailView extends ConsumerWidget {
     final movieDetailAsync = ref.watch(movieDetailProvider(movieId));
 
     return Scaffold(
+      backgroundColor: const Color(0xFFF7FAFC),
       body: movieDetailAsync.when(
         data: (screenState) {
           final movie = screenState.movie;
           if (movie == null) {
             return const Center(child: Text('Film bulunamadı.'));
           }
-          return CustomScrollView(
-            slivers: [
-              _buildSliverAppBar(movie),
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildTitleSection(context, movie),
-                      const SizedBox(height: 16),
-                      _buildActionButtons(context, ref, movieId),
-                      const SizedBox(height: 24),
-                      _buildOverviewSection(context, movie),
-                      const SizedBox(height: 24),
-                      _buildRelatedMoviesSection(
-                          context, screenState.relatedMovies),
-                    ],
-                  ),
-                ),
-              ),
-            ],
+          return SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildMoviePosterSection(movie),
+                _buildTitleSection(context, movie),
+                _buildInfoSection(context, movie),
+                _buildActionButtons(context, ref, movieId),
+                _buildOverviewSection(context, movie),
+                _buildGenresSection(context, movie),
+                _buildRelatedMoviesSection(context, screenState.relatedMovies),
+              ],
+            ),
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
@@ -50,67 +42,91 @@ class MovieDetailView extends ConsumerWidget {
     );
   }
 
-  SliverAppBar _buildSliverAppBar(Movie movie) {
+  Widget _buildMoviePosterSection(Movie movie) {
     final backdropUrl = 'https://image.tmdb.org/t/p/w780${movie.backdropPath}';
-    return SliverAppBar(
-      expandedHeight: 250.0,
-      pinned: true,
-      flexibleSpace: FlexibleSpaceBar(
-        title: Text(
-          movie.title,
-          style: GoogleFonts.manrope(
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-            shadows: [const Shadow(blurRadius: 2.0, color: Colors.black)],
+
+    return Container(
+      height: 280,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: NetworkImage(backdropUrl),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.black.withOpacity(0.6), Colors.transparent],
+            begin: Alignment.bottomCenter,
+            end: Alignment.topCenter,
           ),
         ),
-        background: Stack(
-          fit: StackFit.expand,
-          children: [
-            Image.network(backdropUrl, fit: BoxFit.cover),
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Colors.black.withOpacity(0.6), Colors.transparent],
-                  begin: Alignment.bottomCenter,
-                  end: Alignment.topCenter,
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Builder(
+                  builder: (context) => IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      color: Colors.white,
+                      size: 24,
+                    ),
+                  ),
                 ),
-              ),
+                const SizedBox(),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
   }
 
   Widget _buildTitleSection(BuildContext context, Movie movie) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          movie.title,
-          style: GoogleFonts.manrope(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+      child: Text(
+        movie.title,
+        style: GoogleFonts.manrope(
+          fontSize: 22,
+          fontWeight: FontWeight.w700,
+          color: const Color(0xFF0D141C),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInfoSection(BuildContext context, Movie movie) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+      child: Row(
+        children: [
+          Text(
+            DateTime.parse(movie.releaseDate).year.toString(),
+            style: GoogleFonts.manrope(
+              fontSize: 14,
+              color: Colors.black54,
+            ),
           ),
-        ),
-        const SizedBox(height: 8),
-        Row(
-          children: [
-            Text(
-              '${DateTime.parse(movie.releaseDate).year}',
-              style: Theme.of(context).textTheme.bodyMedium,
+          const SizedBox(width: 16),
+          const Icon(Icons.star, color: Colors.amber, size: 20),
+          const SizedBox(width: 6),
+          Text(
+            movie.voteAverage.toStringAsFixed(1),
+            style: GoogleFonts.manrope(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
             ),
-            const SizedBox(width: 16),
-            const Icon(Icons.star, color: Colors.amber, size: 16),
-            const SizedBox(width: 4),
-            Text(
-              movie.voteAverage.toStringAsFixed(1),
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-          ],
-        ),
-      ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -119,70 +135,144 @@ class MovieDetailView extends ConsumerWidget {
     final provider = movieDetailProvider(movieId);
     final movie = ref.watch(provider).value?.movie;
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        _actionButton(
-          context,
-          icon:
-              movie?.isLiked ?? false ? Icons.favorite : Icons.favorite_border,
-          label: 'Beğen',
-          color: movie?.isLiked ?? false ? Colors.red : Colors.grey,
-          onTap: () => ref.read(provider.notifier).toggleLike(),
-        ),
-        _actionButton(
-          context,
-          icon: movie?.isWatched ?? false
-              ? Icons.visibility
-              : Icons.visibility_outlined,
-          label: 'İzledim',
-          color: movie?.isWatched ?? false
-              ? Theme.of(context).primaryColor
-              : Colors.grey,
-          onTap: () => ref.read(provider.notifier).toggleWatched(),
-        ),
-        _actionButton(
-          context,
-          icon: movie?.isInWatchlist ?? false
-              ? Icons.bookmark
-              : Icons.bookmark_border,
-          label: 'Listem',
-          color: movie?.isInWatchlist ?? false ? Colors.orange : Colors.grey,
-          onTap: () => ref.read(provider.notifier).toggleWatchlist(),
-        ),
-      ],
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          _actionButton(
+            context,
+            icon: movie?.isLiked ?? false
+                ? Icons.favorite
+                : Icons.favorite_border,
+            count: movie?.numLikes.toString(),
+            color: const Color(0xFF4A709C),
+            onTap: () => ref.read(provider.notifier).toggleLike(),
+          ),
+          const SizedBox(width: 24),
+          _actionButton(
+            context,
+            icon: movie?.isWatched ?? false
+                ? Icons.visibility
+                : Icons.visibility_outlined,
+            count: movie?.numWatches.toString(),
+            color: const Color(0xFF4A709C),
+            onTap: () => ref.read(provider.notifier).toggleWatched(),
+          ),
+          const SizedBox(width: 24),
+          _actionButton(
+            context,
+            icon: movie?.isInWatchlist ?? false
+                ? Icons.watch_later
+                : Icons.watch_later_outlined,
+            color: const Color(0xFF4A709C),
+            onTap: () => ref.read(provider.notifier).toggleWatchlist(),
+          ),
+        ],
+      ),
     );
   }
 
   Widget _actionButton(BuildContext context,
       {required IconData icon,
-      required String label,
+      String? count,
       required Color color,
       required VoidCallback onTap}) {
-    return Column(
-      children: [
-        IconButton(
-          onPressed: onTap,
-          icon: Icon(icon, color: color, size: 28),
-          splashRadius: 28,
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 24,
+              height: 24,
+              alignment: Alignment.center,
+              child: Icon(icon, color: color, size: 24),
+            ),
+            if (count != null && count.isNotEmpty) ...[
+              const SizedBox(width: 8),
+              Text(
+                count,
+                style: GoogleFonts.manrope(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                  color: color,
+                ),
+              ),
+            ],
+          ],
         ),
-        const SizedBox(height: 4),
-        Text(label, style: TextStyle(color: color)),
-      ],
+      ),
     );
   }
 
   Widget _buildOverviewSection(BuildContext context, Movie movie) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      child: Text(
+        movie.overview,
+        style: GoogleFonts.manrope(
+          fontSize: 16,
+          fontWeight: FontWeight.w400,
+          color: const Color(0xFF0D141C),
+          height: 1.5,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildGenresSection(BuildContext context, Movie movie) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Özet', style: Theme.of(context).textTheme.titleLarge),
-        const SizedBox(height: 8),
-        Text(
-          movie.overview,
-          style: Theme.of(context).textTheme.bodyMedium,
+        Container(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+          child: Text(
+            'Genres',
+            style: GoogleFonts.manrope(
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+              color: const Color(0xFF0D141C),
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 32, // Height of the genre chips
+          child: ListView.separated(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            scrollDirection: Axis.horizontal,
+            itemCount: movie.genres.length,
+            itemBuilder: (context, index) {
+              return _genreChip(movie.genres[index]);
+            },
+            separatorBuilder: (context, index) => const SizedBox(width: 12),
+          ),
         ),
       ],
+    );
+  }
+
+  Widget _genreChip(String genre) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      height: 32,
+      decoration: BoxDecoration(
+        color: const Color(0xFFE8EDF5),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Center(
+        child: Text(
+          genre,
+          style: GoogleFonts.manrope(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            color: const Color(0xFF0D141C),
+          ),
+        ),
+      ),
     );
   }
 
@@ -194,22 +284,31 @@ class MovieDetailView extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('İlgili Filmler', style: Theme.of(context).textTheme.titleLarge),
-        const SizedBox(height: 12),
+        Container(
+          padding: const EdgeInsets.fromLTRB(16, 24, 16, 12),
+          child: Text(
+            'Similar Content',
+            style: GoogleFonts.manrope(
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+              color: const Color(0xFF0D141C),
+            ),
+          ),
+        ),
         SizedBox(
-          height: 200,
+          height: 280,
           child: ListView.builder(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             scrollDirection: Axis.horizontal,
             itemCount: relatedMovies.length,
             itemBuilder: (context, index) {
               final movie = relatedMovies[index];
               return Padding(
                 padding: const EdgeInsets.only(right: 12.0),
-                child: AspectRatio(
-                  aspectRatio: 2 / 3,
+                child: SizedBox(
+                  width: 140,
                   child: MovieCard(
                     movie: movie,
-                    titleFontSize: 12,
                     onTap: () {
                       Navigator.push(
                         context,
@@ -225,6 +324,7 @@ class MovieDetailView extends ConsumerWidget {
             },
           ),
         ),
+        const SizedBox(height: 16),
       ],
     );
   }

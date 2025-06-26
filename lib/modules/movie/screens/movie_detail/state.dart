@@ -60,13 +60,20 @@ class MovieDetailNotifier
     if (state.value?.movie == null) return;
     final originalMovie = state.value!.movie!;
 
+    final newLikedState = !originalMovie.isLiked;
+    final newLikesCount = originalMovie.numLikes + (newLikedState ? 1 : -1);
+
+    // Optimistic UI update
     state = AsyncValue.data(state.value!.copyWith(
-        movie: originalMovie.copyWith(isLiked: !originalMovie.isLiked)));
+        movie: originalMovie.copyWith(
+      isLiked: newLikedState,
+      numLikes: newLikesCount,
+    )));
+
     try {
       await _movieService.toggleInteraction(_movieId, InteractionType.like);
-      // Başarılı durumda state'i tekrar güncellemeye gerek yok, zaten doğru.
     } catch (e) {
-      // Hata durumunda geri al
+      // Revert on error
       state = AsyncValue.data(state.value!.copyWith(movie: originalMovie));
     }
   }
@@ -75,12 +82,21 @@ class MovieDetailNotifier
     if (state.value?.movie == null) return;
     final originalMovie = state.value!.movie!;
 
+    final newWatchedState = !originalMovie.isWatched;
+    final newWatchesCount =
+        originalMovie.numWatches + (newWatchedState ? 1 : -1);
+
+    // Optimistic UI update
     state = AsyncValue.data(state.value!.copyWith(
-        movie: originalMovie.copyWith(isWatched: !originalMovie.isWatched)));
+        movie: originalMovie.copyWith(
+      isWatched: newWatchedState,
+      numWatches: newWatchesCount,
+    )));
 
     try {
       await _movieService.toggleInteraction(_movieId, InteractionType.watched);
     } catch (e) {
+      // Revert on error
       state = AsyncValue.data(state.value!.copyWith(movie: originalMovie));
     }
   }

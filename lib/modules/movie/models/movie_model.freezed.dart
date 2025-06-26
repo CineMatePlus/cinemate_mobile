@@ -33,6 +33,10 @@ mixin _$Movie {
   @JsonKey(name: 'release_date')
   String get releaseDate => throw _privateConstructorUsedError;
   List<String> get genres => throw _privateConstructorUsedError;
+  @JsonKey(name: 'num_likes')
+  int get numLikes => throw _privateConstructorUsedError;
+  @JsonKey(name: 'num_watches')
+  int get numWatches => throw _privateConstructorUsedError;
   @JsonKey(name: 'is_liked')
   bool get isLiked => throw _privateConstructorUsedError;
   @JsonKey(name: 'is_watched')
@@ -63,6 +67,8 @@ abstract class $MovieCopyWith<$Res> {
       @JsonKey(name: 'vote_average') double voteAverage,
       @JsonKey(name: 'release_date') String releaseDate,
       List<String> genres,
+      @JsonKey(name: 'num_likes') int numLikes,
+      @JsonKey(name: 'num_watches') int numWatches,
       @JsonKey(name: 'is_liked') bool isLiked,
       @JsonKey(name: 'is_watched') bool isWatched,
       @JsonKey(name: 'is_in_watchlist') bool isInWatchlist});
@@ -91,6 +97,8 @@ class _$MovieCopyWithImpl<$Res, $Val extends Movie>
     Object? voteAverage = null,
     Object? releaseDate = null,
     Object? genres = null,
+    Object? numLikes = null,
+    Object? numWatches = null,
     Object? isLiked = null,
     Object? isWatched = null,
     Object? isInWatchlist = null,
@@ -128,6 +136,14 @@ class _$MovieCopyWithImpl<$Res, $Val extends Movie>
           ? _value.genres
           : genres // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      numLikes: null == numLikes
+          ? _value.numLikes
+          : numLikes // ignore: cast_nullable_to_non_nullable
+              as int,
+      numWatches: null == numWatches
+          ? _value.numWatches
+          : numWatches // ignore: cast_nullable_to_non_nullable
+              as int,
       isLiked: null == isLiked
           ? _value.isLiked
           : isLiked // ignore: cast_nullable_to_non_nullable
@@ -160,6 +176,8 @@ abstract class _$$MovieImplCopyWith<$Res> implements $MovieCopyWith<$Res> {
       @JsonKey(name: 'vote_average') double voteAverage,
       @JsonKey(name: 'release_date') String releaseDate,
       List<String> genres,
+      @JsonKey(name: 'num_likes') int numLikes,
+      @JsonKey(name: 'num_watches') int numWatches,
       @JsonKey(name: 'is_liked') bool isLiked,
       @JsonKey(name: 'is_watched') bool isWatched,
       @JsonKey(name: 'is_in_watchlist') bool isInWatchlist});
@@ -186,6 +204,8 @@ class __$$MovieImplCopyWithImpl<$Res>
     Object? voteAverage = null,
     Object? releaseDate = null,
     Object? genres = null,
+    Object? numLikes = null,
+    Object? numWatches = null,
     Object? isLiked = null,
     Object? isWatched = null,
     Object? isInWatchlist = null,
@@ -223,6 +243,14 @@ class __$$MovieImplCopyWithImpl<$Res>
           ? _value._genres
           : genres // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      numLikes: null == numLikes
+          ? _value.numLikes
+          : numLikes // ignore: cast_nullable_to_non_nullable
+              as int,
+      numWatches: null == numWatches
+          ? _value.numWatches
+          : numWatches // ignore: cast_nullable_to_non_nullable
+              as int,
       isLiked: null == isLiked
           ? _value.isLiked
           : isLiked // ignore: cast_nullable_to_non_nullable
@@ -251,6 +279,8 @@ class _$MovieImpl implements _Movie {
       @JsonKey(name: 'vote_average') required this.voteAverage,
       @JsonKey(name: 'release_date') required this.releaseDate,
       required final List<String> genres,
+      @JsonKey(name: 'num_likes') required this.numLikes,
+      @JsonKey(name: 'num_watches') required this.numWatches,
       @JsonKey(name: 'is_liked') required this.isLiked,
       @JsonKey(name: 'is_watched') required this.isWatched,
       @JsonKey(name: 'is_in_watchlist') required this.isInWatchlist})
@@ -287,6 +317,12 @@ class _$MovieImpl implements _Movie {
   }
 
   @override
+  @JsonKey(name: 'num_likes')
+  final int numLikes;
+  @override
+  @JsonKey(name: 'num_watches')
+  final int numWatches;
+  @override
   @JsonKey(name: 'is_liked')
   final bool isLiked;
   @override
@@ -298,7 +334,7 @@ class _$MovieImpl implements _Movie {
 
   @override
   String toString() {
-    return 'Movie(id: $id, title: $title, overview: $overview, posterPath: $posterPath, backdropPath: $backdropPath, voteAverage: $voteAverage, releaseDate: $releaseDate, genres: $genres, isLiked: $isLiked, isWatched: $isWatched, isInWatchlist: $isInWatchlist)';
+    return 'Movie(id: $id, title: $title, overview: $overview, posterPath: $posterPath, backdropPath: $backdropPath, voteAverage: $voteAverage, releaseDate: $releaseDate, genres: $genres, numLikes: $numLikes, numWatches: $numWatches, isLiked: $isLiked, isWatched: $isWatched, isInWatchlist: $isInWatchlist)';
   }
 
   @override
@@ -319,6 +355,10 @@ class _$MovieImpl implements _Movie {
             (identical(other.releaseDate, releaseDate) ||
                 other.releaseDate == releaseDate) &&
             const DeepCollectionEquality().equals(other._genres, _genres) &&
+            (identical(other.numLikes, numLikes) ||
+                other.numLikes == numLikes) &&
+            (identical(other.numWatches, numWatches) ||
+                other.numWatches == numWatches) &&
             (identical(other.isLiked, isLiked) || other.isLiked == isLiked) &&
             (identical(other.isWatched, isWatched) ||
                 other.isWatched == isWatched) &&
@@ -338,6 +378,8 @@ class _$MovieImpl implements _Movie {
       voteAverage,
       releaseDate,
       const DeepCollectionEquality().hash(_genres),
+      numLikes,
+      numWatches,
       isLiked,
       isWatched,
       isInWatchlist);
@@ -368,6 +410,8 @@ abstract class _Movie implements Movie {
       @JsonKey(name: 'vote_average') required final double voteAverage,
       @JsonKey(name: 'release_date') required final String releaseDate,
       required final List<String> genres,
+      @JsonKey(name: 'num_likes') required final int numLikes,
+      @JsonKey(name: 'num_watches') required final int numWatches,
       @JsonKey(name: 'is_liked') required final bool isLiked,
       @JsonKey(name: 'is_watched') required final bool isWatched,
       @JsonKey(name: 'is_in_watchlist')
@@ -396,6 +440,12 @@ abstract class _Movie implements Movie {
   String get releaseDate;
   @override
   List<String> get genres;
+  @override
+  @JsonKey(name: 'num_likes')
+  int get numLikes;
+  @override
+  @JsonKey(name: 'num_watches')
+  int get numWatches;
   @override
   @JsonKey(name: 'is_liked')
   bool get isLiked;

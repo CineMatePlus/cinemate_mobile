@@ -16,6 +16,8 @@ _$MovieImpl _$$MovieImplFromJson(Map<String, dynamic> json) => _$MovieImpl(
       releaseDate: json['release_date'] as String,
       genres:
           (json['genres'] as List<dynamic>).map((e) => e as String).toList(),
+      numLikes: (json['num_likes'] as num).toInt(),
+      numWatches: (json['num_watches'] as num).toInt(),
       isLiked: json['is_liked'] as bool,
       isWatched: json['is_watched'] as bool,
       isInWatchlist: json['is_in_watchlist'] as bool,
@@ -31,6 +33,8 @@ Map<String, dynamic> _$$MovieImplToJson(_$MovieImpl instance) =>
       'vote_average': instance.voteAverage,
       'release_date': instance.releaseDate,
       'genres': instance.genres,
+      'num_likes': instance.numLikes,
+      'num_watches': instance.numWatches,
       'is_liked': instance.isLiked,
       'is_watched': instance.isWatched,
       'is_in_watchlist': instance.isInWatchlist,
