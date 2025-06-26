@@ -1,0 +1,27 @@
+<svg width="250" height="80" viewBox="0 0 250 80" xmlns="http://www.w3.org/2000/svg">
+  <!-- Retro background panel -->
+  <rect x="10" y="10" width="230" height="60" fill="#2c1810" stroke="#8b4513" stroke-width="3" rx="8"/>
+  
+  <!-- Art deco style decorations -->
+  <polygon points="20,20 35,20 30,30 25,30" fill="#ffd700"/>
+  <polygon points="215,20 230,20 225,30 220,30" fill="#ffd700"/>
+  <polygon points="20,50 35,50 30,60 25,60" fill="#ffd700"/>
+  <polygon points="215,50 230,50 225,60 220,60" fill="#ffd700"/>
+  
+  <!-- Film reel decorations -->
+  <circle cx="45" cy="25" r="8" fill="#8b4513" stroke="#ffd700" stroke-width="1"/>
+  <circle cx="45" cy="25" r="4" fill="#2c1810"/>
+  <circle cx="205" cy="55" r="8" fill="#8b4513" stroke="#ffd700" stroke-width="1"/>
+  <circle cx="205" cy="55" r="4" fill="#2c1810"/>
+  
+  <!-- Main text with retro styling -->
+  <text x="125" y="35" font-family="serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#ffd700">CINE</text>
+  <text x="125" y="55" font-family="serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#ffeb3b">MATE</text>
+  
+  <!-- Subtitle -->
+  <text x="125" y="68" font-family="serif" font-size="8" text-anchor="middle" fill="#8b4513">EST. 2024</text>
+  
+  <!-- Art deco lines -->
+  <line x1="60" y1="40" x2="190" y2="40" stroke="#8b4513" stroke-width="1"/>
+  <line x1="70" y1="42" x2="180" y2="42" stroke="#ffd700" stroke-width="0.5"/>
+</svg> 

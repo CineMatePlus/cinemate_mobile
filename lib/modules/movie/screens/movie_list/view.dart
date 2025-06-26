@@ -57,7 +57,7 @@ class MovieListView extends ConsumerWidget {
       padding: const EdgeInsets.all(16),
       sliver: SliverGrid(
         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: 180,
+          maxCrossAxisExtent: 150,
           crossAxisSpacing: 12,
           mainAxisSpacing: 12,
           childAspectRatio: 2 / 3,

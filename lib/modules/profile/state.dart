@@ -72,3 +72,12 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
   }
 }
  */
+
+import 'package:cinemate_mobile/core/services/user_service.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// Profil sayfası istatistiklerini getiren provider
+final userStatsProvider = FutureProvider.autoDispose<UserStats>((ref) async {
+  final userService = ref.watch(userServiceProvider);
+  return userService.getUserStats();
+});

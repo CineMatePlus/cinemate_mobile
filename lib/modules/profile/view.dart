@@ -2,8 +2,12 @@ import 'package:cinemate_mobile/core/constants/colors.dart';
 import 'package:cinemate_mobile/core/constants/text_styles.dart';
 import 'package:cinemate_mobile/core/modules/auth/models/user.dart';
 import 'package:cinemate_mobile/core/modules/auth/state.dart';
+import 'package:cinemate_mobile/core/services/user_service.dart';
+import 'package:cinemate_mobile/modules/user_content/state.dart';
+import 'package:cinemate_mobile/modules/user_content/view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:cinemate_mobile/modules/profile/state.dart';
 
 class ProfileView extends ConsumerStatefulWidget {
   const ProfileView({super.key});
@@ -81,6 +85,8 @@ class _ProfileViewState extends ConsumerState<ProfileView>
   }
 
   Widget _buildProfileHeader(User user) {
+    final userStatsAsync = ref.watch(userStatsProvider);
+
     return Padding(
       padding: const EdgeInsets.all(24.0),
       child: Column(
@@ -99,13 +105,18 @@ class _ProfileViewState extends ConsumerState<ProfileView>
           Text('Joined 2024',
               style: AppTextStyles.bodyMedium.withColor(AppColors.lightGrey)),
           const SizedBox(height: 24),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _buildStatCard('12', 'Lists'),
-              _buildStatCard('24', 'Followers'),
-              _buildStatCard('10', 'Following'),
-            ],
+          userStatsAsync.when(
+            data: (stats) => Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _buildStatCard(stats.likedCount.toString(), 'Liked'),
+                _buildStatCard(stats.watchlistCount.toString(), 'Watchlist'),
+                _buildStatCard(stats.watchedCount.toString(), 'Watched'),
+              ],
+            ),
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (err, stack) =>
+                const Center(child: Text('Stats could not be loaded.')),
           ),
         ],
       ),
@@ -133,30 +144,50 @@ class _ProfileViewState extends ConsumerState<ProfileView>
 
   // Bu fonksiyon artık bir "sliver" döndürüyor.
   Widget _buildMyListsSliver() {
+    final userStatsAsync = ref.watch(userStatsProvider);
+    final stats =
+        userStatsAsync.value; // Hata veya yüklenme durumu header'da yönetildi.
+
     return SliverPadding(
       padding: const EdgeInsets.all(24),
       sliver: SliverList(
         delegate: SliverChildListDelegate([
-          Text('My Lists', style: AppTextStyles.heading3),
-          const SizedBox(height: 16),
           _buildListItem(
-            icon: Icons.favorite_border,
-            title: 'Favorites',
-            subtitle: '12 items',
+            icon: Icons.favorite,
+            title: 'Liked',
+            subtitle: '${stats?.likedCount ?? '...'} movies',
+            onTap: () => _navigateToUserContent(
+                context, UserListType.liked, 'Liked Movies'),
           ),
           const SizedBox(height: 16),
           _buildListItem(
-            icon: Icons.bookmark_border,
-            title: 'Watch Later',
-            subtitle: '10 items',
+            icon: Icons.bookmark,
+            title: 'Watchlist',
+            subtitle: '${stats?.watchlistCount ?? '...'} movies',
+            onTap: () => _navigateToUserContent(
+                context, UserListType.watchlist, 'My Watchlist'),
           ),
           const SizedBox(height: 16),
           _buildListItem(
-            icon: Icons.movie_creation_outlined,
-            title: 'Collections',
-            subtitle: '5 items',
+            icon: Icons.history,
+            title: 'Watched',
+            subtitle: '${stats?.watchedCount ?? '...'} movies',
+            onTap: () => _navigateToUserContent(
+                context, UserListType.watched, 'Watched History'),
           ),
         ]),
+      ),
+    );
+  }
+
+  void _navigateToUserContent(
+      BuildContext context, UserListType listType, String title) {
+    // Notifier'ı dinleyen provider'ın state'ini güncelle
+    ref.read(userListTypeProvider.notifier).state = listType;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => UserContentView(title: title),
       ),
     );
   }
@@ -164,7 +195,8 @@ class _ProfileViewState extends ConsumerState<ProfileView>
   Widget _buildListItem(
       {required IconData icon,
       required String title,
-      required String subtitle}) {
+      required String subtitle,
+      VoidCallback? onTap}) {
     return ListTile(
       leading: Container(
         padding: const EdgeInsets.all(12),
@@ -178,7 +210,7 @@ class _ProfileViewState extends ConsumerState<ProfileView>
           style: AppTextStyles.bodyLarge.withWeight(FontWeight.bold)),
       subtitle: Text(subtitle,
           style: AppTextStyles.bodyMedium.withColor(AppColors.textGrey)),
-      onTap: () {},
+      onTap: onTap,
       contentPadding: EdgeInsets.zero,
     );
   }

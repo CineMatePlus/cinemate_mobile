@@ -1,6 +1,6 @@
 import 'package:cinemate_mobile/core/constants/text_styles.dart';
 import 'package:cinemate_mobile/modules/movie/screens/movie_list/view.dart';
-import 'package:cinemate_mobile/modules/profile/screens/view.dart';
+import 'package:cinemate_mobile/modules/profile/view.dart';
 import 'package:cinemate_mobile/modules/search/view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -36,13 +36,23 @@ class _HomeViewState extends State<HomeView> {
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return [
             SliverAppBar(
-              title: Text(
-                _getAppBarTitle(_selectedIndex),
-                style: AppTextStyles.heading2,
+              title: Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: _selectedIndex == 0
+                    ? SvgPicture.asset(
+                        'lib/core/constants/assets/images/logos/cinemate_minimalist.svg',
+                        height: 50,
+                        fit: BoxFit.contain,
+                      )
+                    : Text(
+                        _getAppBarTitle(_selectedIndex),
+                        style: AppTextStyles.heading2,
+                      ),
               ),
-              centerTitle: false,
+              centerTitle: _selectedIndex == 0 ? true : false,
               elevation: 0,
               backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              toolbarHeight: 60,
               actions: null,
               floating: true,
               snap: true,
