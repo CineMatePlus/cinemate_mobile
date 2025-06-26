@@ -76,6 +76,7 @@ flutter:
   assets:
     - lib/core/constants/assets/images/
     - lib/core/constants/assets/images/logos/
+    - lib/core/constants/assets/images/collection_placeholders/
     - lib/core/constants/assets/data/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
