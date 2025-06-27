@@ -51,51 +51,76 @@ class _SimilarUserCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.borderGrey.withOpacity(0.5)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 5),
-          ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CircularPercentIndicator(
-              radius: 40.0,
-              lineWidth: 5.0,
-              percent: user.similarity,
-              center: UserAvatar(
-                avatarUrl: user.avatarUrl,
-                gender: user.gender,
-                radius: 35,
+    return InkWell(
+      borderRadius: BorderRadius.circular(16),
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
               ),
-              progressColor: AppColors.primary,
-              backgroundColor: AppColors.borderGrey.withOpacity(0.3),
-              circularStrokeCap: CircularStrokeCap.round,
-            ),
-            const SizedBox(height: 12),
-            Text(
-              user.name,
-              style: AppTextStyles.bodyLarge.withWeight(FontWeight.bold),
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              '${(user.similarity * 100).toStringAsFixed(1)}% Match',
-              style: AppTextStyles.bodyMedium.withColor(AppColors.textGrey),
+              title: Text(user.name),
+              content: SelectableText('@${user.email.split('@').first}'),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('Close'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: AppColors.borderGrey.withOpacity(0.5)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 10,
+              offset: const Offset(0, 5),
             ),
           ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircularPercentIndicator(
+                radius: 40.0,
+                lineWidth: 5.0,
+                percent: user.similarity,
+                center: UserAvatar(
+                  avatarUrl: user.avatarUrl,
+                  gender: user.gender,
+                  radius: 35,
+                ),
+                progressColor: AppColors.primary,
+                backgroundColor: AppColors.borderGrey.withOpacity(0.3),
+                circularStrokeCap: CircularStrokeCap.round,
+              ),
+              const SizedBox(height: 12),
+              Text(
+                user.name,
+                style: AppTextStyles.bodyLarge.withWeight(FontWeight.bold),
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 4),
+              Text(
+                '${(user.similarity * 100).toStringAsFixed(1)}% Match',
+                style: AppTextStyles.bodyMedium.withColor(AppColors.textGrey),
+              ),
+            ],
+          ),
         ),
       ),
     );
