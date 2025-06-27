@@ -59,16 +59,50 @@ class _SimilarUserCard extends StatelessWidget {
           builder: (BuildContext context) {
             return AlertDialog(
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(20),
               ),
-              title: Text(user.name),
-              content: SelectableText('@${user.email.split('@').first}'),
+              contentPadding: const EdgeInsets.fromLTRB(24, 24, 24, 12),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  UserAvatar(
+                    avatarUrl: user.avatarUrl,
+                    gender: user.gender,
+                    radius: 40,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    user.name,
+                    style: AppTextStyles.heading5,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 4),
+                  SelectableText(
+                    '@${user.email.split('@').first}',
+                    style:
+                        AppTextStyles.bodyMedium.withColor(AppColors.textGrey),
+                  ),
+                ],
+              ),
+              actionsAlignment: MainAxisAlignment.center,
               actions: <Widget>[
-                TextButton(
-                  child: const Text('Close'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 12.0),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 40, vertical: 12),
+                    ),
+                    child: const Text('Close'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
                 ),
               ],
             );
