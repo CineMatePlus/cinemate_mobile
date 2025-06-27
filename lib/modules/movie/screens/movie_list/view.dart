@@ -1,4 +1,3 @@
-import 'package:cinemate_mobile/modules/collections/screens/collections_list/view.dart';
 import 'package:cinemate_mobile/modules/genre/screens/genre_list/view.dart';
 import 'package:cinemate_mobile/modules/movie/screens/movie_list/state.dart';
 import 'package:cinemate_mobile/modules/movie/screens/paginated_recommendations/view.dart';
@@ -20,7 +19,7 @@ class _MovieListViewState extends State<MovieListView>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
   }
 
   @override
@@ -40,7 +39,6 @@ class _MovieListViewState extends State<MovieListView>
           indicatorColor: Colors.black,
           tabs: const [
             Tab(text: 'All Movies'),
-            Tab(text: 'Collections'),
             Tab(text: 'Categories'),
           ],
         ),
@@ -119,8 +117,6 @@ class _MovieListViewState extends State<MovieListView>
                   );
                 },
               ),
-              // Collections Tab
-              const CollectionsListView(),
               // Categories Tab
               const CategoriesView(),
             ],

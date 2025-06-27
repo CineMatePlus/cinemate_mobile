@@ -1,4 +1,5 @@
 import 'package:cinemate_mobile/core/constants/text_styles.dart';
+import 'package:cinemate_mobile/modules/collections/screens/collections_list/view.dart';
 import 'package:cinemate_mobile/modules/movie/screens/movie_list/view.dart';
 import 'package:cinemate_mobile/modules/profile/view.dart';
 import 'package:cinemate_mobile/modules/search/view.dart';
@@ -20,7 +21,7 @@ class _HomeViewState extends State<HomeView> {
     const MovieListView(),
     const SearchView(),
     const SimilarUsersView(),
-    const Center(child: Text('Collections Page - Coming Soon')),
+    const CollectionsListView(),
     const ProfileView(),
   ];
 
