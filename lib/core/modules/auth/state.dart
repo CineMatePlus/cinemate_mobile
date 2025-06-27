@@ -88,6 +88,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
         status: AuthStatus.error,
         errorMessage: e.toString(),
       );
+      rethrow;
     }
   }
 
@@ -154,6 +155,11 @@ class AuthNotifier extends StateNotifier<AuthState> {
         errorMessage: e.toString(),
       );
     }
+  }
+
+  void setAuthenticated(User user) {
+    state = state.copyWith(
+        status: AuthStatus.authenticated, user: user, errorMessage: null);
   }
 }
 

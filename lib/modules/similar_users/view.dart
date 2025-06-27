@@ -1,5 +1,6 @@
 import 'package:cinemate_mobile/core/constants/colors.dart';
 import 'package:cinemate_mobile/core/constants/text_styles.dart';
+import 'package:cinemate_mobile/core/widgets/user_avatar.dart';
 import 'package:cinemate_mobile/modules/similar_users/models/similar_user.dart';
 import 'package:cinemate_mobile/modules/similar_users/state.dart';
 import 'package:flutter/material.dart';
@@ -72,13 +73,10 @@ class _SimilarUserCard extends StatelessWidget {
               radius: 40.0,
               lineWidth: 5.0,
               percent: user.similarity,
-              center: CircleAvatar(
+              center: UserAvatar(
+                avatarUrl: user.avatarUrl,
+                gender: user.gender,
                 radius: 35,
-                backgroundImage: user.avatarUrl != null
-                    ? NetworkImage(user.avatarUrl!)
-                    : const AssetImage(
-                            'lib/core/constants/assets/images/man_icon.png')
-                        as ImageProvider,
               ),
               progressColor: AppColors.primary,
               backgroundColor: AppColors.borderGrey.withOpacity(0.3),

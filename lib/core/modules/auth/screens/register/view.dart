@@ -139,28 +139,21 @@ class RegisterForm extends StatefulWidget {
 class _RegisterFormState extends State<RegisterForm> {
   late final TextEditingController _nameController;
   late final TextEditingController _emailController;
-  late final TextEditingController _phoneController;
   late final TextEditingController _passwordController;
-  late final TextEditingController _confirmPasswordController;
 
   @override
   void initState() {
     super.initState();
     _nameController = TextEditingController(text: widget.state.name);
     _emailController = TextEditingController(text: widget.state.email);
-    _phoneController = TextEditingController(text: widget.state.phone);
     _passwordController = TextEditingController(text: widget.state.password);
-    _confirmPasswordController =
-        TextEditingController(text: widget.state.confirmPassword);
   }
 
   @override
   void dispose() {
     _nameController.dispose();
     _emailController.dispose();
-    _phoneController.dispose();
     _passwordController.dispose();
-    _confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -174,142 +167,51 @@ class _RegisterFormState extends State<RegisterForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Ad Soyad Alanı
           _buildTextField(
             controller: _nameController,
             label: 'Ad Soyad',
             icon: Icons.person_outline,
             onChanged: widget.notifier.setName,
-            validator: _validateName,
-            keyboardType: TextInputType.name,
+            validator: (value) =>
+                value!.isEmpty ? 'Lütfen adınızı girin' : null,
           ),
-          const SizedBox(height: 10),
-
-          // E-posta Alanı
+          const SizedBox(height: 16),
           _buildTextField(
             controller: _emailController,
             label: 'E-posta Adresi',
             icon: Icons.email_outlined,
             onChanged: widget.notifier.setEmail,
-            validator: _validateEmail,
+            validator: (value) => value!.isEmpty || !value.contains('@')
+                ? 'Geçerli bir e-posta girin'
+                : null,
             keyboardType: TextInputType.emailAddress,
           ),
-          const SizedBox(height: 10),
-
-          // Telefon Alanı - Core olmadığı için kullanıcı girişini kaydedemiyor, tasarım bütünlüğü için bırakıyoruz
-          _buildTextField(
-            controller: _phoneController,
-            label: 'Telefon Numarası ',
-            icon: Icons.phone_outlined,
-            onChanged: widget.notifier.setPhone,
-            keyboardType: TextInputType.phone,
-            prefixText: '+90 ',
-          ),
-          const SizedBox(height: 10),
-          // Şifre Alanı
+          const SizedBox(height: 16),
           _buildTextField(
             controller: _passwordController,
             label: 'Şifre',
             icon: Icons.lock_outline,
             onChanged: widget.notifier.setPassword,
-            validator: _validatePassword,
+            validator: (value) =>
+                value!.length < 6 ? 'Şifre en az 6 karakter olmalı' : null,
             obscureText: true,
           ),
-          const SizedBox(height: 10),
-
-          // Şifre Tekrar Alanı
-          _buildTextField(
-            controller: _confirmPasswordController,
-            label: 'Şifre Tekrar',
-            icon: Icons.lock_outline,
-            onChanged: widget.notifier.setConfirmPassword,
-            validator: _validateConfirmPassword,
-            obscureText: true,
-          ),
+          const SizedBox(height: 16),
+          _buildGenderDropdown(),
           const SizedBox(height: 30),
-
-          // Kullanım Koşulları Checkbox - Core'da bulunmadığı için kullanmıyoruz,
-          // ancak tasarım bütünlüğü için bırakıyoruz
-          Row(
-            children: [
-              SizedBox(
-                width: 24,
-                height: 24,
-                child: Checkbox(
-                  value: true, // Her zaman işaretli varsayıyoruz
-                  onChanged: (value) {},
-                  activeColor: AppColors.black87,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: RichText(
-                  text: TextSpan(
-                    style: AppTextStyles.caption.withColor(AppColors.black54),
-                    children: [
-                      const TextSpan(
-                        text: 'Kullanım koşullarını ve gizlilik politikasını ',
-                      ),
-                      TextSpan(
-                        text: 'kabul ediyorum',
-                        style: AppTextStyles.caption
-                            .withColor(AppColors.black87)
-                            .withWeight(FontWeight.bold),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            // Kullanım koşulları sayfasına yönlendirme
-                          },
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 30),
-
-          // Hata Mesajı
-          if (_hasError)
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: const Color(0xFFFFF6F6),
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: const Color(0xFFFFE0E0)),
-              ),
-              child: Row(
-                children: [
-                  const Icon(Icons.error_outline,
-                      color: Color(0xFFE53935), size: 18),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      _errorMessage,
-                      style: AppTextStyles.error,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          if (_hasError) const SizedBox(height: 24),
-
-          // Kayıt Ol Butonu
           SizedBox(
             width: double.infinity,
             height: 52,
             child: ElevatedButton(
               onPressed: isLoading ? null : () => widget.notifier.register(),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.greyShade900,
-                foregroundColor: AppColors.white,
+                backgroundColor: AppColors.primary,
+                foregroundColor: Colors.white,
                 elevation: 0,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                disabledBackgroundColor: AppColors.greyShade400,
+                disabledBackgroundColor: Colors.grey[400],
               ),
               child: isLoading
                   ? const SizedBox(
@@ -321,23 +223,31 @@ class _RegisterFormState extends State<RegisterForm> {
                       ),
                     )
                   : Text(
-                      'HESAP OLUŞTUR',
-                      style: AppTextStyles.buttonLarge.withLetterSpacing(0.5),
+                      'KAYIT OL',
+                      style: AppTextStyles.buttonLarge
+                          .withWeight(FontWeight.bold)
+                          .withLetterSpacing(0.5),
                     ),
             ),
           ),
           const SizedBox(height: 20),
-
-          // Giriş Yapma Yönlendirmesi
-          Center(
-            child: TextButton(
-              onPressed: isLoading ? null : widget.onLoginTap,
-              style: TextButton.styleFrom(
-                foregroundColor: AppColors.black87,
-              ),
-              child: Text(
-                'Zaten bir hesabın var mı? Giriş yap',
-                style: AppTextStyles.buttonMedium.withColor(AppColors.black87),
+          Align(
+            alignment: Alignment.center,
+            child: RichText(
+              text: TextSpan(
+                style: AppTextStyles.bodyMedium.withColor(AppColors.textGrey),
+                children: [
+                  const TextSpan(text: 'Zaten bir hesabın var mı? '),
+                  TextSpan(
+                    text: 'Giriş Yap',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.primary,
+                    ),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = widget.onLoginTap,
+                  ),
+                ],
               ),
             ),
           ),
@@ -346,22 +256,52 @@ class _RegisterFormState extends State<RegisterForm> {
     );
   }
 
+  Widget _buildGenderDropdown() {
+    return DropdownButtonFormField<int>(
+      value: widget.state.gender,
+      onChanged: (value) {
+        if (value != null) {
+          widget.notifier.setGender(value);
+        }
+      },
+      items: const [
+        DropdownMenuItem(value: 0, child: Text('Kadın')),
+        DropdownMenuItem(value: 1, child: Text('Erkek')),
+        DropdownMenuItem(value: 2, child: Text('Diğer')),
+      ],
+      decoration: InputDecoration(
+        labelText: 'Cinsiyet',
+        prefixIcon: const Icon(Icons.wc_outlined),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: AppColors.primary, width: 2),
+        ),
+      ),
+    );
+  }
+
   Widget _buildTextField({
-    required TextEditingController? controller,
+    required TextEditingController controller,
     required String label,
     required IconData icon,
     required void Function(String) onChanged,
     String? Function(String?)? validator,
     bool obscureText = false,
     TextInputType? keyboardType,
-    String? prefixText,
   }) {
     return TextFormField(
       controller: controller,
       decoration: InputDecoration(
         labelText: label,
         prefixIcon: Icon(icon, color: AppColors.darkTextGrey),
-        prefixText: prefixText,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
@@ -391,49 +331,4 @@ class _RegisterFormState extends State<RegisterForm> {
       keyboardType: keyboardType,
     );
   }
-
-  String? _validateName(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Ad Soyad alanı boş olamaz';
-    }
-    return null;
-  }
-
-  String? _validateEmail(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'E-posta alanı boş olamaz';
-    }
-    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-      return 'Geçerli bir e-posta adresi giriniz';
-    }
-    return null;
-  }
-
-  String? _validatePassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Şifre alanı boş olamaz';
-    }
-    if (value.length < 6) {
-      return 'Şifre en az 6 karakter olmalıdır';
-    }
-    return null;
-  }
-
-  String? _validateConfirmPassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Şifre tekrar alanı boş olamaz';
-    }
-    if (value != widget.state.password) {
-      return 'Şifreler eşleşmiyor';
-    }
-    return null;
-  }
-
-  bool get _hasError =>
-      widget.state.errorMessage != null ||
-      (widget.authState.status == AuthStatus.error &&
-          widget.authState.errorMessage != null);
-
-  String get _errorMessage =>
-      widget.state.errorMessage ?? widget.authState.errorMessage!;
 }

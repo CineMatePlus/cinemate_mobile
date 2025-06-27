@@ -1,5 +1,8 @@
+import 'package:cinemate_mobile/core/modules/auth/models/user.dart';
 import 'package:cinemate_mobile/core/modules/auth/state.dart';
+import 'package:cinemate_mobile/core/widgets/user_avatar.dart';
 import 'package:cinemate_mobile/modules/collections/service/collection_service.dart';
+import 'package:cinemate_mobile/modules/comment/models/comment_with_user.dart';
 import 'package:cinemate_mobile/modules/comment/state/movie_comments_state.dart';
 import 'package:cinemate_mobile/modules/movie/models/movie_model.dart';
 import 'package:cinemate_mobile/modules/movie/screens/movie_detail/state.dart';
@@ -7,6 +10,7 @@ import 'package:cinemate_mobile/modules/movie/widgets/movie_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class MovieDetailView extends ConsumerWidget {
   final String movieId;
@@ -360,106 +364,152 @@ class MovieDetailView extends ConsumerWidget {
       BuildContext context, WidgetRef ref, String movieId) {
     final commentsAsync = ref.watch(movieCommentsProvider(movieId));
     final textController = TextEditingController();
-    // You would typically get the current user's ID from an auth provider
-    final currentUserId = ref.watch(authProvider).user?.id;
+    final auth = ref.watch(authProvider);
+    final currentUser = auth.user;
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Comments',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style:
+                GoogleFonts.manrope(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
           // Comment Input
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: textController,
-                  decoration: const InputDecoration(
-                    hintText: 'Add a comment...',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-              ),
-              IconButton(
-                icon: const Icon(Icons.send),
-                onPressed: () {
-                  if (textController.text.isNotEmpty) {
-                    ref
-                        .read(movieCommentsProvider(movieId).notifier)
-                        .postComment(textController.text);
-                    textController.clear();
-                  }
-                },
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
+          if (currentUser != null)
+            _buildCommentInputField(
+                context, ref, textController, currentUser, movieId),
+          const SizedBox(height: 24),
           // Comments List
           commentsAsync.when(
             data: (comments) {
               if (comments.isEmpty) {
-                return const Text('No comments yet. Be the first!');
+                return const Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20),
+                    child: Text('No comments yet. Be the first!'),
+                  ),
+                );
               }
-              return ListView.builder(
+              return ListView.separated(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: comments.length,
+                separatorBuilder: (context, index) => const Divider(height: 32),
                 itemBuilder: (context, index) {
                   final commentWithUser = comments[index];
-                  final comment = commentWithUser.comment;
-                  final user = commentWithUser.user;
-                  final isAuthor = user.id == currentUserId;
-
-                  return Card(
-                    margin: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        backgroundImage: user.avatarUrl != null
-                            ? NetworkImage(user.avatarUrl!)
-                            : null,
-                        child: user.avatarUrl == null
-                            ? const Icon(Icons.person)
-                            : null,
-                      ),
-                      title: Text(user.name),
-                      subtitle: Text(comment.text),
-                      trailing: isAuthor
-                          ? Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                IconButton(
-                                  icon: const Icon(Icons.edit, size: 20),
-                                  onPressed: () {
-                                    // TODO: Implement edit functionality
-                                  },
-                                ),
-                                IconButton(
-                                  icon: const Icon(Icons.delete, size: 20),
-                                  onPressed: () {
-                                    ref
-                                        .read(movieCommentsProvider(movieId)
-                                            .notifier)
-                                        .deleteComment(comment.id);
-                                  },
-                                ),
-                              ],
-                            )
-                          : null,
-                    ),
-                  );
+                  return _buildCommentItem(
+                      context, ref, commentWithUser, currentUser?.id);
                 },
               );
             },
             loading: () => const Center(child: CircularProgressIndicator()),
-            error: (err, stack) => Text('Error: $err'),
+            error: (err, stack) => Text('Error loading comments: $err'),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildCommentInputField(BuildContext context, WidgetRef ref,
+      TextEditingController controller, User currentUser, String movieId) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        UserAvatar(
+          avatarUrl: currentUser.avatarUrl,
+          gender: currentUser.gender,
+          radius: 20,
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: TextField(
+            controller: controller,
+            decoration: InputDecoration(
+              hintText: 'Add a comment...',
+              fillColor: Colors.grey[100],
+              filled: true,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide.none,
+              ),
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              suffixIcon: IconButton(
+                icon: const Icon(Icons.send),
+                onPressed: () {
+                  if (controller.text.isNotEmpty) {
+                    ref
+                        .read(movieCommentsProvider(movieId).notifier)
+                        .postComment(controller.text);
+                    controller.clear();
+                    FocusScope.of(context).unfocus();
+                  }
+                },
+              ),
+            ),
+            maxLines: null,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCommentItem(BuildContext context, WidgetRef ref,
+      CommentWithUser commentWithUser, String? currentUserId) {
+    final comment = commentWithUser.comment;
+    final user = commentWithUser.user;
+    final isAuthor = user.id == currentUserId;
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        UserAvatar(
+          avatarUrl: user.avatarUrl,
+          gender: user.gender,
+          radius: 20,
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Flexible(
+                    child: Text(
+                      user.name,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    '· ${DateFormat.yMMMd().format(comment.createdAt)}',
+                    style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              Text(comment.text),
+            ],
+          ),
+        ),
+        if (isAuthor)
+          IconButton(
+            icon: const Icon(Icons.more_vert, size: 20),
+            onPressed: () {
+              // TODO: Implement edit/delete menu
+              ref
+                  .read(movieCommentsProvider(movieId).notifier)
+                  .deleteComment(comment.id);
+            },
+          ),
+      ],
     );
   }
 

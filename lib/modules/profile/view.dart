@@ -5,6 +5,7 @@ import 'package:cinemate_mobile/core/modules/auth/models/user.dart';
 import 'package:cinemate_mobile/core/modules/auth/state.dart';
 import 'package:cinemate_mobile/core/routes/route_name.dart';
 import 'package:cinemate_mobile/core/services/user_service.dart';
+import 'package:cinemate_mobile/core/widgets/user_avatar.dart';
 import 'package:cinemate_mobile/modules/comment/state/my_comments_state.dart';
 import 'package:cinemate_mobile/modules/user_content/state.dart';
 import 'package:cinemate_mobile/modules/user_content/view.dart';
@@ -12,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cinemate_mobile/modules/profile/state.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
 class ProfileView extends ConsumerStatefulWidget {
   const ProfileView({super.key});
@@ -27,7 +29,7 @@ class _ProfileViewState extends ConsumerState<ProfileView>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
     // Tab değiştiğinde ekranın yeniden çizilmesini sağlamak için dinleyici ekliyoruz.
     _tabController.addListener(() {
       if (_tabController.indexIsChanging) {
@@ -64,7 +66,6 @@ class _ProfileViewState extends ConsumerState<ProfileView>
               indicatorSize: TabBarIndicatorSize.label,
               tabs: const [
                 Tab(text: 'Lists'),
-                Tab(text: 'Reviews'),
                 Tab(text: 'Comments'),
               ],
             ),
@@ -74,12 +75,6 @@ class _ProfileViewState extends ConsumerState<ProfileView>
         // Seçili sekmeye göre doğru içeriği gösteriyoruz.
         if (_tabController.index == 0)
           _buildMyListsSliver()
-        else if (_tabController.index == 1)
-          const SliverFillRemaining(
-            child: Center(
-              child: Text('Reviews Coming Soon'),
-            ),
-          )
         else
           SliverFillRemaining(
             child: Consumer(
@@ -122,10 +117,10 @@ class _ProfileViewState extends ConsumerState<ProfileView>
       padding: const EdgeInsets.all(24.0),
       child: Column(
         children: [
-          const CircleAvatar(
+          UserAvatar(
+            avatarUrl: user.avatarUrl,
+            gender: user.gender,
             radius: 40,
-            backgroundImage:
-                AssetImage('lib/core/constants/assets/images/man_icon.png'),
           ),
           const SizedBox(height: 16),
           Text(user.name, style: AppTextStyles.heading2),
@@ -133,7 +128,7 @@ class _ProfileViewState extends ConsumerState<ProfileView>
           Text('@${user.email.split('@').first}',
               style: AppTextStyles.bodyLarge.withColor(AppColors.textGrey)),
           const SizedBox(height: 4),
-          Text('Joined 2024',
+          Text('Joined ${DateFormat.yMMMM().format(user.createdAt)}',
               style: AppTextStyles.bodyMedium.withColor(AppColors.lightGrey)),
           const SizedBox(height: 24),
           userStatsAsync.when(

@@ -41,22 +41,21 @@ class AuthService {
   }
 
   Future<User> register(
-      String email, String password, String name, int gender) async {
+      String email, String name, String password, int gender) async {
     try {
       final response = await _apiService.request(
         'POST',
         '/auth/register',
         data: {
           'email': email,
-          'password': password,
           'name': name,
+          'password': password,
           'gender': gender,
         },
       );
 
       if (response.statusCode == 200) {
         // Token'ı local storage'a kaydet
-        //TODO: Bunu state'e çekeriz
         await AuthUtils.saveToken(response.data['access_token']);
 
         return User.fromJson(response.data['user']);
