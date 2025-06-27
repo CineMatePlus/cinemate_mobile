@@ -77,11 +77,11 @@ class UserService {
   }
 
   Future<List<Movie>> getRecommendations(
-      {required String basedOn, int limit = 10}) async {
+      {required String basedOn, int skip = 0, int limit = 10}) async {
     try {
       final response = await _apiService.request(
         'GET',
-        '/users/me/recommendations?based_on=$basedOn&limit=$limit',
+        '/users/me/recommendations?based_on=$basedOn&skip=$skip&limit=$limit',
       );
       if (response.data is List) {
         final List<dynamic> data = response.data;

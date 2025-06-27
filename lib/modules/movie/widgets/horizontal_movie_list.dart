@@ -8,12 +8,14 @@ class HorizontalMovieListView extends ConsumerWidget {
   final String title;
   final AsyncValue<List<Movie>> moviesAsync;
   final VoidCallback? onRefresh;
+  final VoidCallback? onSeeAllTapped;
 
   const HorizontalMovieListView({
     super.key,
     required this.title,
     required this.moviesAsync,
     this.onRefresh,
+    this.onSeeAllTapped,
   });
 
   @override
@@ -23,9 +25,41 @@ class HorizontalMovieListView extends ConsumerWidget {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-          child: Text(
-            title,
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold),
+                  softWrap: true,
+                ),
+              ),
+              if (onSeeAllTapped != null)
+                InkWell(
+                  onTap: onSeeAllTapped,
+                  borderRadius: BorderRadius.circular(8),
+                  child: const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        Text(
+                          'See All',
+                          style: TextStyle(color: Colors.grey, fontSize: 14),
+                        ),
+                        SizedBox(width: 4),
+                        Icon(
+                          Icons.arrow_forward_ios,
+                          size: 14,
+                          color: Colors.grey,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+            ],
           ),
         ),
         SizedBox(

@@ -2,6 +2,7 @@ import 'package:cinemate_mobile/modules/collections/screens/collections_list/vie
 import 'package:cinemate_mobile/modules/genre/screens/genre_list/view.dart';
 import 'package:cinemate_mobile/modules/movie/screens/movie_detail/view.dart';
 import 'package:cinemate_mobile/modules/movie/screens/movie_list/state.dart';
+import 'package:cinemate_mobile/modules/movie/screens/paginated_recommendations/view.dart';
 import 'package:cinemate_mobile/modules/movie/widgets/horizontal_movie_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -67,16 +68,52 @@ class _MovieListViewState extends State<MovieListView>
                         HorizontalMovieListView(
                           title: 'You Might Like',
                           moviesAsync: ref.watch(likedRecommendationsProvider),
+                          onSeeAllTapped: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const PaginatedRecommendationsView(
+                                  title: 'You Might Like',
+                                  recommendationType: 'like',
+                                ),
+                              ),
+                            );
+                          },
                         ),
                         HorizontalMovieListView(
                           title: 'You May Be Interested In',
                           moviesAsync:
                               ref.watch(watchlistRecommendationsProvider),
+                          onSeeAllTapped: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const PaginatedRecommendationsView(
+                                  title: 'You May Be Interested In',
+                                  recommendationType: 'watchlist',
+                                ),
+                              ),
+                            );
+                          },
                         ),
                         HorizontalMovieListView(
                           title: 'Similar to What You Watched Before',
                           moviesAsync:
                               ref.watch(watchedRecommendationsProvider),
+                          onSeeAllTapped: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const PaginatedRecommendationsView(
+                                  title: 'Similar to What You Watched Before',
+                                  recommendationType: 'watched',
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       ],
                     ),
