@@ -2,6 +2,7 @@ import 'package:cinemate_mobile/core/constants/text_styles.dart';
 import 'package:cinemate_mobile/modules/movie/screens/movie_list/view.dart';
 import 'package:cinemate_mobile/modules/profile/view.dart';
 import 'package:cinemate_mobile/modules/search/view.dart';
+import 'package:cinemate_mobile/modules/similar_users/view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -18,7 +19,7 @@ class _HomeViewState extends State<HomeView> {
   static final List<Widget> _widgetOptions = <Widget>[
     const MovieListView(),
     const SearchView(),
-    const Center(child: Text('Cinema Page - Coming Soon')),
+    const SimilarUsersView(),
     const Center(child: Text('Collections Page - Coming Soon')),
     const ProfileView(),
   ];
@@ -110,7 +111,7 @@ class _HomeViewState extends State<HomeView> {
       case 1:
         return 'Search';
       case 2:
-        return 'Cinema';
+        return 'Similar Users';
       case 3:
         return 'Collections';
       case 4:

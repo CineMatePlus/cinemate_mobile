@@ -1,6 +1,7 @@
 import 'package:cinemate_mobile/core/providers/api_service_provider.dart';
 import 'package:cinemate_mobile/core/services/api_service.dart';
 import 'package:cinemate_mobile/modules/movie/models/movie_model.dart';
+import 'package:cinemate_mobile/modules/similar_users/models/similar_user.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // İstatistik verilerini tutacak olan model
@@ -88,6 +89,23 @@ class UserService {
         return data.map((movieJson) => Movie.fromJson(movieJson)).toList();
       } else {
         throw Exception('Unexpected response format for recommendations');
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<SimilarUser>> getSimilarUsers({int limit = 10}) async {
+    try {
+      final response = await _apiService.request(
+        'GET',
+        '/users/me/similar-users?limit=$limit',
+      );
+      if (response.data is List) {
+        final List<dynamic> data = response.data;
+        return data.map((userJson) => SimilarUser.fromJson(userJson)).toList();
+      } else {
+        throw Exception('Unexpected response format for similar users');
       }
     } catch (e) {
       rethrow;
