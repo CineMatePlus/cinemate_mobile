@@ -56,6 +56,23 @@ class CollectionDetailNotifier
     }
   }
 
+  Future<void> removeMovieFromCollection(String movieId) async {
+    try {
+      await _collectionService.removeMovieFromCollection(
+          _collectionId, movieId);
+      // Update the state to reflect the removal
+      state = state.whenData((currentState) {
+        final updatedMovies =
+            currentState.movies.where((movie) => movie.id != movieId).toList();
+        return currentState.copyWith(movies: updatedMovies);
+      });
+    } catch (e) {
+      // Optionally handle the error, e.g., show a toast or revert the state
+      // For now, we'll just rethrow to be caught by the UI
+      rethrow;
+    }
+  }
+
   Future<bool> deleteCollection() async {
     try {
       await _collectionService.deleteCollection(_collectionId);

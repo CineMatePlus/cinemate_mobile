@@ -1,5 +1,6 @@
 import 'package:cinemate_mobile/modules/collections/screens/collection_detail/state.dart';
 import 'package:cinemate_mobile/modules/collections/screens/collections_list/state.dart';
+import 'package:cinemate_mobile/modules/movie/screens/movie_detail/view.dart';
 import 'package:cinemate_mobile/modules/movie/widgets/movie_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -261,12 +262,41 @@ class CollectionDetailView extends ConsumerWidget {
                     (context, index) {
                       if (index >= movies.length) return null;
                       final movie = movies[index];
-                      return MovieCard(
-                        movie: movie,
-                        onTap: () {
-                          context.push('/movie/${movie.id}');
-                        },
-                        titleFontSize: 14.0,
+                      return Stack(
+                        children: [
+                          MovieCard(
+                            movie: movie,
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      MovieDetailView(movieId: movie.id),
+                                ),
+                              );
+                            },
+                            titleFontSize: 14.0,
+                          ),
+                          Positioned(
+                            top: 4,
+                            right: 4,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.black.withOpacity(0.6),
+                                shape: BoxShape.circle,
+                              ),
+                              child: IconButton(
+                                icon: const Icon(Icons.close,
+                                    color: Colors.white, size: 16),
+                                onPressed: () =>
+                                    _showRemoveMovieConfirmationDialog(
+                                        context, ref, movie.id),
+                                padding: EdgeInsets.zero,
+                                constraints: const BoxConstraints(),
+                              ),
+                            ),
+                          ),
+                        ],
                       );
                     },
                     childCount: movies.length,
@@ -309,7 +339,13 @@ class CollectionDetailView extends ConsumerWidget {
                                   movie: movie,
                                   titleFontSize: 12.0,
                                   onTap: () {
-                                    context.push('/movie/${movie.id}');
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            MovieDetailView(movieId: movie.id),
+                                      ),
+                                    );
                                   },
                                 ),
                               ),
@@ -483,5 +519,55 @@ class CollectionDetailView extends ConsumerWidget {
         );
       }
     }
+  }
+
+  void _showRemoveMovieConfirmationDialog(
+      BuildContext context, WidgetRef ref, String movieId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: const Text('Filmi Kaldır'),
+          content: const Text(
+              'Bu filmi koleksiyondan kaldırmak istediğinizden emin misiniz?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('İptal'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                Navigator.of(context).pop();
+                try {
+                  await ref
+                      .read(collectionDetailProvider(collectionId).notifier)
+                      .removeMovieFromCollection(movieId);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Film koleksiyondan kaldırıldı.'),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Hata: $e'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+              ),
+              child: const Text('Kaldır'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
