@@ -1,33 +1,37 @@
+import 'package:cinemate_mobile/modules/genre/services/genre_service.dart';
 import 'package:cinemate_mobile/modules/movie/screens/movie_detail/view.dart';
 import 'package:cinemate_mobile/modules/movie/widgets/movie_card.dart';
-import 'package:cinemate_mobile/modules/user_content/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class UserContentView extends ConsumerWidget {
-  final String title;
-  final Color color;
-  final IconData icon;
+final genreMoviesProvider =
+    FutureProvider.autoDispose.family((ref, String genreName) {
+  final genreService = ref.watch(genreServiceProvider);
+  return genreService.getMoviesByGenre(genreName);
+});
 
-  const UserContentView({
-    super.key,
-    required this.title,
-    required this.color,
-    required this.icon,
-  });
+class GenreMovieListView extends ConsumerWidget {
+  final String genreName;
+  final Color genreColor;
+  final IconData genreIcon;
+
+  const GenreMovieListView(
+      {super.key,
+      required this.genreName,
+      required this.genreColor,
+      required this.genreIcon});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final moviesAsync = ref.watch(userContentProvider);
-
+    final moviesAsync = ref.watch(genreMoviesProvider(genreName));
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: color,
+        backgroundColor: genreColor,
         title: Row(
           children: [
-            Icon(icon, color: Colors.white),
+            Icon(genreIcon, color: Colors.white),
             const SizedBox(width: 10),
-            Text(title, style: const TextStyle(color: Colors.white)),
+            Text(genreName, style: const TextStyle(color: Colors.white)),
           ],
         ),
         iconTheme: const IconThemeData(color: Colors.white),
@@ -35,22 +39,22 @@ class UserContentView extends ConsumerWidget {
       body: moviesAsync.when(
         data: (movies) {
           if (movies.isEmpty) {
-            return const Center(child: Text('Bu listede henüz film yok.'));
+            return const Center(
+                child: Text("No movies to display for this genre."));
           }
           return GridView.builder(
-            padding: const EdgeInsets.all(16.0),
-            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 150,
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
-              childAspectRatio: 2 / 3,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 0.6,
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10,
             ),
+            padding: const EdgeInsets.all(10),
             itemCount: movies.length,
             itemBuilder: (context, index) {
               final movie = movies[index];
               return MovieCard(
                 movie: movie,
-                titleFontSize: 14,
                 onTap: () {
                   Navigator.push(
                     context,
@@ -64,8 +68,7 @@ class UserContentView extends ConsumerWidget {
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) =>
-            const Center(child: Text('Filmler yüklenirken bir hata oluştu.')),
+        error: (err, stack) => Center(child: Text(err.toString())),
       ),
     );
   }

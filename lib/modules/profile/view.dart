@@ -1,5 +1,6 @@
 import 'package:cinemate_mobile/core/constants/colors.dart';
 import 'package:cinemate_mobile/core/constants/text_styles.dart';
+import 'package:cinemate_mobile/core/constants/user_list_constants.dart';
 import 'package:cinemate_mobile/core/modules/auth/models/user.dart';
 import 'package:cinemate_mobile/core/modules/auth/state.dart';
 import 'package:cinemate_mobile/core/services/user_service.dart';
@@ -182,12 +183,17 @@ class _ProfileViewState extends ConsumerState<ProfileView>
 
   void _navigateToUserContent(
       BuildContext context, UserListType listType, String title) {
+    final details = userListDetails[title]!;
+    final icon = details['icon'] as IconData;
+    final color = details['color'] as Color;
+
     // Notifier'ı dinleyen provider'ın state'ini güncelle
     ref.read(userListTypeProvider.notifier).state = listType;
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => UserContentView(title: title),
+        builder: (context) =>
+            UserContentView(title: title, icon: icon, color: color),
       ),
     );
   }
