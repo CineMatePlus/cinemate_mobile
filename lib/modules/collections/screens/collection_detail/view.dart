@@ -1,7 +1,5 @@
 import 'package:cinemate_mobile/modules/collections/screens/collection_detail/state.dart';
 import 'package:cinemate_mobile/modules/collections/screens/collections_list/state.dart';
-import 'package:cinemate_mobile/modules/movie/models/movie_model.dart';
-import 'package:cinemate_mobile/modules/movie/screens/movie_detail/view.dart';
 import 'package:cinemate_mobile/modules/movie/widgets/movie_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

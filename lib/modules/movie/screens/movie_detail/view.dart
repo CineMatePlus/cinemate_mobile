@@ -1,3 +1,4 @@
+import 'package:cinemate_mobile/modules/collections/service/collection_service.dart';
 import 'package:cinemate_mobile/modules/movie/models/movie_model.dart';
 import 'package:cinemate_mobile/modules/movie/screens/movie_detail/state.dart';
 import 'package:cinemate_mobile/modules/movie/widgets/movie_card.dart';
@@ -168,9 +169,85 @@ class MovieDetailView extends ConsumerWidget {
             color: const Color(0xFF4A709C),
             onTap: () => ref.read(provider.notifier).toggleWatchlist(),
           ),
+          const SizedBox(width: 24),
+          _actionButton(
+            context,
+            icon: Icons.playlist_add,
+            color: const Color(0xFF4A709C),
+            onTap: () => _showCollectionsBottomSheet(context, ref, movieId),
+          ),
         ],
       ),
     );
+  }
+
+  void _showCollectionsBottomSheet(
+      BuildContext context, WidgetRef ref, String movieId) async {
+    try {
+      final collections =
+          await ref.read(collectionServiceProvider).getMyCollections();
+      if (!context.mounted) return;
+
+      if (collections.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text('No collections found. Create one first!')),
+        );
+        return;
+      }
+
+      showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return SafeArea(
+            child: Wrap(
+              children: <Widget>[
+                const ListTile(
+                  title: Text('Add to a collection',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                ),
+                const Divider(),
+                SizedBox(
+                  height: 250,
+                  child: ListView.builder(
+                    itemCount: collections.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final collection = collections[index];
+                      return ListTile(
+                        leading: const Icon(Icons.list),
+                        title: Text(collection.name),
+                        onTap: () async {
+                          Navigator.of(context).pop();
+                          try {
+                            await ref
+                                .read(collectionServiceProvider)
+                                .addMovieToCollection(collection.id, movieId);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content: Text(
+                                      'Successfully added to ${collection.name}')),
+                            );
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Failed to add: $e')),
+                            );
+                          }
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Could not fetch collections: $e')),
+      );
+    }
   }
 
   Widget _actionButton(BuildContext context,

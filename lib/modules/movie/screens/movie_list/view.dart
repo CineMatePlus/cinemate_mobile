@@ -1,6 +1,5 @@
 import 'package:cinemate_mobile/modules/collections/screens/collections_list/view.dart';
 import 'package:cinemate_mobile/modules/genre/screens/genre_list/view.dart';
-import 'package:cinemate_mobile/modules/movie/screens/movie_detail/view.dart';
 import 'package:cinemate_mobile/modules/movie/screens/movie_list/state.dart';
 import 'package:cinemate_mobile/modules/movie/screens/paginated_recommendations/view.dart';
 import 'package:cinemate_mobile/modules/movie/widgets/horizontal_movie_list.dart';
