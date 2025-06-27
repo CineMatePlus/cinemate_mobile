@@ -55,4 +55,14 @@ class CollectionDetailNotifier
       state = AsyncValue.error(e, s);
     }
   }
+
+  Future<bool> deleteCollection() async {
+    try {
+      await _collectionService.deleteCollection(_collectionId);
+      return true;
+    } catch (e, s) {
+      state = AsyncValue.error(e, s);
+      return false;
+    }
+  }
 }

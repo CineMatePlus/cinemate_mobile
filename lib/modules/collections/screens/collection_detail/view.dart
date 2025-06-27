@@ -1,4 +1,5 @@
 import 'package:cinemate_mobile/modules/collections/screens/collection_detail/state.dart';
+import 'package:cinemate_mobile/modules/collections/screens/collections_list/state.dart';
 import 'package:cinemate_mobile/modules/movie/models/movie_model.dart';
 import 'package:cinemate_mobile/modules/movie/screens/movie_detail/view.dart';
 import 'package:cinemate_mobile/modules/movie/widgets/movie_card.dart';
@@ -193,6 +194,39 @@ class CollectionDetailView extends ConsumerWidget {
                             ),
                           ],
                         ),
+                        const SizedBox(height: 16),
+                        // Delete collection button
+                        SizedBox(
+                          width: double.infinity,
+                          child: OutlinedButton.icon(
+                            onPressed: () =>
+                                _showDeleteConfirmationDialog(context, ref),
+                            icon: const Icon(
+                              Icons.delete_outline,
+                              size: 18,
+                              color: Colors.white70,
+                            ),
+                            label: const Text(
+                              'Koleksiyonu Sil',
+                              style: TextStyle(
+                                fontFamily: 'Manrope',
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                                color: Colors.white70,
+                              ),
+                            ),
+                            style: OutlinedButton.styleFrom(
+                              side: BorderSide(
+                                color: Colors.white.withOpacity(0.3),
+                                width: 1,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -355,5 +389,101 @@ class CollectionDetailView extends ConsumerWidget {
         ],
       ),
     );
+  }
+
+  void _showDeleteConfirmationDialog(BuildContext context, WidgetRef ref) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: const Text(
+            'Koleksiyonu Sil',
+            style: TextStyle(
+              fontFamily: 'Manrope',
+              fontWeight: FontWeight.w700,
+              fontSize: 20,
+              color: Color(0xFF0D141C),
+            ),
+          ),
+          content: const Text(
+            'Bu koleksiyonu silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.',
+            style: TextStyle(
+              fontFamily: 'Manrope',
+              fontSize: 16,
+              color: Color(0xFF4A709C),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text(
+                'İptal',
+                style: TextStyle(
+                  fontFamily: 'Manrope',
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF4A709C),
+                ),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await _deleteCollection(context, ref);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: const Text(
+                'Sil',
+                style: TextStyle(
+                  fontFamily: 'Manrope',
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _deleteCollection(BuildContext context, WidgetRef ref) async {
+    try {
+      final success = await ref
+          .read(collectionDetailProvider(collectionId).notifier)
+          .deleteCollection();
+
+      if (success && context.mounted) {
+        // Refresh collections list
+        ref.invalidate(collectionsListProvider);
+
+        // Navigate back to collections list
+        context.pop();
+
+        // Show success message
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Koleksiyon başarıyla silindi'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Hata: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 }

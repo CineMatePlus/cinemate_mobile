@@ -36,4 +36,28 @@ class CollectionsListNotifier
       state = AsyncValue.error(e, s);
     }
   }
+
+  Future<void> createCollection({
+    required String name,
+    required String description,
+    required bool isPublic,
+  }) async {
+    try {
+      final newCollection = await _collectionService.createCollection(
+        name: name,
+        description: description,
+        isPublic: isPublic,
+      );
+
+      // Add the new collection to the beginning of the list
+      state.whenData((currentState) {
+        final updatedCollections = [newCollection, ...currentState.collections];
+        state = AsyncValue.data(
+            CollectionsListState(collections: updatedCollections));
+      });
+    } catch (e, s) {
+      // Handle error - you might want to show a snackbar or dialog
+      state = AsyncValue.error(e, s);
+    }
+  }
 }

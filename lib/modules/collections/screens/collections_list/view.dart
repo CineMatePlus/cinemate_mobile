@@ -1,6 +1,7 @@
 import 'package:cinemate_mobile/modules/collections/screens/collection_detail/view.dart';
 import 'package:cinemate_mobile/modules/collections/screens/collections_list/state.dart';
 import 'package:cinemate_mobile/modules/collections/widgets/collection_card.dart';
+import 'package:cinemate_mobile/modules/collections/widgets/create_collection_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -62,8 +63,15 @@ class CollectionsListView extends ConsumerWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // TODO: Show a dialog or navigate to a new screen to create a collection
+          showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            backgroundColor: Colors.transparent,
+            builder: (context) => const CreateCollectionModal(),
+          );
         },
+        backgroundColor: const Color(0xFF0F3460),
+        foregroundColor: Colors.white,
         child: const Icon(Icons.add),
       ),
     );

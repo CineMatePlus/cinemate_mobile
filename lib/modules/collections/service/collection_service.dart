@@ -27,11 +27,19 @@ class CollectionService {
     return Collection.fromJson(response.data);
   }
 
-  Future<Collection> createCollection(String name, String description) async {
+  Future<Collection> createCollection({
+    required String name,
+    required String description,
+    required bool isPublic,
+  }) async {
     final response = await _apiService.request(
       'POST',
       '/collections',
-      data: {'name': name, 'description': description},
+      data: {
+        'name': name,
+        'description': description,
+        'isPublic': isPublic,
+      },
     );
     return Collection.fromJson(response.data);
   }
