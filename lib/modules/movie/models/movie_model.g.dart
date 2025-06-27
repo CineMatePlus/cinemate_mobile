@@ -10,8 +10,8 @@ _$MovieImpl _$$MovieImplFromJson(Map<String, dynamic> json) => _$MovieImpl(
       id: json['_id'] as String,
       title: json['title'] as String,
       overview: json['overview'] as String,
-      posterPath: json['poster_path'] as String,
-      backdropPath: json['backdrop_path'] as String,
+      posterPath: json['poster_path'] as String?,
+      backdropPath: json['backdrop_path'] as String?,
       voteAverage: (json['vote_average'] as num).toDouble(),
       releaseDate: json['release_date'] as String,
       genres:

@@ -25,9 +25,9 @@ mixin _$Movie {
   String get title => throw _privateConstructorUsedError;
   String get overview => throw _privateConstructorUsedError;
   @JsonKey(name: 'poster_path')
-  String get posterPath => throw _privateConstructorUsedError;
+  String? get posterPath => throw _privateConstructorUsedError;
   @JsonKey(name: 'backdrop_path')
-  String get backdropPath => throw _privateConstructorUsedError;
+  String? get backdropPath => throw _privateConstructorUsedError;
   @JsonKey(name: 'vote_average')
   double get voteAverage => throw _privateConstructorUsedError;
   @JsonKey(name: 'release_date')
@@ -62,8 +62,8 @@ abstract class $MovieCopyWith<$Res> {
       {@JsonKey(name: '_id') String id,
       String title,
       String overview,
-      @JsonKey(name: 'poster_path') String posterPath,
-      @JsonKey(name: 'backdrop_path') String backdropPath,
+      @JsonKey(name: 'poster_path') String? posterPath,
+      @JsonKey(name: 'backdrop_path') String? backdropPath,
       @JsonKey(name: 'vote_average') double voteAverage,
       @JsonKey(name: 'release_date') String releaseDate,
       List<String> genres,
@@ -92,8 +92,8 @@ class _$MovieCopyWithImpl<$Res, $Val extends Movie>
     Object? id = null,
     Object? title = null,
     Object? overview = null,
-    Object? posterPath = null,
-    Object? backdropPath = null,
+    Object? posterPath = freezed,
+    Object? backdropPath = freezed,
     Object? voteAverage = null,
     Object? releaseDate = null,
     Object? genres = null,
@@ -116,14 +116,14 @@ class _$MovieCopyWithImpl<$Res, $Val extends Movie>
           ? _value.overview
           : overview // ignore: cast_nullable_to_non_nullable
               as String,
-      posterPath: null == posterPath
+      posterPath: freezed == posterPath
           ? _value.posterPath
           : posterPath // ignore: cast_nullable_to_non_nullable
-              as String,
-      backdropPath: null == backdropPath
+              as String?,
+      backdropPath: freezed == backdropPath
           ? _value.backdropPath
           : backdropPath // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       voteAverage: null == voteAverage
           ? _value.voteAverage
           : voteAverage // ignore: cast_nullable_to_non_nullable
@@ -171,8 +171,8 @@ abstract class _$$MovieImplCopyWith<$Res> implements $MovieCopyWith<$Res> {
       {@JsonKey(name: '_id') String id,
       String title,
       String overview,
-      @JsonKey(name: 'poster_path') String posterPath,
-      @JsonKey(name: 'backdrop_path') String backdropPath,
+      @JsonKey(name: 'poster_path') String? posterPath,
+      @JsonKey(name: 'backdrop_path') String? backdropPath,
       @JsonKey(name: 'vote_average') double voteAverage,
       @JsonKey(name: 'release_date') String releaseDate,
       List<String> genres,
@@ -199,8 +199,8 @@ class __$$MovieImplCopyWithImpl<$Res>
     Object? id = null,
     Object? title = null,
     Object? overview = null,
-    Object? posterPath = null,
-    Object? backdropPath = null,
+    Object? posterPath = freezed,
+    Object? backdropPath = freezed,
     Object? voteAverage = null,
     Object? releaseDate = null,
     Object? genres = null,
@@ -223,14 +223,14 @@ class __$$MovieImplCopyWithImpl<$Res>
           ? _value.overview
           : overview // ignore: cast_nullable_to_non_nullable
               as String,
-      posterPath: null == posterPath
+      posterPath: freezed == posterPath
           ? _value.posterPath
           : posterPath // ignore: cast_nullable_to_non_nullable
-              as String,
-      backdropPath: null == backdropPath
+              as String?,
+      backdropPath: freezed == backdropPath
           ? _value.backdropPath
           : backdropPath // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       voteAverage: null == voteAverage
           ? _value.voteAverage
           : voteAverage // ignore: cast_nullable_to_non_nullable
@@ -274,8 +274,8 @@ class _$MovieImpl implements _Movie {
       {@JsonKey(name: '_id') required this.id,
       required this.title,
       required this.overview,
-      @JsonKey(name: 'poster_path') required this.posterPath,
-      @JsonKey(name: 'backdrop_path') required this.backdropPath,
+      @JsonKey(name: 'poster_path') this.posterPath,
+      @JsonKey(name: 'backdrop_path') this.backdropPath,
       @JsonKey(name: 'vote_average') required this.voteAverage,
       @JsonKey(name: 'release_date') required this.releaseDate,
       required final List<String> genres,
@@ -298,10 +298,10 @@ class _$MovieImpl implements _Movie {
   final String overview;
   @override
   @JsonKey(name: 'poster_path')
-  final String posterPath;
+  final String? posterPath;
   @override
   @JsonKey(name: 'backdrop_path')
-  final String backdropPath;
+  final String? backdropPath;
   @override
   @JsonKey(name: 'vote_average')
   final double voteAverage;
@@ -405,8 +405,8 @@ abstract class _Movie implements Movie {
       {@JsonKey(name: '_id') required final String id,
       required final String title,
       required final String overview,
-      @JsonKey(name: 'poster_path') required final String posterPath,
-      @JsonKey(name: 'backdrop_path') required final String backdropPath,
+      @JsonKey(name: 'poster_path') final String? posterPath,
+      @JsonKey(name: 'backdrop_path') final String? backdropPath,
       @JsonKey(name: 'vote_average') required final double voteAverage,
       @JsonKey(name: 'release_date') required final String releaseDate,
       required final List<String> genres,
@@ -428,10 +428,10 @@ abstract class _Movie implements Movie {
   String get overview;
   @override
   @JsonKey(name: 'poster_path')
-  String get posterPath;
+  String? get posterPath;
   @override
   @JsonKey(name: 'backdrop_path')
-  String get backdropPath;
+  String? get backdropPath;
   @override
   @JsonKey(name: 'vote_average')
   double get voteAverage;
