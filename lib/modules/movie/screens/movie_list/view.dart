@@ -2,7 +2,7 @@ import 'package:cinemate_mobile/modules/collections/screens/collections_list/vie
 import 'package:cinemate_mobile/modules/genre/screens/genre_list/view.dart';
 import 'package:cinemate_mobile/modules/movie/screens/movie_detail/view.dart';
 import 'package:cinemate_mobile/modules/movie/screens/movie_list/state.dart';
-import 'package:cinemate_mobile/modules/movie/widgets/movie_card.dart';
+import 'package:cinemate_mobile/modules/movie/widgets/horizontal_movie_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -51,48 +51,35 @@ class _MovieListViewState extends State<MovieListView>
               // All Movies Tab
               Consumer(
                 builder: (context, ref, child) {
-                  final moviesAsync = ref.watch(moviesProvider);
-                  return moviesAsync.when(
-                    data: (movies) {
-                      if (movies.isEmpty) {
-                        return const Center(
-                            child: Text("No movies to display."));
-                      }
-                      return RefreshIndicator(
-                        onRefresh: () async {
-                          ref.invalidate(moviesProvider);
-                        },
-                        child: GridView.builder(
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio: 0.6,
-                            mainAxisSpacing: 10,
-                            crossAxisSpacing: 10,
-                          ),
-                          padding: const EdgeInsets.all(10),
-                          itemCount: movies.length,
-                          itemBuilder: (context, index) {
-                            final movie = movies[index];
-                            return MovieCard(
-                              movie: movie,
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        MovieDetailView(movieId: movie.id),
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                        ),
-                      );
+                  return RefreshIndicator(
+                    onRefresh: () async {
+                      ref.invalidate(moviesProvider);
+                      ref.invalidate(likedRecommendationsProvider);
+                      ref.invalidate(watchlistRecommendationsProvider);
+                      ref.invalidate(watchedRecommendationsProvider);
                     },
-                    loading: () =>
-                        const Center(child: CircularProgressIndicator()),
-                    error: (err, stack) => Center(child: Text(err.toString())),
+                    child: ListView(
+                      children: [
+                        HorizontalMovieListView(
+                          title: 'All Movies',
+                          moviesAsync: ref.watch(moviesProvider),
+                        ),
+                        HorizontalMovieListView(
+                          title: 'You Might Like',
+                          moviesAsync: ref.watch(likedRecommendationsProvider),
+                        ),
+                        HorizontalMovieListView(
+                          title: 'You May Be Interested In',
+                          moviesAsync:
+                              ref.watch(watchlistRecommendationsProvider),
+                        ),
+                        HorizontalMovieListView(
+                          title: 'Similar to What You Watched Before',
+                          moviesAsync:
+                              ref.watch(watchedRecommendationsProvider),
+                        ),
+                      ],
+                    ),
                   );
                 },
               ),

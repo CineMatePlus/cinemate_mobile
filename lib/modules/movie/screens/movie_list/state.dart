@@ -1,3 +1,4 @@
+import 'package:cinemate_mobile/core/services/user_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../models/movie_model.dart';
 import '../../services/service.dart';
@@ -60,4 +61,20 @@ final moviesProvider =
     StateNotifierProvider<MoviesNotifier, AsyncValue<List<Movie>>>((ref) {
   final movieService = ref.watch(movieServiceProvider);
   return MoviesNotifier(movieService);
+});
+
+// Recommendation Providers
+final likedRecommendationsProvider = FutureProvider<List<Movie>>((ref) {
+  final userService = ref.watch(userServiceProvider);
+  return userService.getRecommendations(basedOn: 'like');
+});
+
+final watchlistRecommendationsProvider = FutureProvider<List<Movie>>((ref) {
+  final userService = ref.watch(userServiceProvider);
+  return userService.getRecommendations(basedOn: 'watchlist');
+});
+
+final watchedRecommendationsProvider = FutureProvider<List<Movie>>((ref) {
+  final userService = ref.watch(userServiceProvider);
+  return userService.getRecommendations(basedOn: 'watched');
 });
