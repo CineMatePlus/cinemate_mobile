@@ -3,12 +3,14 @@ import 'package:cinemate_mobile/core/constants/text_styles.dart';
 import 'package:cinemate_mobile/core/constants/user_list_constants.dart';
 import 'package:cinemate_mobile/core/modules/auth/models/user.dart';
 import 'package:cinemate_mobile/core/modules/auth/state.dart';
+import 'package:cinemate_mobile/core/routes/route_name.dart';
 import 'package:cinemate_mobile/core/services/user_service.dart';
 import 'package:cinemate_mobile/modules/user_content/state.dart';
 import 'package:cinemate_mobile/modules/user_content/view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cinemate_mobile/modules/profile/state.dart';
+import 'package:go_router/go_router.dart';
 
 class ProfileView extends ConsumerStatefulWidget {
   const ProfileView({super.key});
@@ -175,6 +177,28 @@ class _ProfileViewState extends ConsumerState<ProfileView>
             subtitle: '${stats?.watchedCount ?? '...'} movies',
             onTap: () => _navigateToUserContent(
                 context, UserListType.watched, 'Watched History'),
+          ),
+          const SizedBox(height: 16),
+          SizedBox(
+            width: double.infinity,
+            height: 52,
+            child: ElevatedButton(
+              onPressed: () async {
+                await ref.read(authProvider.notifier).logout();
+                if (mounted) {
+                  context.goNamed(loginRoute);
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: Colors.white,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: const Text('LOGOUT'),
+            ),
           ),
         ]),
       ),

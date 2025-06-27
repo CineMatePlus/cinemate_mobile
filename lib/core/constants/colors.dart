@@ -20,7 +20,7 @@ class AppColors {
   static const Color grey = Color(0xFF9E9E9E);
 
   /// Açık gri renk
-  static const Color lightGrey = Color(0xFFE0E0E0);
+  static const Color lightGrey = Color(0xFFA8ADB2);
 
   /// Koyu gri renk
   static const Color darkGrey = Color(0xFF616161);
@@ -49,9 +49,9 @@ class AppColors {
   // Nötr Renkler
   static const Color white = Color(0xFFFFFFFF);
   static const Color mediumGrey = Color(0xFFBFBFBF);
-  static const Color textGrey = Color(0xFF908C8C);
+  static const Color textGrey = Color(0xFF5C738A);
   static const Color figmaTextGrey = Color(0xFF667382);
-  static const Color borderGrey = Color(0xFFE0E0E0);
+  static const Color borderGrey = Color(0xFFE5E5E5);
   static const Color darkTextGrey = Color(0xFF616161);
   static const Color subtitleGrey = Color(0xFF8B8B8B);
 
@@ -104,4 +104,6 @@ class AppColors {
   static const Color greenLight = Color(0xFFE8F5E9); // light green for success
   static const Color orangeLight =
       Color(0xFFFFF3E0); // light orange for warnings
+
+  static const Color error = Color(0xFFD32F2F);
 }
