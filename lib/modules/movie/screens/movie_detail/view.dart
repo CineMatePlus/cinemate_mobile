@@ -1,4 +1,6 @@
+import 'package:cinemate_mobile/core/modules/auth/state.dart';
 import 'package:cinemate_mobile/modules/collections/service/collection_service.dart';
+import 'package:cinemate_mobile/modules/comment/state/movie_comments_state.dart';
 import 'package:cinemate_mobile/modules/movie/models/movie_model.dart';
 import 'package:cinemate_mobile/modules/movie/screens/movie_detail/state.dart';
 import 'package:cinemate_mobile/modules/movie/widgets/movie_card.dart';
@@ -33,6 +35,7 @@ class MovieDetailView extends ConsumerWidget {
                 _buildOverviewSection(context, movie),
                 _buildGenresSection(context, movie),
                 _buildRelatedMoviesSection(context, screenState.relatedMovies),
+                _buildCommentsSection(context, ref, movieId),
               ],
             ),
           );
@@ -349,6 +352,113 @@ class MovieDetailView extends ConsumerWidget {
             color: const Color(0xFF0D141C),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildCommentsSection(
+      BuildContext context, WidgetRef ref, String movieId) {
+    final commentsAsync = ref.watch(movieCommentsProvider(movieId));
+    final textController = TextEditingController();
+    // You would typically get the current user's ID from an auth provider
+    final currentUserId = ref.watch(authProvider).user?.id;
+
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Comments',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 16),
+          // Comment Input
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: textController,
+                  decoration: const InputDecoration(
+                    hintText: 'Add a comment...',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.send),
+                onPressed: () {
+                  if (textController.text.isNotEmpty) {
+                    ref
+                        .read(movieCommentsProvider(movieId).notifier)
+                        .postComment(textController.text);
+                    textController.clear();
+                  }
+                },
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          // Comments List
+          commentsAsync.when(
+            data: (comments) {
+              if (comments.isEmpty) {
+                return const Text('No comments yet. Be the first!');
+              }
+              return ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: comments.length,
+                itemBuilder: (context, index) {
+                  final commentWithUser = comments[index];
+                  final comment = commentWithUser.comment;
+                  final user = commentWithUser.user;
+                  final isAuthor = user.id == currentUserId;
+
+                  return Card(
+                    margin: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        backgroundImage: user.avatarUrl != null
+                            ? NetworkImage(user.avatarUrl!)
+                            : null,
+                        child: user.avatarUrl == null
+                            ? const Icon(Icons.person)
+                            : null,
+                      ),
+                      title: Text(user.name),
+                      subtitle: Text(comment.text),
+                      trailing: isAuthor
+                          ? Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  icon: const Icon(Icons.edit, size: 20),
+                                  onPressed: () {
+                                    // TODO: Implement edit functionality
+                                  },
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.delete, size: 20),
+                                  onPressed: () {
+                                    ref
+                                        .read(movieCommentsProvider(movieId)
+                                            .notifier)
+                                        .deleteComment(comment.id);
+                                  },
+                                ),
+                              ],
+                            )
+                          : null,
+                    ),
+                  );
+                },
+              );
+            },
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (err, stack) => Text('Error: $err'),
+          ),
+        ],
       ),
     );
   }

@@ -5,6 +5,7 @@ import 'package:cinemate_mobile/core/modules/auth/models/user.dart';
 import 'package:cinemate_mobile/core/modules/auth/state.dart';
 import 'package:cinemate_mobile/core/routes/route_name.dart';
 import 'package:cinemate_mobile/core/services/user_service.dart';
+import 'package:cinemate_mobile/modules/comment/state/my_comments_state.dart';
 import 'package:cinemate_mobile/modules/user_content/state.dart';
 import 'package:cinemate_mobile/modules/user_content/view.dart';
 import 'package:flutter/material.dart';
@@ -73,14 +74,41 @@ class _ProfileViewState extends ConsumerState<ProfileView>
         // Seçili sekmeye göre doğru içeriği gösteriyoruz.
         if (_tabController.index == 0)
           _buildMyListsSliver()
+        else if (_tabController.index == 1)
+          const SliverFillRemaining(
+            child: Center(
+              child: Text('Reviews Coming Soon'),
+            ),
+          )
         else
           SliverFillRemaining(
-            child: Center(
-              child: Text(
-                _tabController.index == 1
-                    ? 'Reviews Coming Soon'
-                    : 'Comments Coming Soon',
-              ),
+            child: Consumer(
+              builder: (context, ref, child) {
+                final myCommentsAsync = ref.watch(myCommentsProvider);
+                return myCommentsAsync.when(
+                  data: (comments) {
+                    if (comments.isEmpty) {
+                      return const Center(
+                        child: Text('You have not made any comments yet.'),
+                      );
+                    }
+                    return ListView.builder(
+                      itemCount: comments.length,
+                      itemBuilder: (context, index) {
+                        final commentWithUser = comments[index];
+                        return ListTile(
+                          title: Text(commentWithUser.comment.text),
+                          subtitle: Text(
+                              'On movie: ${commentWithUser.comment.movieId}'), // We might need movie titles here
+                        );
+                      },
+                    );
+                  },
+                  loading: () =>
+                      const Center(child: CircularProgressIndicator()),
+                  error: (err, stack) => Center(child: Text('Error: $err')),
+                );
+              },
             ),
           ),
       ],
