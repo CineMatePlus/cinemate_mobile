@@ -14,8 +14,6 @@ class ApiConfig {
     }
   }
 
-  // static const String baseUrl = 'http://159.146.28.250:4816';
-
   static const String apiPrefix = '/api/v1';
 }
 
