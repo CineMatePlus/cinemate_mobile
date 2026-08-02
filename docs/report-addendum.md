@@ -1,4 +1,6 @@
-# CineMate Final Raporu Ek Değişiklikler
+# Mobil Uygulama Rapor Eki
+
+> Bu belge final raporuna aktarılacak değişikliklerin tarihsel özetidir; güncel mimari açıklaması için `architecture.md` dosyasını kullanın.
 
 Bu rapor, CineMate projesinin `50f2c218a` commit'i ve sonrasında yapılan temel değişiklikleri ve eklenen yeni özellikleri özetlemektedir. Bu dönemde proje, API ve mimari değişikliği ile yeniden yapılandırılmış ve modern bir yapıya kavuşturulmuştur.
 
@@ -61,4 +63,4 @@ Uygulamanın genel görünümü ve kullanıcı deneyimini iyileştirmek için te
 
 ## 3. Sonuç
 
-Bu değişiklikler sonucunda CineMate, eski yapısından tamamen arınarak daha modern, esnek ve özellik zengini bir platform haline gelmiştir. Modüler mimari, gelecekteki özellik eklemelerini ve bakımı kolaylaştırırken, eklenen yeni film etkileşim, arama ve profil özellikleri kullanıcı deneyimini önemli ölçüde zenginleştirmiştir. Proje, sağlam bir temel üzerinde geliştirilmeye hazır durumdadır. 
+Bu değişiklikler sonucunda CineMate, eski yapısından tamamen arınarak daha modern, esnek ve özellik zengini bir platform haline gelmiştir. Modüler mimari, gelecekteki özellik eklemelerini ve bakımı kolaylaştırırken, eklenen yeni film etkileşim, arama ve profil özellikleri kullanıcı deneyimini önemli ölçüde zenginleştirmiştir. Proje, sağlam bir temel üzerinde geliştirilmeye hazır durumdadır.

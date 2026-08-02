@@ -1,76 +1,52 @@
-# cinemate_mobile
+# CineMate Mobile
 
-A new Flutter project.
+CineMate servislerini kullanan Flutter mobil uygulamasıdır. Uygulama; kimlik doğrulama, içerik keşfi, arama, koleksiyonlar, yorumlar, profil ve öneri akışlarını içerir.
 
-## Getting Started
+## Gereksinimler
 
-This project is a starting point for a Flutter application.
+- Flutter SDK
+- Dart `>=3.0.0 <4.0.0`
+- Çalışan CineMate backend servisi
 
-A few resources to get you started if this is your first Flutter project:
+## Kurulum ve çalıştırma
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+```powershell
+flutter pub get
+flutter run
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Android emülatörde backend adresi `10.0.2.2:8000`, masaüstü hedeflerinde ise yerel makine adresi kullanılır. Ayarlar `lib/core/services/api_service.dart` dosyasındadır.
 
+Freezed, Riverpod veya JSON modelleri değiştiğinde kod üretimini çalıştırın:
 
+```powershell
+dart run build_runner build --delete-conflicting-outputs
+```
 
-lib/
-├── core/
-│   ├── constants/
-│   │   ├── app_constants.dart
-│   │   └── theme_constants.dart
-│   ├── models/
-│   │   ├── movie.dart
-│   │   ├── movie.freezed.dart
-│   │   ├── movie.g.dart
-│   │   ├── user.dart
-│   │   ├── user.freezed.dart
-│   │   └── user.g.dart
-│   ├── services/
-│   │   ├── api_service.dart
-│   │   └── auth_service.dart
-│   └── widgets/
-│       ├── custom_app_bar.dart
-│       └── custom_bottom_nav.dart
-├── main.dart
-├── modules/
-│   ├── auth/
-│   │   ├── screens/
-│   │   │   ├── login/
-│   │   │   │   ├── state.dart
-│   │   │   │   └── view.dart
-│   │   │   └── register/
-│   │   │       ├── state.dart
-│   │   │       └── view.dart
-│   │   └── services/
-│   │       └── auth_service.dart
-│   ├── home/
-│   │   ├── screens/
-│   │   │   ├── home_screen/
-│   │   │   │   ├── state.dart
-│   │   │   │   └── view.dart
-│   │   │   └── movie_details/
-│   │   │       ├── state.dart
-│   │   │       └── view.dart
-│   │   └── services/
-│   │       └── movie_service.dart
-│   ├── profile/
-│   │   ├── screens/
-│   │   │   ├── profile_screen/
-│   │   │   │   ├── state.dart
-│   │   │   │   └── view.dart
-│   │   │   └── edit_profile/
-│   │   │       ├── state.dart
-│   │   │       └── view.dart
-│   │   └── services/
-│   │       └── profile_service.dart
-│   └── watchlist/
-│       ├── screens/
-│       │   ├── watchlist_screen/
-│       │   │   ├── state.dart
-│       │   │   └── view.dart
-│       └── services/
-│           └── watchlist_service.dart
+## Kontroller
+
+```powershell
+flutter analyze
+flutter test
+```
+
+## Kaynak yapısı
+
+| Yol | Sorumluluk |
+| --- | --- |
+| `lib/core/` | Ortak servisler, yönlendirme, tema ve paylaşılan bileşenler |
+| `lib/modules/` | Özellik bazlı uygulama modülleri |
+| `test/` | Flutter testleri |
+| `docs/` | Mobil mimari ve rapor notları |
+
+Mobil dokümantasyon haritası için [`docs/README.md`](docs/README.md) dosyasını kullanın. Yalnızca belirli bir modülün kullanımını anlatan belgeler ilgili modülün yanında kalır.
+
+## İlgili depolar
+
+- [Backend API](https://github.com/CineMatePlus/cinemate_backend)
+- [Sistem diyagramları](https://github.com/CineMatePlus/docs)
+- [Akademik raporlar](https://github.com/CineMatePlus/rapor)
+
+## Lisans
+
+Bu proje, telif hakkı Muhammet Berk'e ait olmak üzere [MIT License](LICENSE) ile lisanslanmıştır.

@@ -1,4 +1,4 @@
-# CineMate Mobil Uygulaması Teknik Raporu
+# CineMate Mobil Uygulama Mimarisi
 
 ## 1. Proje Özeti
 
@@ -171,7 +171,7 @@ Uygulama, state yönetimi için Riverpod framework'ünü kullanmaktadır. State 
   - Dosya indirme/yükleme ilerleme takibi
   - Timeout mekanizması
   - HTTP/2 desteği
-  
+
 ### 3.4. Veri İşleme ve Modelleme
 
 - **Freezed (^2.4.5)**: Immutable sınıflar için kod üretimi sağlayan pakettir. Aşağıdaki özellikleri sağlar:
@@ -771,7 +771,7 @@ class _ActionButtons extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final userContentState = ref.watch(userContentProvider);
     final userContent = userContentState.userContent;
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -818,7 +818,7 @@ class _ActionButtons extends ConsumerWidget {
       ],
     );
   }
-  
+
   Widget _buildActionButton({
     required IconData icon,
     required String label,
@@ -899,13 +899,13 @@ class ThemeConstants {
   // Tema renkleri
   static const Color primaryLightColor = Color(0xFF6200EE);
   static const Color primaryDarkColor = Color(0xFFBB86FC);
-  
+
   static const Color backgroundLightColor = Color(0xFFFFFFFF);
   static const Color backgroundDarkColor = Color(0xFF121212);
-  
+
   static const Color textLightColor = Color(0xFF000000);
   static const Color textDarkColor = Color(0xFFFFFFFF);
-  
+
   // Light tema
   static final ThemeData lightTheme = ThemeData(
     primaryColor: primaryLightColor,
@@ -916,7 +916,7 @@ class ThemeConstants {
     ),
     // ... diğer tema özellikleri
   );
-  
+
   // Dark tema
   static final ThemeData darkTheme = ThemeData(
     primaryColor: primaryDarkColor,
@@ -927,23 +927,23 @@ class ThemeConstants {
     ),
     // ... diğer tema özellikleri
   );
-  
+
   // Yardımcı metodlar
   static Color getPrimaryColor(WidgetRef ref) {
     final themeMode = ref.watch(themeProvider);
     if (themeMode == ThemeMode.light) return primaryLightColor;
     if (themeMode == ThemeMode.dark) return primaryDarkColor;
-    
+
     // Sistem teması
     final brightness = WidgetsBinding.instance.window.platformBrightness;
     return brightness == Brightness.light ? primaryLightColor : primaryDarkColor;
   }
-  
+
   static Color getTextColor(WidgetRef ref) {
     final themeMode = ref.watch(themeProvider);
     if (themeMode == ThemeMode.light) return textLightColor;
     if (themeMode == ThemeMode.dark) return textDarkColor;
-    
+
     // Sistem teması
     final brightness = WidgetsBinding.instance.window.platformBrightness;
     return brightness == Brightness.light ? textLightColor : textDarkColor;
@@ -986,7 +986,7 @@ class ThemeSettingsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentTheme = ref.watch(themeProvider);
-    
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Tema Ayarları'),
@@ -1030,7 +1030,7 @@ class ThemeSettingsPage extends ConsumerWidget {
       ),
     );
   }
-  
+
   void _saveThemePreference(ThemeMode mode) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setInt('theme_mode', mode.index);
@@ -1134,7 +1134,7 @@ class UserContentNotifier extends StateNotifier<UserContentState> {
 
   Future<void> loadUserContentStatus(String contentId) async {
     state = state.copyWith(isLoading: true, error: null);
-    
+
     try {
       final userContent = await _userContentService.getUserContentStatus(contentId);
       state = state.copyWith(
@@ -1148,7 +1148,7 @@ class UserContentNotifier extends StateNotifier<UserContentState> {
       );
     }
   }
-  
+
   // Diğer metodlar...
 }
 ```
@@ -1165,7 +1165,7 @@ API'den alınan veriler, gereksiz ağ isteklerini önlemek için önbelleğe al�
 // FutureProvider ile API önbelleğe alma örneği
 final contentDetailsProvider = FutureProvider.family<Content, String>((ref, contentId) async {
   final contentService = ref.watch(contentServiceProvider);
-  
+
   try {
     return await contentService.getContentDetails(contentId);
   } catch (e) {
@@ -1211,14 +1211,14 @@ class _PaginatedListViewState extends State<PaginatedListView> {
 
   Future<void> _loadMoreData() async {
     if (_isLoading) return;
-    
+
     setState(() {
       _isLoading = true;
     });
-    
+
     try {
       final newItems = await widget.loadData(_currentPage, 10);
-      
+
       if (newItems.isEmpty) {
         setState(() {
           _hasMoreData = false;
@@ -1226,7 +1226,7 @@ class _PaginatedListViewState extends State<PaginatedListView> {
         });
         return;
       }
-      
+
       setState(() {
         _items.addAll(newItems);
         _currentPage++;
@@ -1239,7 +1239,7 @@ class _PaginatedListViewState extends State<PaginatedListView> {
       // Hata işleme...
     }
   }
-  
+
   // Widget build metodu...
 }
 ```
@@ -1394,20 +1394,20 @@ Future<Response> secureRequest(
     if (!_rateLimiter.canMakeRequest(path)) {
       throw Exception('Çok fazla istek yapıldı. Lütfen daha sonra tekrar deneyin.');
     }
-    
+
     // Token kontrolü ve yenileme
     await _checkAndRefreshTokenIfNeeded();
-    
+
     // İsteği yap
     final response = await _dio.request(
       path,
       data: data,
       options: Options(method: method),
     );
-    
+
     // Yanıt doğrulama
     _validateResponse(response);
-    
+
     return response;
   } catch (e) {
     // Güvenlik hata işleme
@@ -1435,7 +1435,7 @@ Future<LoginResult> secureLogin(String email, String password) async {
   if (!_validateEmail(email) || !_validatePassword(password)) {
     throw InvalidCredentialsException('Geçersiz e-posta veya şifre formatı.');
   }
-  
+
   try {
     // Login isteği
     final response = await _apiService.request(
@@ -1447,10 +1447,10 @@ Future<LoginResult> secureLogin(String email, String password) async {
         'device_info': await _getDeviceInfo(), // Cihaz bilgisi gönder
       },
     );
-    
+
     // Token saklama
     await _storage.write(key: 'token', value: response.data['access_token']);
-    
+
     return LoginResult(
       user: User.fromJson(response.data['user']),
       isNewDevice: response.data['is_new_device'] ?? false,
@@ -1458,7 +1458,7 @@ Future<LoginResult> secureLogin(String email, String password) async {
   } catch (e) {
     // Güvenlik loglama
     _securityLogger.logFailedLogin(email, e.toString());
-    
+
     // Kullanıcıya özel hata mesajı
     throw LoginException('Giriş yapılamadı. Lütfen bilgilerinizi kontrol edin.');
   }
@@ -1558,4 +1558,4 @@ Modüler yapısı, tema desteği, güvenli kimlik doğrulama sistemi ve zengin i
 
 ---
 
-*Bu rapor, CineMate mobil uygulamasının teknik özelliklerini ve yapısını özetlemektedir. Gelecekteki geliştirmeler ve iyileştirmeler için yukarıdaki öneriler dikkate alınabilir.* 
+*Bu rapor, CineMate mobil uygulamasının teknik özelliklerini ve yapısını özetlemektedir. Gelecekteki geliştirmeler ve iyileştirmeler için yukarıdaki öneriler dikkate alınabilir.*
