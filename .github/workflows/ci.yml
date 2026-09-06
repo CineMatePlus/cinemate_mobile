@@ -2,7 +2,7 @@ name: Mobile CI
 on:
   pull_request:
   push:
-    branches: [main, 'release/app-readiness']
+    branches: [main]
 permissions:
   contents: read
 concurrency:

@@ -25,8 +25,12 @@ If a debug build with a different signer is installed, uninstall that app first 
 
 Normal release packaging, signature verification and emulator installation passed. Automated debug-mode tests exercised real API registration/restoration/logout and seven populated demo screens. Physical-device release acceptance and a fully recorded interactive walkthrough remain pending; screenshots are real emulator captures. Do not describe the debug acceptance as a release-device test.
 
-[Completion status](https://github.com/CineMatePlus/cinemate_backend/blob/release/app-readiness/docs/completion-status.md) records remote CI and publication gates. iOS/web/desktop are unverified.
+[Completion status](https://github.com/CineMatePlus/cinemate_backend/blob/main/docs/completion-status.md) records remote CI and publication gates. iOS/web/desktop are unverified.
 
 ## Presentation artifact
 
 [70-second screen tour](demo-screen-tour.mp4) is assembled from seven real emulator captures. Recreate it with `python3 scripts/make_screen_tour.py --ffmpeg=/path/to/ffmpeg`. This is a screenshot tour, not a full interactive recording.
+
+## Main integration — 6 September 2026
+
+Application changes were fast-forwarded to main after generation consistency, formatting, fatal-info analysis, 12 local tests, a standard debug APK build and the real-API Android registration/restore/logout test passed. The backend revision in `.backend-ref` is available on its main branch. Mobile remote CI remains unverified because repository API access is unavailable; physical-device release acceptance remains pending.
