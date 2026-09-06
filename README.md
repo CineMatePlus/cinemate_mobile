@@ -10,6 +10,10 @@ A Flutter application for discovering films, building collections and finding re
 
 More views: [similar users](docs/screenshots/04-similar-users.png), [collections](docs/screenshots/05-collections.png), [collection detail](docs/screenshots/06-collection-detail.png), [profile](docs/screenshots/07-profile.png).
 
+[70-second screen tour](docs/demo-screen-tour.mp4) · [APK installation and checksum](docs/release.md)
+
+The tour uses the seven real emulator screenshots; it is a screen sequence, not a recording of taps or a physical-device acceptance test.
+
 ## Features
 
 - Registration, login, persistent sessions and rotating refresh tokens.
