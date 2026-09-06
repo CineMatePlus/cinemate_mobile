@@ -2,7 +2,7 @@ name: Mobile CI
 on:
   pull_request:
   push:
-    branches: [main, 'codex/portfolio-completion']
+    branches: [main, 'release/app-readiness']
 permissions:
   contents: read
 concurrency:
