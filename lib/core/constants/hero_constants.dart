@@ -6,9 +6,9 @@ class HeroConstants {
 
   /// Content ID ve source identifier kullanarak herhangi bir içerik için tag oluşturur
   /// Bu metot farklı hero animasyonları için genişletilebilir
-  static String createHeroTag(
-          {required String contentId,
-          required String sourceId,
-          String prefix = 'content_image'}) =>
-      '${prefix}_${contentId}_$sourceId';
+  static String createHeroTag({
+    required String contentId,
+    required String sourceId,
+    String prefix = 'content_image',
+  }) => '${prefix}_${contentId}_$sourceId';
 }

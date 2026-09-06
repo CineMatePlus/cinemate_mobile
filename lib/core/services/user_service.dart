@@ -1,3 +1,4 @@
+import 'package:cinemate_mobile/core/modules/auth/state.dart';
 import 'package:cinemate_mobile/core/providers/api_service_provider.dart';
 import 'package:cinemate_mobile/core/services/api_service.dart';
 import 'package:cinemate_mobile/modules/movie/models/movie_model.dart';
@@ -25,19 +26,18 @@ class UserStats {
   }
 }
 
-enum UserListType {
-  liked,
-  watchlist,
-  watched,
-}
+enum UserListType { liked, watchlist, watched }
 
 class UserService {
   final ApiService _apiService;
 
   UserService(this._apiService);
 
-  Future<List<Movie>> _getUserMovies(String endpoint,
-      {int skip = 0, int limit = 20}) async {
+  Future<List<Movie>> _getUserMovies(
+    String endpoint, {
+    int skip = 0,
+    int limit = 20,
+  }) async {
     try {
       final response = await _apiService.request(
         'GET',
@@ -64,8 +64,11 @@ class UserService {
   }
 
   Future<List<Movie>> getWatchedHistory({int skip = 0, int limit = 20}) {
-    return _getUserMovies('/users/me/watched-history',
-        skip: skip, limit: limit);
+    return _getUserMovies(
+      '/users/me/watched-history',
+      skip: skip,
+      limit: limit,
+    );
   }
 
   Future<UserStats> getUserStats() async {
@@ -77,12 +80,15 @@ class UserService {
     }
   }
 
-  Future<List<Movie>> getRecommendations(
-      {required String basedOn, int skip = 0, int limit = 10}) async {
+  Future<List<Movie>> getRecommendations({
+    required String basedOn,
+    int skip = 0,
+    int limit = 10,
+  }) async {
     try {
       final response = await _apiService.request(
         'GET',
-        '/users/me/recommendations?based_on=$basedOn&skip=$skip&limit=$limit',
+        '/users/me/recommendations?based_on=$basedOn&limit=$limit',
       );
       if (response.data is List) {
         final List<dynamic> data = response.data;
@@ -114,6 +120,7 @@ class UserService {
 }
 
 final userServiceProvider = Provider<UserService>((ref) {
+  ref.watch(authProvider.select((state) => state.user?.id));
   final apiService = ref.watch(apiServiceProvider);
   return UserService(apiService);
 });

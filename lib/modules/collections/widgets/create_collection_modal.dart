@@ -32,7 +32,9 @@ class _CreateCollectionModalState extends ConsumerState<CreateCollectionModal> {
     });
 
     try {
-      await ref.read(collectionsListProvider.notifier).createCollection(
+      await ref
+          .read(collectionsListProvider.notifier)
+          .createCollection(
             name: _titleController.text.trim(),
             description: _descriptionController.text.trim(),
             isPublic: _isPublic,
@@ -50,10 +52,7 @@ class _CreateCollectionModalState extends ConsumerState<CreateCollectionModal> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Hata: $e'),
-            backgroundColor: Colors.red,
-          ),
+          SnackBar(content: Text('Hata: $e'), backgroundColor: Colors.red),
         );
       }
     } finally {
@@ -121,8 +120,10 @@ class _CreateCollectionModalState extends ConsumerState<CreateCollectionModal> {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide:
-                        const BorderSide(color: Color(0xFF0F3460), width: 2),
+                    borderSide: const BorderSide(
+                      color: Color(0xFF0F3460),
+                      width: 2,
+                    ),
                   ),
                 ),
                 validator: (value) {
@@ -149,8 +150,10 @@ class _CreateCollectionModalState extends ConsumerState<CreateCollectionModal> {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide:
-                        const BorderSide(color: Color(0xFF0F3460), width: 2),
+                    borderSide: const BorderSide(
+                      color: Color(0xFF0F3460),
+                      width: 2,
+                    ),
                   ),
                 ),
                 validator: (value) {
@@ -212,7 +215,7 @@ class _CreateCollectionModalState extends ConsumerState<CreateCollectionModal> {
                           _isPublic = value;
                         });
                       },
-                      activeColor: const Color(0xFF0F3460),
+                      activeThumbColor: const Color(0xFF0F3460),
                     ),
                   ],
                 ),
@@ -239,8 +242,9 @@ class _CreateCollectionModalState extends ConsumerState<CreateCollectionModal> {
                           height: 20,
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
-                            valueColor:
-                                AlwaysStoppedAnimation<Color>(Colors.white),
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              Colors.white,
+                            ),
                           ),
                         )
                       : const Text(

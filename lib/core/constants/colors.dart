@@ -102,8 +102,9 @@ class AppColors {
   // Notifications
   static const Color redLight = Color(0xFFFFEBEE); // light red for errors
   static const Color greenLight = Color(0xFFE8F5E9); // light green for success
-  static const Color orangeLight =
-      Color(0xFFFFF3E0); // light orange for warnings
+  static const Color orangeLight = Color(
+    0xFFFFF3E0,
+  ); // light orange for warnings
 
   static const Color error = Color(0xFFD32F2F);
 }

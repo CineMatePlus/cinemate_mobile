@@ -10,8 +10,10 @@ class GenreService {
 
   Future<List<Movie>> getMoviesByGenre(String genreName) async {
     try {
-      final response =
-          await _apiService.request('GET', '/movies/genre/$genreName');
+      final response = await _apiService.request(
+        'GET',
+        '/movies/genre/$genreName',
+      );
       if (response.data is List) {
         final List<dynamic> data = response.data;
         return data.map((movieJson) => Movie.fromJson(movieJson)).toList();

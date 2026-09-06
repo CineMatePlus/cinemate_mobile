@@ -5,7 +5,7 @@ part 'comment_with_user.freezed.dart';
 part 'comment_with_user.g.dart';
 
 @freezed
-class Comment with _$Comment {
+abstract class Comment with _$Comment {
   const factory Comment({
     @JsonKey(name: '_id') required String id,
     required String text,
@@ -20,7 +20,7 @@ class Comment with _$Comment {
 }
 
 @freezed
-class CommentWithUser with _$CommentWithUser {
+abstract class CommentWithUser with _$CommentWithUser {
   const factory CommentWithUser({
     required Comment comment,
     required User user,

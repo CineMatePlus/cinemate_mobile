@@ -18,9 +18,7 @@ class SimilarUsersView extends ConsumerWidget {
       body: similarUsersAsync.when(
         data: (users) {
           if (users.isEmpty) {
-            return const Center(
-              child: Text('No similar users found.'),
-            );
+            return const Center(child: Text('No similar users found.'));
           }
           return GridView.builder(
             padding: const EdgeInsets.all(16),
@@ -78,9 +76,10 @@ class _SimilarUserCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   SelectableText(
-                    '@${user.email.split('@').first}',
-                    style:
-                        AppTextStyles.bodyMedium.withColor(AppColors.textGrey),
+                    'Film tutkunu',
+                    style: AppTextStyles.bodyMedium.withColor(
+                      AppColors.textGrey,
+                    ),
                   ),
                 ],
               ),
@@ -96,7 +95,9 @@ class _SimilarUserCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 40, vertical: 12),
+                        horizontal: 40,
+                        vertical: 12,
+                      ),
                     ),
                     child: const Text('Close'),
                     onPressed: () {
@@ -113,10 +114,12 @@ class _SimilarUserCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.borderGrey.withOpacity(0.5)),
+          border: Border.all(
+            color: AppColors.borderGrey.withValues(alpha: 0.5),
+          ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, 5),
             ),
@@ -137,7 +140,7 @@ class _SimilarUserCard extends StatelessWidget {
                   radius: 35,
                 ),
                 progressColor: AppColors.primary,
-                backgroundColor: AppColors.borderGrey.withOpacity(0.3),
+                backgroundColor: AppColors.borderGrey.withValues(alpha: 0.3),
                 circularStrokeCap: CircularStrokeCap.round,
               ),
               const SizedBox(height: 12),

@@ -1,9 +1,9 @@
-import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../services/api_service.dart';
 
-part 'api_service_provider.g.dart';
-
-@riverpod
-ApiService apiService(ApiServiceRef ref) {
-  return ApiService();
-}
+final apiServiceProvider = Provider<ApiService>((ref) {
+  final api = ApiService();
+  ref.onDispose(api.close);
+  return api;
+});

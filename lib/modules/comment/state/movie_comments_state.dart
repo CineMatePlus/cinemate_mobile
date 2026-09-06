@@ -3,11 +3,13 @@ import 'package:cinemate_mobile/modules/comment/service/comment_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final movieCommentsProvider = StateNotifierProvider.autoDispose
-    .family<MovieCommentsNotifier, AsyncValue<List<CommentWithUser>>, String>(
-        (ref, movieId) {
-  final commentService = ref.watch(commentServiceProvider);
-  return MovieCommentsNotifier(commentService, movieId);
-});
+    .family<MovieCommentsNotifier, AsyncValue<List<CommentWithUser>>, String>((
+      ref,
+      movieId,
+    ) {
+      final commentService = ref.watch(commentServiceProvider);
+      return MovieCommentsNotifier(commentService, movieId);
+    });
 
 class MovieCommentsNotifier
     extends StateNotifier<AsyncValue<List<CommentWithUser>>> {
@@ -15,7 +17,7 @@ class MovieCommentsNotifier
   final String _movieId;
 
   MovieCommentsNotifier(this._commentService, this._movieId)
-      : super(const AsyncValue.loading()) {
+    : super(const AsyncValue.loading()) {
     fetchComments();
   }
 
@@ -23,8 +25,10 @@ class MovieCommentsNotifier
     state = const AsyncValue.loading();
     try {
       final comments = await _commentService.getMovieComments(_movieId);
+      if (!mounted) return;
       state = AsyncValue.data(comments);
     } catch (e, s) {
+      if (!mounted) return;
       state = AsyncValue.error(e, s);
     }
   }
@@ -41,8 +45,9 @@ class MovieCommentsNotifier
   Future<void> deleteComment(String commentId) async {
     // Optimistic update
     final previousState = state;
-    state = state.whenData((comments) =>
-        comments.where((c) => c.comment.id != commentId).toList());
+    state = state.whenData(
+      (comments) => comments.where((c) => c.comment.id != commentId).toList(),
+    );
 
     try {
       await _commentService.deleteComment(commentId);
@@ -54,11 +59,15 @@ class MovieCommentsNotifier
 
   Future<void> updateComment(String commentId, String text) async {
     try {
-      final updatedComment =
-          await _commentService.updateComment(commentId, text);
-      state = state.whenData((comments) => comments
-          .map((c) => c.comment.id == commentId ? updatedComment : c)
-          .toList());
+      final updatedComment = await _commentService.updateComment(
+        commentId,
+        text,
+      );
+      state = state.whenData(
+        (comments) => comments
+            .map((c) => c.comment.id == commentId ? updatedComment : c)
+            .toList(),
+      );
     } catch (e) {
       rethrow;
     }

@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:cinemate_mobile/modules/movie/models/movie_model.dart';
 import 'package:cinemate_mobile/modules/movie/services/service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,12 +8,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class SearchNotifier extends StateNotifier<AsyncValue<List<Movie>>> {
   final MovieService _movieService;
   Timer? _debounceTimer;
+  int _requestId = 0;
+  String _lastQuery = '';
+  void retry() => searchMovies(_lastQuery);
 
   SearchNotifier(this._movieService) : super(const AsyncValue.data([]));
 
   void searchMovies(String query) {
+    query = query.trim();
+    _lastQuery = query;
     // Kullanıcı yazmaya devam ederken önceki zamanlayıcıyı iptal et
     _debounceTimer?.cancel();
+    final requestId = ++_requestId;
 
     if (query.isEmpty) {
       state = const AsyncValue.data([]);
@@ -24,9 +31,9 @@ class SearchNotifier extends StateNotifier<AsyncValue<List<Movie>>> {
       state = const AsyncValue.loading();
       try {
         final movies = await _movieService.searchMovies(query);
-        state = AsyncValue.data(movies);
+        if (mounted && requestId == _requestId) state = AsyncValue.data(movies);
       } catch (e, s) {
-        state = AsyncValue.error(e, s);
+        if (mounted && requestId == _requestId) state = AsyncValue.error(e, s);
       }
     });
   }
@@ -41,6 +48,6 @@ class SearchNotifier extends StateNotifier<AsyncValue<List<Movie>>> {
 // Search Notifier Provider'ı
 final searchProvider =
     StateNotifierProvider<SearchNotifier, AsyncValue<List<Movie>>>((ref) {
-  final movieService = ref.watch(movieServiceProvider);
-  return SearchNotifier(movieService);
-});
+      final movieService = ref.watch(movieServiceProvider);
+      return SearchNotifier(movieService);
+    });

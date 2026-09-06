@@ -94,7 +94,8 @@ class _ProfileViewState extends ConsumerState<ProfileView>
                         return ListTile(
                           title: Text(commentWithUser.comment.text),
                           subtitle: Text(
-                              'On movie: ${commentWithUser.comment.movieId}'), // We might need movie titles here
+                            'On movie: ${commentWithUser.comment.movieId}',
+                          ), // We might need movie titles here
                         );
                       },
                     );
@@ -125,11 +126,15 @@ class _ProfileViewState extends ConsumerState<ProfileView>
           const SizedBox(height: 16),
           Text(user.name, style: AppTextStyles.heading2),
           const SizedBox(height: 4),
-          Text('@${user.email.split('@').first}',
-              style: AppTextStyles.bodyLarge.withColor(AppColors.textGrey)),
+          Text(
+            '@${user.email.split('@').first}',
+            style: AppTextStyles.bodyLarge.withColor(AppColors.textGrey),
+          ),
           const SizedBox(height: 4),
-          Text('Joined ${DateFormat.yMMMM().format(user.createdAt)}',
-              style: AppTextStyles.bodyMedium.withColor(AppColors.lightGrey)),
+          Text(
+            'Joined ${DateFormat.yMMMM().format(user.createdAt)}',
+            style: AppTextStyles.bodyMedium.withColor(AppColors.lightGrey),
+          ),
           const SizedBox(height: 24),
           userStatsAsync.when(
             data: (stats) => Row(
@@ -155,14 +160,16 @@ class _ProfileViewState extends ConsumerState<ProfileView>
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.borderGrey.withOpacity(0.5)),
+        border: Border.all(color: AppColors.borderGrey.withValues(alpha: 0.5)),
       ),
       child: Column(
         children: [
           Text(value, style: AppTextStyles.heading3),
           const SizedBox(height: 4),
-          Text(label,
-              style: AppTextStyles.bodyMedium.withColor(AppColors.textGrey)),
+          Text(
+            label,
+            style: AppTextStyles.bodyMedium.withColor(AppColors.textGrey),
+          ),
         ],
       ),
     );
@@ -183,7 +190,10 @@ class _ProfileViewState extends ConsumerState<ProfileView>
             title: 'Liked',
             subtitle: '${stats?.likedCount ?? '...'} movies',
             onTap: () => _navigateToUserContent(
-                context, UserListType.liked, 'Liked Movies'),
+              context,
+              UserListType.liked,
+              'Liked Movies',
+            ),
           ),
           const SizedBox(height: 16),
           _buildListItem(
@@ -191,7 +201,10 @@ class _ProfileViewState extends ConsumerState<ProfileView>
             title: 'Watchlist',
             subtitle: '${stats?.watchlistCount ?? '...'} movies',
             onTap: () => _navigateToUserContent(
-                context, UserListType.watchlist, 'My Watchlist'),
+              context,
+              UserListType.watchlist,
+              'My Watchlist',
+            ),
           ),
           const SizedBox(height: 16),
           _buildListItem(
@@ -199,7 +212,10 @@ class _ProfileViewState extends ConsumerState<ProfileView>
             title: 'Watched',
             subtitle: '${stats?.watchedCount ?? '...'} movies',
             onTap: () => _navigateToUserContent(
-                context, UserListType.watched, 'Watched History'),
+              context,
+              UserListType.watched,
+              'Watched History',
+            ),
           ),
           const SizedBox(height: 16),
           SizedBox(
@@ -229,7 +245,10 @@ class _ProfileViewState extends ConsumerState<ProfileView>
   }
 
   void _navigateToUserContent(
-      BuildContext context, UserListType listType, String title) {
+    BuildContext context,
+    UserListType listType,
+    String title,
+  ) {
     final details = userListDetails[title]!;
     final icon = details['icon'] as IconData;
     final color = details['color'] as Color;
@@ -245,11 +264,12 @@ class _ProfileViewState extends ConsumerState<ProfileView>
     );
   }
 
-  Widget _buildListItem(
-      {required IconData icon,
-      required String title,
-      required String subtitle,
-      VoidCallback? onTap}) {
+  Widget _buildListItem({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    VoidCallback? onTap,
+  }) {
     return ListTile(
       leading: Container(
         padding: const EdgeInsets.all(12),
@@ -259,10 +279,14 @@ class _ProfileViewState extends ConsumerState<ProfileView>
         ),
         child: Icon(icon, color: AppColors.textGrey, size: 28),
       ),
-      title: Text(title,
-          style: AppTextStyles.bodyLarge.withWeight(FontWeight.bold)),
-      subtitle: Text(subtitle,
-          style: AppTextStyles.bodyMedium.withColor(AppColors.textGrey)),
+      title: Text(
+        title,
+        style: AppTextStyles.bodyLarge.withWeight(FontWeight.bold),
+      ),
+      subtitle: Text(
+        subtitle,
+        style: AppTextStyles.bodyMedium.withColor(AppColors.textGrey),
+      ),
       onTap: onTap,
       contentPadding: EdgeInsets.zero,
     );
@@ -282,11 +306,11 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Container(
-      color: Colors.white,
-      child: _tabBar,
-    );
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    return Container(color: Colors.white, child: _tabBar);
   }
 
   @override

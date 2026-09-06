@@ -8,7 +8,7 @@ import '../../service/service.dart';
 part 'state.freezed.dart';
 
 @freezed
-class RegisterState with _$RegisterState {
+abstract class RegisterState with _$RegisterState {
   const factory RegisterState({
     @Default('') String name,
     @Default('') String email,
@@ -21,17 +21,16 @@ class RegisterState with _$RegisterState {
 
 final registerProvider =
     StateNotifierProvider.autoDispose<RegisterNotifier, RegisterState>((ref) {
-  final authService = ref.watch(authServiceProvider);
-  final authNotifier = ref.read(authProvider.notifier);
-  return RegisterNotifier(authService, authNotifier);
-});
+      final authService = ref.watch(authServiceProvider);
+      final authNotifier = ref.read(authProvider.notifier);
+      return RegisterNotifier(authService, authNotifier);
+    });
 
 class RegisterNotifier extends StateNotifier<RegisterState> {
-  final AuthService _authService;
   final AuthNotifier _authNotifier;
 
-  RegisterNotifier(this._authService, this._authNotifier)
-      : super(RegisterState(formKey: GlobalKey<FormState>()));
+  RegisterNotifier(AuthService authService, this._authNotifier)
+    : super(RegisterState(formKey: GlobalKey<FormState>()));
 
   void setName(String name) {
     state = state.copyWith(name: name);
@@ -55,13 +54,12 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
     }
     state = state.copyWith(isLoading: true);
     try {
-      final user = await _authService.register(
-        state.email,
+      await _authNotifier.register(
         state.name,
+        state.email,
         state.password,
         state.gender,
       );
-      _authNotifier.setAuthenticated(user);
     } catch (e) {
       // Hata yönetimi burada yapılabilir, örneğin bir SnackBar göstermek.
       debugPrint('Register failed: $e');

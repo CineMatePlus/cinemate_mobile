@@ -4,83 +4,65 @@ import 'package:go_router/go_router.dart';
 
 import '../../../auth/state.dart';
 import '../../../../routes/route_name.dart';
-import '../config.dart';
 import '../../utils/preferences_service.dart';
 
-/// Splash ekranı
-///
-/// Bu widget herhangi bir UI göstermez, sadece routing mantığını yönetir.
-/// Uygulama başlatıldığında onboarding, auth veya home ekranlarına yönlendirmeyi sağlar.
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
-
   @override
   ConsumerState<SplashScreen> createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends ConsumerState<SplashScreen> {
-  int _authCheckRetryCount = 0;
-  static const int _maxAuthCheckRetries = 3;
-
+  bool? _onboarded;
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await _handleAppStartingFlow();
-    });
+    _loadPreferences();
   }
 
-  /// Uygulama başlangıç akışını yönet
-  Future<void> _handleAppStartingFlow() async {
-    if (!mounted) return;
-
-    try {
-      final preferencesService = ref.read(preferencesServiceProvider);
-      await preferencesService.init();
-
-      final isOnboardingCompleted =
-          await preferencesService.isOnboardingCompleted();
-      if (!isOnboardingCompleted) {
-        if (mounted) context.go(onboardingPath);
-        return;
-      }
-
-      final config = ref.read(splashConfigProvider);
-      if (!config.isAuthenticationNeccessery) {
-        if (mounted) context.go(homePath);
-        return;
-      }
-
-      final authState = ref.read(authProvider);
-      switch (authState.status) {
-        case AuthStatus.authenticated:
-          if (mounted) context.go(homePath);
-          break;
-        case AuthStatus.unauthenticated:
-        case AuthStatus.error:
-        case AuthStatus.initial:
-          if (mounted) context.go(loginPath);
-          break;
-        case AuthStatus.loading:
-          if (_authCheckRetryCount < _maxAuthCheckRetries) {
-            _authCheckRetryCount++;
-            await Future.delayed(const Duration(milliseconds: 500));
-            await _handleAppStartingFlow();
-          } else {
-            if (mounted) context.go(loginPath);
-          }
-          break;
-      }
-    } catch (e) {
-      if (mounted) context.go(loginPath);
-    }
+  Future<void> _loadPreferences() async {
+    final prefs = ref.read(preferencesServiceProvider);
+    await prefs.init();
+    final done = await prefs.isOnboardingCompleted();
+    if (mounted) setState(() => _onboarded = done);
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    final auth = ref.watch(authProvider);
+    String? next;
+    if (_onboarded == false) {
+      next = onboardingPath;
+    } else if (_onboarded == true && auth.status == AuthStatus.authenticated) {
+      next = homePath;
+    } else if (_onboarded == true &&
+        auth.status == AuthStatus.unauthenticated) {
+      next = loginPath;
+    }
+    if (next != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) context.go(next!);
+      });
+    }
+    return Scaffold(
       body: Center(
-        child: SizedBox.shrink(),
+        child: auth.status == AuthStatus.error
+            ? Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(auth.errorMessage ?? 'Bağlantı kurulamadı.'),
+                  FilledButton(
+                    onPressed: () =>
+                        ref.read(authProvider.notifier).checkAuthStatus(),
+                    child: const Text('Tekrar dene'),
+                  ),
+                  TextButton(
+                    onPressed: () => context.go(loginPath),
+                    child: const Text('Giriş ekranı'),
+                  ),
+                ],
+              )
+            : const CircularProgressIndicator(),
       ),
     );
   }

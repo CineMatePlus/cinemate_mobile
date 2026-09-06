@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'state.dart';
 
 typedef AutoCompleteItemBuilder = Widget Function(
-    BuildContext context, String item, VoidCallback onTap);
+  BuildContext context,
+  String item,
+  VoidCallback onTap,
+);
 
-typedef AutoCompleteListBuilder = Widget Function(BuildContext context,
-    List<String> items, AutoCompleteItemBuilder itemBuilder);
+typedef AutoCompleteListBuilder = Widget Function(
+  BuildContext context,
+  List<String> items,
+  AutoCompleteItemBuilder itemBuilder,
+);
 
 class AutoCompleteItem {
   final String value;
   final String label;
 
-  const AutoCompleteItem({
-    required this.value,
-    required this.label,
-  });
+  const AutoCompleteItem({required this.value, required this.label});
 }
 
 class AutoCompleteTextField extends ConsumerStatefulWidget {
@@ -148,10 +152,7 @@ class _AutoCompleteTextFieldState extends ConsumerState<AutoCompleteTextField> {
           return ListTile(
             dense: true,
             visualDensity: VisualDensity.compact,
-            title: Text(
-              suggestion,
-              style: const TextStyle(fontSize: 14),
-            ),
+            title: Text(suggestion, style: const TextStyle(fontSize: 14)),
             onTap: () {
               _controller.text = suggestion;
               _hideOverlay();
@@ -171,22 +172,19 @@ class _AutoCompleteTextFieldState extends ConsumerState<AutoCompleteTextField> {
       child: TextField(
         controller: _controller,
         focusNode: _focusNode,
-        decoration: widget.decoration?.copyWith(
+        decoration:
+            widget.decoration?.copyWith(
               suffixIcon: _isLoading
                   ? const SizedBox(
                       width: 20,
                       height: 20,
                       child: Center(
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                        ),
+                        child: CircularProgressIndicator(strokeWidth: 2),
                       ),
                     )
                   : null,
             ) ??
-            const InputDecoration(
-              border: InputBorder.none,
-            ),
+            const InputDecoration(border: InputBorder.none),
       ),
     );
   }

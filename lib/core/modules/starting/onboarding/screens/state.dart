@@ -1,6 +1,8 @@
 import 'dart:convert';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/services.dart';
+
 import '../../utils/preferences_service.dart';
 import '../models/onboarding_item.dart';
 
@@ -40,9 +42,8 @@ class OnboardingState {
 class OnboardingStateNotifier extends StateNotifier<OnboardingState> {
   final PreferencesService _preferencesService;
 
-  OnboardingStateNotifier({required PreferencesService preferencesService})
-      : _preferencesService = preferencesService,
-        super(OnboardingState()) {
+  OnboardingStateNotifier({required this._preferencesService})
+    : super(OnboardingState()) {
     initializeOnboardingState();
     loadOnboardingData();
   }
@@ -68,19 +69,14 @@ class OnboardingStateNotifier extends StateNotifier<OnboardingState> {
   Future<void> loadOnboardingData() async {
     state = state.copyWith(isLoading: true);
     try {
-      final String response = await rootBundle
-          .loadString('lib/core/constants/assets/data/onboarding_data.json');
+      final String response = await rootBundle.loadString(
+        'lib/core/constants/assets/data/onboarding_data.json',
+      );
       final List<dynamic> data = json.decode(response);
       final items = data.map((e) => OnboardingItem.fromJson(e)).toList();
-      state = state.copyWith(
-        isLoading: false,
-        items: items,
-      );
+      state = state.copyWith(isLoading: false, items: items);
     } catch (error) {
-      state = state.copyWith(
-        isLoading: false,
-        error: error.toString(),
-      );
+      state = state.copyWith(isLoading: false, error: error.toString());
     }
   }
 
@@ -88,10 +84,7 @@ class OnboardingStateNotifier extends StateNotifier<OnboardingState> {
     state = state.copyWith(isLoading: true);
     try {
       await _preferencesService.setOnboardingCompleted();
-      state = state.copyWith(
-        isLoading: false,
-        isOnboardingCompleted: true,
-      );
+      state = state.copyWith(isLoading: false, isOnboardingCompleted: true);
     } catch (error) {
       state = state.copyWith(
         isLoading: false,
@@ -112,10 +105,7 @@ class OnboardingStateNotifier extends StateNotifier<OnboardingState> {
         currentPage: 0,
       );
     } catch (error) {
-      state = state.copyWith(
-        isLoading: false,
-        error: error.toString(),
-      );
+      state = state.copyWith(isLoading: false, error: error.toString());
     }
   }
 
@@ -129,9 +119,7 @@ class OnboardingStateNotifier extends StateNotifier<OnboardingState> {
 }
 
 final onboardingStateProvider =
-    StateNotifierProvider<OnboardingStateNotifier, OnboardingState>(
-  (ref) {
-    final preferencesService = ref.watch(preferencesServiceProvider);
-    return OnboardingStateNotifier(preferencesService: preferencesService);
-  },
-);
+    StateNotifierProvider<OnboardingStateNotifier, OnboardingState>((ref) {
+      final preferencesService = ref.watch(preferencesServiceProvider);
+      return OnboardingStateNotifier(preferencesService: preferencesService);
+    });

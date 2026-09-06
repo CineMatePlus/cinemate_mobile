@@ -1,131 +1,73 @@
-import 'dart:developer';
-
-import 'package:cinemate_mobile/core/modules/auth/utils/auth.utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../providers/api_service_provider.dart';
-import '../models/user.dart';
 import '../../../services/api_service.dart';
+import '../models/user.dart';
 
 class AuthService {
+  AuthService({required this._apiService});
   final ApiService _apiService;
 
-  AuthService({ApiService? apiService})
-      : _apiService = apiService ?? ApiService();
+  set onSessionExpired(void Function()? callback) =>
+      _apiService.onSessionExpired = callback;
 
   Future<User> login(String email, String password) async {
-    try {
-      final response = await _apiService.request(
-        'POST',
-        '/auth/login',
-        data: {
-          'email': email,
-          'password': password,
-        },
-      );
-      log("Giriş cevabı: ${response.statusCode}", name: 'AuthService');
-      log("Giriş cevabı: ${response.data.toString()}", name: 'AuthService');
-      if (response.statusCode == 200) {
-        // Token'ı local storage'a kaydet
-        //TODO: Bunu state'e çekeriz
-        await AuthUtils.saveToken(response.data['access_token']);
-
-        return User.fromJson(response.data['user']);
-      } else {
-        throw Exception('Giriş başarısız');
-      }
-    } catch (e) {
-      log('Giriş hatası: $e', name: 'AuthService', error: e);
-      throw Exception('Giriş sırasında bir hata oluştu: $e');
-    }
+    final response = await _apiService.request(
+      'POST',
+      '/auth/login',
+      data: {'email': email.trim(), 'password': password},
+    );
+    await _apiService.saveSession(response.data);
+    return User.fromJson(response.data['user']);
   }
 
   Future<User> register(
-      String email, String name, String password, int gender) async {
-    try {
-      final response = await _apiService.request(
-        'POST',
-        '/auth/register',
-        data: {
-          'email': email,
-          'name': name,
-          'password': password,
-          'gender': gender,
-        },
-      );
-
-      if (response.statusCode == 200) {
-        // Token'ı local storage'a kaydet
-        await AuthUtils.saveToken(response.data['access_token']);
-
-        return User.fromJson(response.data['user']);
-      } else {
-        throw Exception('Kayıt başarısız');
-      }
-    } catch (e) {
-      log('Kayıt hatası: $e', name: 'AuthService', error: e);
-      throw Exception('Kayıt sırasında bir hata oluştu: $e');
-    }
+    String email,
+    String name,
+    String password,
+    int gender,
+  ) async {
+    final response = await _apiService.request(
+      'POST',
+      '/auth/register',
+      data: {
+        'email': email.trim(),
+        'name': name.trim(),
+        'password': password,
+        'gender': gender,
+      },
+    );
+    await _apiService.saveSession(response.data);
+    return User.fromJson(response.data['user']);
   }
 
   Future<User?> refreshTokenAndGetUser() async {
+    if (await _apiService.store.read() == null) return null;
     try {
-      final token = await AuthUtils.getToken();
-
-      if (token == null || token.isEmpty) {
-        return null;
-      }
-
-      // Token'ın geçerliliğini API ile kontrol et ve yeni token + user bilgilerini al
-      final response = await _apiService.request('POST', '/auth/refresh');
-      log("Status Code = ${response.statusCode}", name: 'AuthService');
-      log("Token yenileme cevabı: ${response.data.toString()}",
-          name: 'AuthService');
-      if (response.statusCode == 200) {
-        // Yeni token'ı kaydet
-        final newToken = response.data['access_token'];
-        await AuthUtils.saveToken(newToken);
-
-        // Kullanıcı bilgilerini döndür
-        return User.fromJson(response.data['user']);
-      } else {
-        // Token geçersiz, storage'dan temizle
-        await AuthUtils.deleteToken();
-        return null;
-      }
-    } catch (e) {
-      log(
-        'Token yenileme ve kullanıcı bilgileri alma hatası: $e',
-        name: 'AuthService',
-        error: e,
-      );
-      // Hata durumunda token'ı temizle
-      await AuthUtils.deleteToken();
-      return null;
+      final response = await _apiService.request('GET', '/auth/me');
+      return User.fromJson(response.data);
+    } on ApiException catch (error) {
+      if (error.statusCode == 401) return null;
+      rethrow; // A network outage must not erase a valid refresh session.
     }
   }
 
   Future<void> logout() async {
+    final session = await _apiService.store.read();
     try {
-      // Token'ı temizle
-      await AuthUtils.deleteToken();
-    } catch (e) {
-      log('Çıkış hatası: $e', name: 'AuthService', error: e);
-      throw AuthException('Çıkış işlemi sırasında bir hata oluştu: $e');
+      if (session != null) {
+        await _apiService.request(
+          'POST',
+          '/auth/logout',
+          data: {'refresh_token': session.refreshToken},
+        );
+      }
+    } finally {
+      await _apiService.clearSession();
     }
   }
 }
 
-class AuthException implements Exception {
-  final String message;
-  AuthException(this.message);
-
-  @override
-  String toString() => message;
-}
-
-// Auth Service Provider
 final authServiceProvider = Provider<AuthService>((ref) {
-  final apiService = ref.watch(apiServiceProvider);
-  return AuthService(apiService: apiService);
+  return AuthService(apiService: ref.watch(apiServiceProvider));
 });

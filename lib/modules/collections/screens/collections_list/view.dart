@@ -17,18 +17,14 @@ class CollectionsListView extends ConsumerWidget {
         title: const Text('My Collections'),
         backgroundColor: Colors.transparent,
         elevation: 0,
-        titleTextStyle: Theme.of(context)
-            .textTheme
-            .titleLarge
+        titleTextStyle: Theme.of(context).textTheme.titleLarge
             ?.copyWith(fontWeight: FontWeight.bold),
       ),
       body: collectionsAsync.when(
         data: (screenState) {
           final collections = screenState.collections;
           if (collections.isEmpty) {
-            return const Center(
-              child: Text('No collections yet. Create one!'),
-            );
+            return const Center(child: Text('No collections yet. Create one!'));
           }
           return GridView.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -57,9 +53,8 @@ class CollectionsListView extends ConsumerWidget {
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(
-          child: Text('Failed to load collections: $error'),
-        ),
+        error: (error, stack) =>
+            Center(child: Text('Failed to load collections: $error')),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

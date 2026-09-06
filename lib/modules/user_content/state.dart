@@ -9,21 +9,22 @@ final userListTypeProvider = StateProvider<UserListType>((ref) {
 });
 
 // Kullanıcı film listelerini yöneten Notifier
-final userContentProvider = StateNotifierProvider.autoDispose<
-    UserContentNotifier, AsyncValue<List<Movie>>>(
-  (ref) {
-    final userService = ref.watch(userServiceProvider);
-    final listType = ref.watch(userListTypeProvider);
-    return UserContentNotifier(userService, listType);
-  },
-);
+final userContentProvider =
+    StateNotifierProvider.autoDispose<
+      UserContentNotifier,
+      AsyncValue<List<Movie>>
+    >((ref) {
+      final userService = ref.watch(userServiceProvider);
+      final listType = ref.watch(userListTypeProvider);
+      return UserContentNotifier(userService, listType);
+    });
 
 class UserContentNotifier extends StateNotifier<AsyncValue<List<Movie>>> {
   final UserService _userService;
   final UserListType _listType;
 
   UserContentNotifier(this._userService, this._listType)
-      : super(const AsyncValue.loading()) {
+    : super(const AsyncValue.loading()) {
     fetchMovies();
   }
 
@@ -42,8 +43,10 @@ class UserContentNotifier extends StateNotifier<AsyncValue<List<Movie>>> {
           movies = await _userService.getWatchedHistory();
           break;
       }
+      if (!mounted) return;
       state = AsyncValue.data(movies);
     } catch (e, s) {
+      if (!mounted) return;
       state = AsyncValue.error(e, s);
     }
   }

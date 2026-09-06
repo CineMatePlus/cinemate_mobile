@@ -5,13 +5,15 @@ import 'package:visibility_detector/visibility_detector.dart';
 import 'state.dart';
 
 class CoreList<T> extends ConsumerStatefulWidget {
-  final Future<dynamic> Function(
-      {int? page,
-      int? size,
-      String? search,
-      String? filter,
-      String? sort,
-      String? order}) dataProvider;
+  final Future<dynamic> Function({
+    int? page,
+    int? size,
+    String? search,
+    String? filter,
+    String? sort,
+    String? order,
+  })
+  dataProvider;
   final Widget Function(BuildContext context, T item, int index) itemBuilder;
   final Widget? loadingWidget;
   final Widget? errorWidget;
@@ -54,7 +56,7 @@ class CoreList<T> extends ConsumerStatefulWidget {
 
 class _CoreListState<T> extends ConsumerState<CoreList<T>> {
   late StateNotifierProvider<CoreListStateNotifier<T>, CoreListState<T>>
-      listProvider;
+  listProvider;
   bool _initialFetchDone = false;
   final ScrollController _scrollController = ScrollController();
   late final int _defaultPageSize;
@@ -66,15 +68,17 @@ class _CoreListState<T> extends ConsumerState<CoreList<T>> {
 
     listProvider =
         StateNotifierProvider<CoreListStateNotifier<T>, CoreListState<T>>(
-      (ref) => CoreListStateNotifier<T>(
-        dataProvider: widget.dataProvider,
-        defaultPageSize: _defaultPageSize,
-        isPaginated: widget.isPaginated,
-      ),
-    );
+          (ref) => CoreListStateNotifier<T>(
+            dataProvider: widget.dataProvider,
+            defaultPageSize: _defaultPageSize,
+            isPaginated: widget.isPaginated,
+          ),
+        );
 
     if (widget.isPaginated) {
-      ref.read(listProvider.notifier).setSearchParams(
+      ref
+          .read(listProvider.notifier)
+          .setSearchParams(
             search: widget.searchQuery,
             filter: widget.filterJson,
             sort: widget.sortField,

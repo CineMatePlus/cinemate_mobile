@@ -20,7 +20,8 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
   void initState() {
     super.initState();
     Future.microtask(
-        () => ref.read(onboardingStateProvider.notifier).loadOnboardingData());
+      () => ref.read(onboardingStateProvider.notifier).loadOnboardingData(),
+    );
   }
 
   @override
@@ -28,11 +29,7 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
     final state = ref.watch(onboardingStateProvider);
 
     if (state.isLoading) {
-      return const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     return Scaffold(
@@ -71,9 +68,8 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
                   Row(
                     children: List.generate(
                       state.items.length,
-                      (index) => _DotIndicator(
-                        isActive: index == state.currentPage,
-                      ),
+                      (index) =>
+                          _DotIndicator(isActive: index == state.currentPage),
                     ),
                   ),
                   TextButton(
@@ -119,9 +115,15 @@ class _OnboardingPage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(
-            item.image,
-            height: 300,
+          const SizedBox(
+            height: 240,
+            child: Center(
+              child: Icon(
+                Icons.movie_filter_outlined,
+                size: 140,
+                color: Color(0xFF18435B),
+              ),
+            ),
           ),
           const SizedBox(height: 32),
           Text(

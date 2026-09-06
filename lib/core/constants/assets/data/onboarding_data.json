@@ -1,17 +1,17 @@
 [
   {
-    "title": "Welcome to CineMate!",
-    "subtitle": "Your personal guide to discovering and tracking great movies.",
+    "title": "CineMate’e hoş geldin!",
+    "subtitle": "Film keşfet, izlediklerini takip et ve kendi koleksiyonlarını oluştur.",
     "image": "lib/core/constants/assets/images/onboarding.png"
   },
   {
-    "title": "Smart Movie Suggestions",
-    "subtitle": "Get tailored movie recommendations based on your taste.",
+    "title": "Sana uygun film önerileri",
+    "subtitle": "Beğendiğin filmlerden yola çıkarak yeni hikâyeler keşfet.",
     "image": "lib/core/constants/assets/images/onboarding.png"
   },
   {
-    "title": "Track. Discover. Enjoy.",
-    "subtitle": "Create your watchlist, mark favorites, and never miss a hit.",
+    "title": "İzle. Keşfet. Paylaş.",
+    "subtitle": "İzleme listeni oluştur ve benzer zevklere sahip kullanıcıları bul.",
     "image": "lib/core/constants/assets/images/onboarding.png"
   }
 ]

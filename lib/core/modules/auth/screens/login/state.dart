@@ -11,8 +11,8 @@ class LoginState {
   final GlobalKey<FormState> formKey;
 
   LoginState({
-    this.email = 'string@gmail.com',
-    this.password = 'string',
+    this.email = '',
+    this.password = '',
     this.isLoading = false,
     this.errorMessage,
     GlobalKey<FormState>? formKey,
@@ -38,9 +38,7 @@ class LoginState {
 class LoginNotifier extends StateNotifier<LoginState> {
   final AuthNotifier _authNotifier;
 
-  LoginNotifier({required AuthNotifier authNotifier})
-      : _authNotifier = authNotifier,
-        super(LoginState());
+  LoginNotifier({required this._authNotifier}) : super(LoginState());
 
   void setEmail(String email) {
     state = state.copyWith(email: email);
@@ -75,10 +73,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
         resetForm();
       }
     } catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        errorMessage: e.toString(),
-      );
+      state = state.copyWith(isLoading: false, errorMessage: e.toString());
     }
   }
 }

@@ -75,15 +75,15 @@ class CollectionDetailView extends ConsumerWidget {
                       colors: [
                         const Color(0xFF1A1A2E),
                         const Color(0xFF0F3460),
-                        const Color(0xFF0F3460).withOpacity(0.8),
-                        const Color(0xFF0F3460).withOpacity(0.6),
+                        const Color(0xFF0F3460).withValues(alpha: 0.8),
+                        const Color(0xFF0F3460).withValues(alpha: 0.6),
                       ],
                       stops: const [0.0, 0.4, 0.7, 1.0],
                     ),
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.15),
+                        color: Colors.black.withValues(alpha: 0.15),
                         blurRadius: 24,
                         offset: const Offset(0, 12),
                       ),
@@ -108,8 +108,7 @@ class CollectionDetailView extends ConsumerWidget {
                         const SizedBox(height: 20),
                         // Description
                         Text(
-                          collection?.description ??
-                              'This collection features a curated list of high-octane action films, showcasing thrilling stunts, intense narratives, and unforgettable characters. Perfect for adrenaline junkies and movie enthusiasts alike.',
+                          collection?.description ?? 'This collection features a curated list of high-octane action films, showcasing thrilling stunts, intense narratives, and unforgettable characters. Perfect for adrenaline junkies and movie enthusiasts alike.',
                           style: const TextStyle(
                             fontFamily: 'Manrope',
                             fontWeight: FontWeight.w400,
@@ -133,9 +132,11 @@ class CollectionDetailView extends ConsumerWidget {
                             // Public/Private indicator
                             Container(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 6),
+                                horizontal: 12,
+                                vertical: 6,
+                              ),
                               decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.15),
+                                color: Colors.white.withValues(alpha: 0.15),
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Row(
@@ -165,9 +166,11 @@ class CollectionDetailView extends ConsumerWidget {
                             ),
                             Container(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 6),
+                                horizontal: 12,
+                                vertical: 6,
+                              ),
                               decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.15),
+                                color: Colors.white.withValues(alpha: 0.15),
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Row(
@@ -216,7 +219,7 @@ class CollectionDetailView extends ConsumerWidget {
                             ),
                             style: OutlinedButton.styleFrom(
                               side: BorderSide(
-                                color: Colors.white.withOpacity(0.3),
+                                color: Colors.white.withValues(alpha: 0.3),
                                 width: 1,
                               ),
                               shape: RoundedRectangleBorder(
@@ -258,49 +261,52 @@ class CollectionDetailView extends ConsumerWidget {
                     crossAxisSpacing: 12,
                     mainAxisSpacing: 12,
                   ),
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      if (index >= movies.length) return null;
-                      final movie = movies[index];
-                      return Stack(
-                        children: [
-                          MovieCard(
-                            movie: movie,
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      MovieDetailView(movieId: movie.id),
-                                ),
-                              );
-                            },
-                            titleFontSize: 14.0,
-                          ),
-                          Positioned(
-                            top: 4,
-                            right: 4,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(0.6),
-                                shape: BoxShape.circle,
+                  delegate: SliverChildBuilderDelegate((context, index) {
+                    if (index >= movies.length) return null;
+                    final movie = movies[index];
+                    return Stack(
+                      children: [
+                        MovieCard(
+                          movie: movie,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    MovieDetailView(movieId: movie.id),
                               ),
-                              child: IconButton(
-                                icon: const Icon(Icons.close,
-                                    color: Colors.white, size: 16),
-                                onPressed: () =>
-                                    _showRemoveMovieConfirmationDialog(
-                                        context, ref, movie.id),
-                                padding: EdgeInsets.zero,
-                                constraints: const BoxConstraints(),
+                            );
+                          },
+                          titleFontSize: 14.0,
+                        ),
+                        Positioned(
+                          top: 4,
+                          right: 4,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.black.withValues(alpha: 0.6),
+                              shape: BoxShape.circle,
+                            ),
+                            child: IconButton(
+                              icon: const Icon(
+                                Icons.close,
+                                color: Colors.white,
+                                size: 16,
                               ),
+                              onPressed: () =>
+                                  _showRemoveMovieConfirmationDialog(
+                                    context,
+                                    ref,
+                                    movie.id,
+                                  ),
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints(),
                             ),
                           ),
-                        ],
-                      );
-                    },
-                    childCount: movies.length,
-                  ),
+                        ),
+                      ],
+                    );
+                  }, childCount: movies.length),
                 ),
               ),
 
@@ -366,9 +372,7 @@ class CollectionDetailView extends ConsumerWidget {
         ),
         error: (error, stack) => Scaffold(
           backgroundColor: const Color(0xFFF7FAFC),
-          body: Center(
-            child: Text('Failed to load details: $error'),
-          ),
+          body: Center(child: Text('Failed to load details: $error')),
         ),
       ),
     );
@@ -383,16 +387,12 @@ class CollectionDetailView extends ConsumerWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.1),
+        color: Colors.white.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
         children: [
-          Icon(
-            icon,
-            size: 20,
-            color: Colors.white,
-          ),
+          Icon(icon, size: 20, color: Colors.white),
           const SizedBox(width: 12),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -512,17 +512,17 @@ class CollectionDetailView extends ConsumerWidget {
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Hata: $e'),
-            backgroundColor: Colors.red,
-          ),
+          SnackBar(content: Text('Hata: $e'), backgroundColor: Colors.red),
         );
       }
     }
   }
 
   void _showRemoveMovieConfirmationDialog(
-      BuildContext context, WidgetRef ref, String movieId) {
+    BuildContext context,
+    WidgetRef ref,
+    String movieId,
+  ) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -532,7 +532,8 @@ class CollectionDetailView extends ConsumerWidget {
           ),
           title: const Text('Filmi Kaldır'),
           content: const Text(
-              'Bu filmi koleksiyondan kaldırmak istediğinizden emin misiniz?'),
+            'Bu filmi koleksiyondan kaldırmak istediğinizden emin misiniz?',
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
@@ -540,19 +541,20 @@ class CollectionDetailView extends ConsumerWidget {
             ),
             ElevatedButton(
               onPressed: () async {
+                final messenger = ScaffoldMessenger.of(context);
                 Navigator.of(context).pop();
                 try {
                   await ref
                       .read(collectionDetailProvider(collectionId).notifier)
                       .removeMovieFromCollection(movieId);
-                  ScaffoldMessenger.of(context).showSnackBar(
+                  messenger.showSnackBar(
                     const SnackBar(
                       content: Text('Film koleksiyondan kaldırıldı.'),
                       backgroundColor: Colors.green,
                     ),
                   );
                 } catch (e) {
-                  ScaffoldMessenger.of(context).showSnackBar(
+                  messenger.showSnackBar(
                     SnackBar(
                       content: Text('Hata: $e'),
                       backgroundColor: Colors.red,
@@ -560,9 +562,7 @@ class CollectionDetailView extends ConsumerWidget {
                   );
                 }
               },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
-              ),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
               child: const Text('Kaldır'),
             ),
           ],

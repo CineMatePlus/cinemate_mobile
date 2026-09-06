@@ -1,15 +1,12 @@
-import 'dart:developer';
+import 'package:cinemate_mobile/core/modules/auth/state.dart';
 
 import 'package:cinemate_mobile/core/providers/api_service_provider.dart';
 import 'package:cinemate_mobile/core/services/api_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../models/movie_model.dart';
 
-enum InteractionType {
-  like,
-  watched,
-  watchlist,
-}
+enum InteractionType { like, watched, watchlist }
 
 class MovieService {
   final ApiService _apiService;
@@ -36,11 +33,7 @@ class MovieService {
 
   Future<Movie> getMovieById(String movieId) async {
     try {
-      final response = await _apiService.request(
-        'GET',
-        '/movies/$movieId',
-      );
-      log(response.data.toString());
+      final response = await _apiService.request('GET', '/movies/$movieId');
       return Movie.fromJson(response.data);
     } catch (e) {
       // Hata yönetimi burada daha detaylı yapılabilir.
@@ -49,7 +42,9 @@ class MovieService {
   }
 
   Future<void> toggleInteraction(
-      String movieId, InteractionType interactionType) async {
+    String movieId,
+    InteractionType interactionType,
+  ) async {
     try {
       // İstek başarılı olursa bir şey döndürmesine gerek yok.
       // Başarısız olursa ApiService katmanı hata fırlatacaktır.
@@ -63,14 +58,16 @@ class MovieService {
   }
 
   // İlgili filmleri getiren metod
-  Future<List<Movie>> getRelatedMovies(String movieId,
-      {int skip = 0, int limit = 10}) async {
+  Future<List<Movie>> getRelatedMovies(
+    String movieId, {
+    int skip = 0,
+    int limit = 10,
+  }) async {
     try {
       final response = await _apiService.request(
         'GET',
         '/movies/$movieId/similar?skip=$skip&limit=$limit',
       );
-      log(response.data.toString());
       if (response.data is List) {
         final List<dynamic> data = response.data;
         return data.map((movieJson) => Movie.fromJson(movieJson)).toList();
@@ -89,7 +86,7 @@ class MovieService {
     try {
       final response = await _apiService.request(
         'GET',
-        '/movies/search?query=$query',
+        '/movies/search?query=${Uri.encodeQueryComponent(query.trim())}',
       );
 
       if (response.data is List) {
@@ -105,6 +102,7 @@ class MovieService {
 }
 
 final movieServiceProvider = Provider<MovieService>((ref) {
+  ref.watch(authProvider.select((state) => state.user?.id));
   final apiService = ref.watch(apiServiceProvider);
   return MovieService(apiService);
 });

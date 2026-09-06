@@ -1,0 +1,4 @@
+storeFile=/absolute/path/outside/repo/cinemate-release.jks
+storePassword=REPLACE_LOCALLY
+keyAlias=cinemate
+keyPassword=REPLACE_LOCALLY

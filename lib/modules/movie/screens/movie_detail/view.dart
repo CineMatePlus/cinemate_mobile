@@ -51,49 +51,63 @@ class MovieDetailView extends ConsumerWidget {
   }
 
   Widget _buildMoviePosterSection(Movie movie) {
-    final backdropUrl = 'https://image.tmdb.org/t/p/w780${movie.backdropPath}';
-
-    return Container(
+    final path = movie.backdropPath;
+    return SizedBox(
       height: 280,
       width: double.infinity,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: NetworkImage(backdropUrl),
-          fit: BoxFit.cover,
-        ),
-      ),
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.black.withOpacity(0.6), Colors.transparent],
-            begin: Alignment.bottomCenter,
-            end: Alignment.topCenter,
-          ),
-        ),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Builder(
-                  builder: (context) => IconButton(
-                    onPressed: () => Navigator.pop(context),
-                    icon: const Icon(
-                      Icons.arrow_back,
-                      color: Colors.white,
-                      size: 24,
-                    ),
-                  ),
-                ),
-                const SizedBox(),
-              ],
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          Container(
+            color: const Color(0xFF18435B),
+            child: const Icon(
+              Icons.movie_outlined,
+              size: 72,
+              color: Colors.white54,
             ),
           ),
-        ),
+          if (path != null && path.isNotEmpty)
+            Image.network(
+              'https://image.tmdb.org/t/p/w780$path',
+              fit: BoxFit.cover,
+              errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+            ),
+          const DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.black38, Colors.transparent],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+            ),
+          ),
+          Positioned(
+            top: 40,
+            left: 16,
+            child: Builder(
+              builder: (context) => BackButton(
+                color: Colors.white,
+                onPressed: () => Navigator.pop(context),
+              ),
+            ),
+          ),
+        ],
       ),
     );
+  }
+
+  Future<void> _runAction(
+    BuildContext context,
+    Future<void> Function() action,
+  ) async {
+    try {
+      await action();
+    } catch (error) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(error.toString())));
+      }
+    }
   }
 
   Widget _buildTitleSection(BuildContext context, Movie movie) {
@@ -117,10 +131,7 @@ class MovieDetailView extends ConsumerWidget {
         children: [
           Text(
             DateTime.parse(movie.releaseDate).year.toString(),
-            style: GoogleFonts.manrope(
-              fontSize: 14,
-              color: Colors.black54,
-            ),
+            style: GoogleFonts.manrope(fontSize: 14, color: Colors.black54),
           ),
           const SizedBox(width: 16),
           const Icon(Icons.star, color: Colors.amber, size: 20),
@@ -139,7 +150,10 @@ class MovieDetailView extends ConsumerWidget {
   }
 
   Widget _buildActionButtons(
-      BuildContext context, WidgetRef ref, String movieId) {
+    BuildContext context,
+    WidgetRef ref,
+    String movieId,
+  ) {
     final provider = movieDetailProvider(movieId);
     final movie = ref.watch(provider).value?.movie;
 
@@ -155,7 +169,10 @@ class MovieDetailView extends ConsumerWidget {
                 : Icons.favorite_border,
             count: movie?.numLikes.toString(),
             color: const Color(0xFF4A709C),
-            onTap: () => ref.read(provider.notifier).toggleLike(),
+            onTap: () => _runAction(
+              context,
+              () => ref.read(provider.notifier).toggleLike(),
+            ),
           ),
           const SizedBox(width: 24),
           _actionButton(
@@ -165,7 +182,10 @@ class MovieDetailView extends ConsumerWidget {
                 : Icons.visibility_outlined,
             count: movie?.numWatches.toString(),
             color: const Color(0xFF4A709C),
-            onTap: () => ref.read(provider.notifier).toggleWatched(),
+            onTap: () => _runAction(
+              context,
+              () => ref.read(provider.notifier).toggleWatched(),
+            ),
           ),
           const SizedBox(width: 24),
           _actionButton(
@@ -174,7 +194,10 @@ class MovieDetailView extends ConsumerWidget {
                 ? Icons.watch_later
                 : Icons.watch_later_outlined,
             color: const Color(0xFF4A709C),
-            onTap: () => ref.read(provider.notifier).toggleWatchlist(),
+            onTap: () => _runAction(
+              context,
+              () => ref.read(provider.notifier).toggleWatchlist(),
+            ),
           ),
           const SizedBox(width: 24),
           _actionButton(
@@ -189,16 +212,21 @@ class MovieDetailView extends ConsumerWidget {
   }
 
   void _showCollectionsBottomSheet(
-      BuildContext context, WidgetRef ref, String movieId) async {
+    BuildContext context,
+    WidgetRef ref,
+    String movieId,
+  ) async {
     try {
-      final collections =
-          await ref.read(collectionServiceProvider).getMyCollections();
+      final collections = await ref
+          .read(collectionServiceProvider)
+          .getMyCollections();
       if (!context.mounted) return;
 
       if (collections.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-              content: Text('No collections found. Create one first!')),
+            content: Text('No collections found. Create one first!'),
+          ),
         );
         return;
       }
@@ -210,9 +238,10 @@ class MovieDetailView extends ConsumerWidget {
             child: Wrap(
               children: <Widget>[
                 const ListTile(
-                  title: Text('Add to a collection',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                  title: Text(
+                    'Add to a collection',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  ),
                 ),
                 const Divider(),
                 SizedBox(
@@ -225,18 +254,21 @@ class MovieDetailView extends ConsumerWidget {
                         leading: const Icon(Icons.list),
                         title: Text(collection.name),
                         onTap: () async {
+                          final messenger = ScaffoldMessenger.of(context);
                           Navigator.of(context).pop();
                           try {
                             await ref
                                 .read(collectionServiceProvider)
                                 .addMovieToCollection(collection.id, movieId);
-                            ScaffoldMessenger.of(context).showSnackBar(
+                            messenger.showSnackBar(
                               SnackBar(
-                                  content: Text(
-                                      'Successfully added to ${collection.name}')),
+                                content: Text(
+                                  'Successfully added to ${collection.name}',
+                                ),
+                              ),
                             );
                           } catch (e) {
-                            ScaffoldMessenger.of(context).showSnackBar(
+                            messenger.showSnackBar(
                               SnackBar(content: Text('Failed to add: $e')),
                             );
                           }
@@ -251,17 +283,20 @@ class MovieDetailView extends ConsumerWidget {
         },
       );
     } catch (e) {
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Could not fetch collections: $e')),
       );
     }
   }
 
-  Widget _actionButton(BuildContext context,
-      {required IconData icon,
-      String? count,
-      required Color color,
-      required VoidCallback onTap}) {
+  Widget _actionButton(
+    BuildContext context, {
+    required IconData icon,
+    String? count,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
@@ -361,7 +396,10 @@ class MovieDetailView extends ConsumerWidget {
   }
 
   Widget _buildCommentsSection(
-      BuildContext context, WidgetRef ref, String movieId) {
+    BuildContext context,
+    WidgetRef ref,
+    String movieId,
+  ) {
     final commentsAsync = ref.watch(movieCommentsProvider(movieId));
     final textController = TextEditingController();
     final auth = ref.watch(authProvider);
@@ -374,14 +412,21 @@ class MovieDetailView extends ConsumerWidget {
         children: [
           Text(
             'Comments',
-            style:
-                GoogleFonts.manrope(fontSize: 20, fontWeight: FontWeight.bold),
+            style: GoogleFonts.manrope(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(height: 16),
           // Comment Input
           if (currentUser != null)
             _buildCommentInputField(
-                context, ref, textController, currentUser, movieId),
+              context,
+              ref,
+              textController,
+              currentUser,
+              movieId,
+            ),
           const SizedBox(height: 24),
           // Comments List
           commentsAsync.when(
@@ -402,7 +447,11 @@ class MovieDetailView extends ConsumerWidget {
                 itemBuilder: (context, index) {
                   final commentWithUser = comments[index];
                   return _buildCommentItem(
-                      context, ref, commentWithUser, currentUser?.id);
+                    context,
+                    ref,
+                    commentWithUser,
+                    currentUser?.id,
+                  );
                 },
               );
             },
@@ -414,8 +463,13 @@ class MovieDetailView extends ConsumerWidget {
     );
   }
 
-  Widget _buildCommentInputField(BuildContext context, WidgetRef ref,
-      TextEditingController controller, User currentUser, String movieId) {
+  Widget _buildCommentInputField(
+    BuildContext context,
+    WidgetRef ref,
+    TextEditingController controller,
+    User currentUser,
+    String movieId,
+  ) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -436,17 +490,27 @@ class MovieDetailView extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide.none,
               ),
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 12,
+              ),
               suffixIcon: IconButton(
                 icon: const Icon(Icons.send),
-                onPressed: () {
-                  if (controller.text.isNotEmpty) {
-                    ref
+                onPressed: () async {
+                  if (controller.text.trim().isEmpty) return;
+                  final text = controller.text;
+                  try {
+                    await ref
                         .read(movieCommentsProvider(movieId).notifier)
-                        .postComment(controller.text);
+                        .postComment(text);
                     controller.clear();
-                    FocusScope.of(context).unfocus();
+                    if (context.mounted) FocusScope.of(context).unfocus();
+                  } catch (error) {
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(SnackBar(content: Text(error.toString())));
+                    }
                   }
                 },
               ),
@@ -458,8 +522,12 @@ class MovieDetailView extends ConsumerWidget {
     );
   }
 
-  Widget _buildCommentItem(BuildContext context, WidgetRef ref,
-      CommentWithUser commentWithUser, String? currentUserId) {
+  Widget _buildCommentItem(
+    BuildContext context,
+    WidgetRef ref,
+    CommentWithUser commentWithUser,
+    String? currentUserId,
+  ) {
     final comment = commentWithUser.comment;
     final user = commentWithUser.user;
     final isAuthor = user.id == currentUserId;
@@ -467,11 +535,7 @@ class MovieDetailView extends ConsumerWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        UserAvatar(
-          avatarUrl: user.avatarUrl,
-          gender: user.gender,
-          radius: 20,
-        ),
+        UserAvatar(avatarUrl: user.avatarUrl, gender: user.gender, radius: 20),
         const SizedBox(width: 12),
         Expanded(
           child: Column(
@@ -500,13 +564,59 @@ class MovieDetailView extends ConsumerWidget {
           ),
         ),
         if (isAuthor)
-          IconButton(
-            icon: const Icon(Icons.more_vert, size: 20),
-            onPressed: () {
-              // TODO: Implement edit/delete menu
-              ref
-                  .read(movieCommentsProvider(movieId).notifier)
-                  .deleteComment(comment.id);
+          PopupMenuButton<String>(
+            tooltip: 'Yorum işlemleri',
+            itemBuilder: (_) => const [
+              PopupMenuItem(value: 'edit', child: Text('Düzenle')),
+              PopupMenuItem(value: 'delete', child: Text('Sil')),
+            ],
+            onSelected: (action) async {
+              if (action == 'delete') {
+                await _runAction(
+                  context,
+                  () => ref
+                      .read(movieCommentsProvider(movieId).notifier)
+                      .deleteComment(comment.id),
+                );
+                return;
+              }
+              final controller = TextEditingController(text: comment.text);
+              final edited = await showDialog<String>(
+                context: context,
+                builder: (dialogContext) => AlertDialog(
+                  title: const Text('Yorumu düzenle'),
+                  content: TextField(
+                    controller: controller,
+                    maxLength: 2000,
+                    maxLines: 4,
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(dialogContext),
+                      child: const Text('İptal'),
+                    ),
+                    FilledButton(
+                      onPressed: () {
+                        if (controller.text.trim().isNotEmpty) {
+                          Navigator.pop(dialogContext, controller.text.trim());
+                        }
+                      },
+                      child: const Text('Kaydet'),
+                    ),
+                  ],
+                ),
+              );
+              // Let the dialog finish its exit transition before disposing its controller.
+              await Future<void>.delayed(const Duration(milliseconds: 300));
+              controller.dispose();
+              if (edited != null && context.mounted) {
+                await _runAction(
+                  context,
+                  () => ref
+                      .read(movieCommentsProvider(movieId).notifier)
+                      .updateComment(comment.id, edited),
+                );
+              }
             },
           ),
       ],
@@ -514,7 +624,9 @@ class MovieDetailView extends ConsumerWidget {
   }
 
   Widget _buildRelatedMoviesSection(
-      BuildContext context, List<Movie> relatedMovies) {
+    BuildContext context,
+    List<Movie> relatedMovies,
+  ) {
     if (relatedMovies.isEmpty) {
       return const SizedBox.shrink();
     }

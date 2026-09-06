@@ -1,5 +1,6 @@
 import 'package:cinemate_mobile/core/services/user_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../models/movie_model.dart';
 import '../../services/service.dart';
 
@@ -20,10 +21,14 @@ class MoviesNotifier extends StateNotifier<AsyncValue<List<Movie>>> {
     _page = 0;
     _hasReachedEnd = false;
     try {
-      final movies =
-          await _movieService.getMovies(skip: _page * _limit, limit: _limit);
+      final movies = await _movieService.getMovies(
+        skip: _page * _limit,
+        limit: _limit,
+      );
+      if (!mounted) return;
       state = AsyncValue.data(movies);
     } catch (e, s) {
+      if (!mounted) return;
       state = AsyncValue.error(e, s);
     }
   }
@@ -32,20 +37,24 @@ class MoviesNotifier extends StateNotifier<AsyncValue<List<Movie>>> {
     if (_isLoading || _hasReachedEnd) return;
 
     _isLoading = true;
-    _page++;
+    final nextPage = _page + 1;
 
     try {
-      final newMovies =
-          await _movieService.getMovies(skip: _page * _limit, limit: _limit);
+      final newMovies = await _movieService.getMovies(
+        skip: nextPage * _limit,
+        limit: _limit,
+      );
+      _page = nextPage;
       if (newMovies.isEmpty) {
         _hasReachedEnd = true;
       }
 
       state.whenData((currentMovies) {
+        if (!mounted) return;
         state = AsyncValue.data([...currentMovies, ...newMovies]);
       });
     } catch (e) {
-      //TODO: Handle error, maybe revert page count or show a snackbar
+      // Keep the current page so the next scroll retries the failed page.
     } finally {
       _isLoading = false;
     }
@@ -59,9 +68,9 @@ class MoviesNotifier extends StateNotifier<AsyncValue<List<Movie>>> {
 // Movies Provider
 final moviesProvider =
     StateNotifierProvider<MoviesNotifier, AsyncValue<List<Movie>>>((ref) {
-  final movieService = ref.watch(movieServiceProvider);
-  return MoviesNotifier(movieService);
-});
+      final movieService = ref.watch(movieServiceProvider);
+      return MoviesNotifier(movieService);
+    });
 
 // Recommendation Providers
 final likedRecommendationsProvider = FutureProvider<List<Movie>>((ref) {

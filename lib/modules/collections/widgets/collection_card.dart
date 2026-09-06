@@ -1,6 +1,5 @@
 import 'package:cinemate_mobile/modules/collections/models/collection_model.dart';
 import 'package:flutter/material.dart';
-import 'dart:math';
 
 class CollectionCard extends StatelessWidget {
   final Collection collection;
@@ -12,23 +11,8 @@ class CollectionCard extends StatelessWidget {
     required this.onTap,
   });
 
-  static const List<String> _placeholderImages = [
-    'lib/core/constants/assets/images/collection_placeholders/placeholder_1.png',
-    'lib/core/constants/assets/images/collection_placeholders/placeholder_2.png',
-    'lib/core/constants/assets/images/collection_placeholders/placeholder_3.png',
-    'lib/core/constants/assets/images/collection_placeholders/placeholder_4.png',
-    'lib/core/constants/assets/images/collection_placeholders/placeholder_5.png',
-    'lib/core/constants/assets/images/collection_placeholders/placeholder_6.png',
-    'lib/core/constants/assets/images/collection_placeholders/placeholder_7.png',
-    'lib/core/constants/assets/images/collection_placeholders/placeholder_8.png',
-    'lib/core/constants/assets/images/collection_placeholders/placeholder_9.png',
-  ];
-
   @override
   Widget build(BuildContext context) {
-    final randomPlaceholder =
-        _placeholderImages[Random().nextInt(_placeholderImages.length)];
-
     return GestureDetector(
       onTap: onTap,
       child: ClipRRect(
@@ -36,14 +20,29 @@ class CollectionCard extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            Image.asset(
-              randomPlaceholder,
-              fit: BoxFit.cover,
+            Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Color(0xFF18435B), Color(0xFF447785)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
+            ),
+            const Center(
+              child: Icon(
+                Icons.movie_outlined,
+                size: 70,
+                color: Colors.white54,
+              ),
             ),
             Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [Colors.black.withOpacity(0.8), Colors.transparent],
+                  colors: [
+                    Colors.black.withValues(alpha: 0.8),
+                    Colors.transparent,
+                  ],
                   begin: Alignment.bottomCenter,
                   end: Alignment.topCenter,
                   stops: const [0.0, 0.5],
@@ -71,7 +70,7 @@ class CollectionCard extends StatelessWidget {
                   Text(
                     '${collection.movieCount} movies',
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.8),
+                      color: Colors.white.withValues(alpha: 0.8),
                       fontSize: 12,
                     ),
                   ),

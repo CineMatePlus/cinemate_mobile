@@ -33,7 +33,9 @@ class HorizontalMovieListView extends ConsumerWidget {
                 child: Text(
                   title,
                   style: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold),
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                   softWrap: true,
                 ),
               ),
@@ -97,8 +99,10 @@ class HorizontalMovieListView extends ConsumerWidget {
             },
             loading: () => const Center(child: CircularProgressIndicator()),
             error: (err, stack) => Center(
-              child: Text('Could not load movies. ${err.toString()}',
-                  softWrap: true),
+              child: Text(
+                'Could not load movies. ${err.toString()}',
+                softWrap: true,
+              ),
             ),
           ),
         ),

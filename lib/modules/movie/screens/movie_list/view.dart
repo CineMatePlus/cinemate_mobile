@@ -71,43 +71,46 @@ class _MovieListViewState extends State<MovieListView>
                               MaterialPageRoute(
                                 builder: (context) =>
                                     const PaginatedRecommendationsView(
-                                  title: 'You Might Like',
-                                  recommendationType: 'like',
-                                ),
+                                      title: 'You Might Like',
+                                      recommendationType: 'like',
+                                    ),
                               ),
                             );
                           },
                         ),
                         HorizontalMovieListView(
                           title: 'You May Be Interested In',
-                          moviesAsync:
-                              ref.watch(watchlistRecommendationsProvider),
+                          moviesAsync: ref.watch(
+                            watchlistRecommendationsProvider,
+                          ),
                           onSeeAllTapped: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
                                     const PaginatedRecommendationsView(
-                                  title: 'You May Be Interested In',
-                                  recommendationType: 'watchlist',
-                                ),
+                                      title: 'You May Be Interested In',
+                                      recommendationType: 'watchlist',
+                                    ),
                               ),
                             );
                           },
                         ),
                         HorizontalMovieListView(
                           title: 'Similar to What You Watched Before',
-                          moviesAsync:
-                              ref.watch(watchedRecommendationsProvider),
+                          moviesAsync: ref.watch(
+                            watchedRecommendationsProvider,
+                          ),
                           onSeeAllTapped: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
                                     const PaginatedRecommendationsView(
-                                  title: 'Similar to What You Watched Before',
-                                  recommendationType: 'watched',
-                                ),
+                                      title:
+                                          'Similar to What You Watched Before',
+                                      recommendationType: 'watched',
+                                    ),
                               ),
                             );
                           },

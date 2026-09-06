@@ -5,17 +5,9 @@ class HomeState {
   final String? error;
   final int currentIndex;
 
-  HomeState({
-    this.isLoading = false,
-    this.error,
-    this.currentIndex = 0,
-  });
+  HomeState({this.isLoading = false, this.error, this.currentIndex = 0});
 
-  HomeState copyWith({
-    bool? isLoading,
-    String? error,
-    int? currentIndex,
-  }) {
+  HomeState copyWith({bool? isLoading, String? error, int? currentIndex}) {
     return HomeState(
       isLoading: isLoading ?? this.isLoading,
       error: error ?? this.error,

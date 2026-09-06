@@ -4,8 +4,10 @@ import 'package:cinemate_mobile/modules/movie/widgets/movie_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final genreMoviesProvider =
-    FutureProvider.autoDispose.family((ref, String genreName) {
+final genreMoviesProvider = FutureProvider.autoDispose.family((
+  ref,
+  String genreName,
+) {
   final genreService = ref.watch(genreServiceProvider);
   return genreService.getMoviesByGenre(genreName);
 });
@@ -15,11 +17,12 @@ class GenreMovieListView extends ConsumerWidget {
   final Color genreColor;
   final IconData genreIcon;
 
-  const GenreMovieListView(
-      {super.key,
-      required this.genreName,
-      required this.genreColor,
-      required this.genreIcon});
+  const GenreMovieListView({
+    super.key,
+    required this.genreName,
+    required this.genreColor,
+    required this.genreIcon,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -40,7 +43,8 @@ class GenreMovieListView extends ConsumerWidget {
         data: (movies) {
           if (movies.isEmpty) {
             return const Center(
-                child: Text("No movies to display for this genre."));
+              child: Text("No movies to display for this genre."),
+            );
           }
           return GridView.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

@@ -33,26 +33,28 @@ class _PaginatedRecommendationsViewState
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
       ref
-          .read(paginatedRecommendationsProvider(widget.recommendationType)
-              .notifier)
+          .read(
+            paginatedRecommendationsProvider(widget.recommendationType)
+                .notifier,
+          )
           .fetchNextPage();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final moviesAsync =
-        ref.watch(paginatedRecommendationsProvider(widget.recommendationType));
+    final moviesAsync = ref.watch(
+      paginatedRecommendationsProvider(widget.recommendationType),
+    );
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
+      appBar: AppBar(title: Text(widget.title)),
       body: moviesAsync.when(
         data: (movies) {
           if (movies.isEmpty) {
             return const Center(
-                child: Text('There are no recommendations to show.'));
+              child: Text('There are no recommendations to show.'),
+            );
           }
           return GridView.builder(
             controller: _scrollController,

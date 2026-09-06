@@ -33,6 +33,10 @@ class RegisterScreen extends ConsumerWidget {
 
     // Başarılı kayıt durumunu izle
     ref.listen(authProvider, (previous, current) {
+      if (current.status == AuthStatus.error && current.errorMessage != null) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(current.errorMessage!)));
+      }
       if (previous?.status != AuthStatus.authenticated &&
           current.status == AuthStatus.authenticated) {
         // Başarılı kayıt sonrası authProvider state'i authenticated olacak.
@@ -258,7 +262,7 @@ class _RegisterFormState extends State<RegisterForm> {
 
   Widget _buildGenderDropdown() {
     return DropdownButtonFormField<int>(
-      value: widget.state.gender,
+      initialValue: widget.state.gender,
       onChanged: (value) {
         if (value != null) {
           widget.notifier.setGender(value);
@@ -320,8 +324,10 @@ class _RegisterFormState extends State<RegisterForm> {
         ),
         filled: true,
         fillColor: Colors.white,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 16,
+        ),
         labelStyle: AppTextStyles.inputLabel,
       ),
       style: AppTextStyles.inputText,

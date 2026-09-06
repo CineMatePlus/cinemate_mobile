@@ -41,10 +41,13 @@ class _HomeViewState extends State<HomeView> {
               title: Padding(
                 padding: const EdgeInsets.only(top: 20),
                 child: _selectedIndex == 0
-                    ? SvgPicture.asset(
-                        'lib/core/constants/assets/images/logos/cinemate_minimalist.svg',
-                        height: 50,
-                        fit: BoxFit.contain,
+                    ? const Text(
+                        'CineMate',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w800,
+                          fontSize: 28,
+                          color: Color(0xFF18435B),
+                        ),
                       )
                     : Text(
                         _getAppBarTitle(_selectedIndex),
@@ -61,22 +64,35 @@ class _HomeViewState extends State<HomeView> {
             ),
           ];
         },
-        body: Center(
-          child: _widgetOptions.elementAt(_selectedIndex),
-        ),
+        body: Center(child: _widgetOptions.elementAt(_selectedIndex)),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           _buildNavItem(
-              'lib/core/constants/assets/images/home_icon.svg', 'Home', 0),
+            'lib/core/constants/assets/images/home_icon.svg',
+            'Home',
+            0,
+          ),
           _buildNavItem(
-              'lib/core/constants/assets/images/search_icon.svg', 'Search', 1),
+            'lib/core/constants/assets/images/search_icon.svg',
+            'Search',
+            1,
+          ),
           _buildNavItem(
-              'lib/core/constants/assets/images/nav_icon_2.svg', 'Cinema', 2),
-          _buildNavItem('lib/core/constants/assets/images/nav_icon_3.svg',
-              'Collections', 3),
+            'lib/core/constants/assets/images/nav_icon_2.svg',
+            'Cinema',
+            2,
+          ),
           _buildNavItem(
-              'lib/core/constants/assets/images/nav_icon_4.svg', 'Profile', 4),
+            'lib/core/constants/assets/images/nav_icon_3.svg',
+            'Collections',
+            3,
+          ),
+          _buildNavItem(
+            'lib/core/constants/assets/images/nav_icon_4.svg',
+            'Profile',
+            4,
+          ),
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
@@ -90,7 +106,10 @@ class _HomeViewState extends State<HomeView> {
   }
 
   BottomNavigationBarItem _buildNavItem(
-      String iconPath, String label, int index) {
+    String iconPath,
+    String label,
+    int index,
+  ) {
     return BottomNavigationBarItem(
       icon: SvgPicture.asset(
         iconPath,

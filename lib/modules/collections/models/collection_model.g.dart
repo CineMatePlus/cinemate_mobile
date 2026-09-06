@@ -6,22 +6,20 @@ part of 'collection_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$CollectionImpl _$$CollectionImplFromJson(Map<String, dynamic> json) =>
-    _$CollectionImpl(
-      id: json['_id'] as String,
-      name: json['name'] as String,
-      description: json['description'] as String,
-      ownerName: json['owner_name'] as String,
-      movieCount: (json['movie_count'] as num?)?.toInt() ?? 0,
-      isPublic: json['is_public'] as bool,
-      movieIds: (json['movie_ids'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList() ??
-          const [],
-      posterPath: json['posterPath'] as String?,
-    );
+_Collection _$CollectionFromJson(Map<String, dynamic> json) => _Collection(
+  id: json['_id'] as String,
+  name: json['name'] as String,
+  description: json['description'] as String? ?? '',
+  ownerName: json['owner_name'] as String,
+  movieCount: (json['movie_count'] as num?)?.toInt() ?? 0,
+  isPublic: json['is_public'] as bool,
+  movieIds:
+      (json['movie_ids'] as List<dynamic>?)?.map((e) => e as String).toList() ??
+      const [],
+  posterPath: json['posterPath'] as String?,
+);
 
-Map<String, dynamic> _$$CollectionImplToJson(_$CollectionImpl instance) =>
+Map<String, dynamic> _$CollectionToJson(_Collection instance) =>
     <String, dynamic>{
       '_id': instance.id,
       'name': instance.name,

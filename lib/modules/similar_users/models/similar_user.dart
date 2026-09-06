@@ -4,10 +4,10 @@ part 'similar_user.freezed.dart';
 part 'similar_user.g.dart';
 
 @freezed
-class SimilarUser with _$SimilarUser {
+abstract class SimilarUser with _$SimilarUser {
   const factory SimilarUser({
     @JsonKey(name: '_id') required String id,
-    required String email,
+    @Default('') String email,
     required String name,
     @JsonKey(name: 'avatar_url') String? avatarUrl,
     required int gender,

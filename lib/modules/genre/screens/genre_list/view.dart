@@ -8,7 +8,7 @@ class CategoriesView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final genres = staticGenres;
+    const genres = staticGenres;
 
     if (genres.isEmpty) {
       return const Center(child: Text("No genres to display."));
@@ -50,9 +50,7 @@ class CategoriesView extends ConsumerWidget {
                   const SizedBox(height: 8),
                   Text(
                     genreName,
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium
+                    style: Theme.of(context).textTheme.titleMedium
                         ?.copyWith(color: Colors.white),
                     textAlign: TextAlign.center,
                   ),

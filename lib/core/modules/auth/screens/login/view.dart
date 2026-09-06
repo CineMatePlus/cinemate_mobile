@@ -196,14 +196,14 @@ class _LoginFormState extends State<LoginForm> {
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.error_outline,
-                      color: Color(0xFFE53935), size: 18),
+                  const Icon(
+                    Icons.error_outline,
+                    color: Color(0xFFE53935),
+                    size: 18,
+                  ),
                   const SizedBox(width: 8),
                   Expanded(
-                    child: Text(
-                      _errorMessage,
-                      style: AppTextStyles.error,
-                    ),
+                    child: Text(_errorMessage, style: AppTextStyles.error),
                   ),
                 ],
               ),

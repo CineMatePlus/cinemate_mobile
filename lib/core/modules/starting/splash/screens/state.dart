@@ -57,10 +57,10 @@ class SplashState {
 
   /// Hata durumu
   static SplashState error(String message) => SplashState(
-        isLoading: false,
-        errorMessage: message,
-        navigationState: SplashNavigationState.error,
-      );
+    isLoading: false,
+    errorMessage: message,
+    navigationState: SplashNavigationState.error,
+  );
 }
 
 /// Splash ekranı state notifier
@@ -70,13 +70,10 @@ class SplashNotifier extends StateNotifier<SplashState> {
   final SplashConfig _config;
 
   SplashNotifier({
-    required PreferencesService preferencesService,
-    required SplashConfig config,
-    AuthState? authState,
-  })  : _preferencesService = preferencesService,
-        _authState = authState,
-        _config = config,
-        super(SplashState.initial);
+    required this._preferencesService,
+    required this._config,
+    this._authState,
+  }) : super(SplashState.initial);
 
   /// Akış kontrolünü başlat (Splash süresinden sonra çağrılmalı)
   Future<void> checkFlow() async {
@@ -84,8 +81,8 @@ class SplashNotifier extends StateNotifier<SplashState> {
       await _preferencesService.init();
 
       // 1. Onboarding kontrolü
-      final isOnboardingCompleted =
-          await _preferencesService.isOnboardingCompleted();
+      final isOnboardingCompleted = await _preferencesService
+          .isOnboardingCompleted();
 
       if (!isOnboardingCompleted) {
         state = state.copyWith(
@@ -130,8 +127,9 @@ class SplashNotifier extends StateNotifier<SplashState> {
 }
 
 /// Splash Provider
-final splashProvider =
-    StateNotifierProvider<SplashNotifier, SplashState>((ref) {
+final splashProvider = StateNotifierProvider<SplashNotifier, SplashState>((
+  ref,
+) {
   final preferencesService = ref.watch(preferencesServiceProvider);
   final authState = ref.watch(authProvider);
   final config = ref.watch(splashConfigProvider);

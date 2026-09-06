@@ -6,19 +6,18 @@ part of 'similar_user.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$SimilarUserImpl _$$SimilarUserImplFromJson(Map<String, dynamic> json) =>
-    _$SimilarUserImpl(
-      id: json['_id'] as String,
-      email: json['email'] as String,
-      name: json['name'] as String,
-      avatarUrl: json['avatar_url'] as String?,
-      gender: (json['gender'] as num).toInt(),
-      createdAt: DateTime.parse(json['created_at'] as String),
-      updatedAt: DateTime.parse(json['updated_at'] as String),
-      similarity: (json['similarity'] as num).toDouble(),
-    );
+_SimilarUser _$SimilarUserFromJson(Map<String, dynamic> json) => _SimilarUser(
+  id: json['_id'] as String,
+  email: json['email'] as String? ?? '',
+  name: json['name'] as String,
+  avatarUrl: json['avatar_url'] as String?,
+  gender: (json['gender'] as num).toInt(),
+  createdAt: DateTime.parse(json['created_at'] as String),
+  updatedAt: DateTime.parse(json['updated_at'] as String),
+  similarity: (json['similarity'] as num).toDouble(),
+);
 
-Map<String, dynamic> _$$SimilarUserImplToJson(_$SimilarUserImpl instance) =>
+Map<String, dynamic> _$SimilarUserToJson(_SimilarUser instance) =>
     <String, dynamic>{
       '_id': instance.id,
       'email': instance.email,

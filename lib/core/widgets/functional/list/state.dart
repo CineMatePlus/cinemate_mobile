@@ -70,10 +70,7 @@ class ApiResponse<T> {
   final List<T> items;
   final PaginationInfo pagination;
 
-  ApiResponse({
-    required this.items,
-    required this.pagination,
-  });
+  ApiResponse({required this.items, required this.pagination});
 }
 
 class CoreListState<T> {
@@ -117,20 +114,24 @@ class CoreListStateNotifier<T> extends StateNotifier<CoreListState<T>> {
     required this.dataProvider,
     required this.defaultPageSize,
     this.isPaginated = false,
-  }) : super(CoreListState<T>(
-          items: [],
-          isLoading: false,
-          hasError: false,
-          paginationInfo: PaginationInfo.initial(defaultPageSize),
-        ));
+  }) : super(
+         CoreListState<T>(
+           items: [],
+           isLoading: false,
+           hasError: false,
+           paginationInfo: PaginationInfo.initial(defaultPageSize),
+         ),
+       );
 
-  final Future<dynamic> Function(
-      {int? page,
-      int? size,
-      String? search,
-      String? filter,
-      String? sort,
-      String? order}) dataProvider;
+  final Future<dynamic> Function({
+    int? page,
+    int? size,
+    String? search,
+    String? filter,
+    String? sort,
+    String? order,
+  })
+  dataProvider;
   final int defaultPageSize;
   final bool isPaginated;
   String? _search;
@@ -167,8 +168,9 @@ class CoreListStateNotifier<T> extends StateNotifier<CoreListState<T>> {
 
         final apiResponse = response as Map<String, dynamic>;
         final items = (apiResponse['items'] as List).cast<T>();
-        final paginationInfo =
-            PaginationInfo.fromJson(apiResponse['pagination']);
+        final paginationInfo = PaginationInfo.fromJson(
+          apiResponse['pagination'],
+        );
 
         state = state.copyWith(
           items: items,
@@ -177,10 +179,7 @@ class CoreListStateNotifier<T> extends StateNotifier<CoreListState<T>> {
         );
       } else {
         final items = await dataProvider() as List<T>;
-        state = state.copyWith(
-          items: items,
-          isLoading: false,
-        );
+        state = state.copyWith(items: items, isLoading: false);
       }
 
       log('Veri başarıyla alındı. Eleman sayısı: ${state.items.length}');

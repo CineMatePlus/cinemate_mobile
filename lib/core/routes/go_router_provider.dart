@@ -12,13 +12,19 @@ import '../modules/starting/splash/screens/view.dart';
 import 'route_name.dart';
 
 final goRouterProvider = Provider<GoRouter>((ref) {
-  final authState = ref.watch(authProvider);
+  final changes = ValueNotifier<int>(0);
+  ref.listen(authProvider, (_, __) {
+    changes.value++;
+  });
+  ref.onDispose(changes.dispose);
 
-  return GoRouter(
+  final router = GoRouter(
+    refreshListenable: changes,
     initialLocation: splashPath,
     //TODO: debugLogDiagnostics true yapılarak kontrol edilecek
     debugLogDiagnostics: false,
     redirect: (BuildContext context, GoRouterState state) {
+      final authState = ref.read(authProvider);
       final isAuthenticated = authState.status == AuthStatus.authenticated;
       final isAuthenticating = authState.status == AuthStatus.loading;
       final hasError = authState.status == AuthStatus.error;
@@ -97,8 +103,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       appBar: AppBar(title: const Text('Hata')),
       body: Center(
         child: Text(
-            'Sayfa bulunamadı: ${state.error?.toString() ?? 'Bilinmeyen hata'}'),
+          'Sayfa bulunamadı: ${state.error?.toString() ?? 'Bilinmeyen hata'}',
+        ),
       ),
     ),
   );
+  ref.onDispose(router.dispose);
+  return router;
 });

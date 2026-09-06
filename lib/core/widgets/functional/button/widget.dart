@@ -10,13 +10,14 @@ class CoreButton extends ConsumerWidget {
   final String? label;
   final IconData? iconData;
 
-  const CoreButton(
-      {super.key,
-      required this.onPressed,
-      this.child,
-      this.icon,
-      this.iconData,
-      this.label});
+  const CoreButton({
+    super.key,
+    required this.onPressed,
+    this.child,
+    this.icon,
+    this.iconData,
+    this.label,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

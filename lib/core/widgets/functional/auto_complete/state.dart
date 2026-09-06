@@ -26,8 +26,8 @@ class AutoCompleteNotifier extends StateNotifier<AsyncValue<List<String>>> {
   AutoCompleteNotifier({
     required this.getSuggestions,
     AutoCompleteSettings? settings,
-  })  : settings = settings ?? const AutoCompleteSettings(),
-        super(const AsyncValue.data([]));
+  }) : settings = settings ?? const AutoCompleteSettings(),
+       super(const AsyncValue.data([]));
 
   Future<void> fetchSuggestions(String query) async {
     if (query.length < settings.minQueryLength) {
@@ -38,9 +38,7 @@ class AutoCompleteNotifier extends StateNotifier<AsyncValue<List<String>>> {
     state = const AsyncValue.loading();
     try {
       final suggestions = await getSuggestions(query);
-      state = AsyncValue.data(
-        suggestions.take(settings.maxResults).toList(),
-      );
+      state = AsyncValue.data(suggestions.take(settings.maxResults).toList());
     } catch (e, st) {
       state = AsyncValue.error(e, st);
     }

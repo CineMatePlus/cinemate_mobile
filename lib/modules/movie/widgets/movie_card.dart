@@ -21,9 +21,7 @@ class MovieCard extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         elevation: 4,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(12),
@@ -51,9 +49,9 @@ class MovieCard extends StatelessWidget {
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        Colors.black.withOpacity(0.8),
-                        Colors.black.withOpacity(0.6),
-                        Colors.transparent
+                        Colors.black.withValues(alpha: 0.8),
+                        Colors.black.withValues(alpha: 0.6),
+                        Colors.transparent,
                       ],
                       begin: Alignment.bottomCenter,
                       end: Alignment.topCenter,
@@ -67,7 +65,7 @@ class MovieCard extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                       shadows: [
-                        const Shadow(blurRadius: 2.0, color: Colors.black)
+                        const Shadow(blurRadius: 2.0, color: Colors.black),
                       ],
                     ),
                     maxLines: 2,
@@ -81,9 +79,11 @@ class MovieCard extends StatelessWidget {
                 right: 8,
                 child: Container(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0, vertical: 4.0),
+                    horizontal: 8.0,
+                    vertical: 4.0,
+                  ),
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.8),
+                    color: Colors.black.withValues(alpha: 0.8),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(

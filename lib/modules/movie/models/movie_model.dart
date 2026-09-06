@@ -4,7 +4,7 @@ part 'movie_model.freezed.dart';
 part 'movie_model.g.dart';
 
 @freezed
-class Movie with _$Movie {
+abstract class Movie with _$Movie {
   const factory Movie({
     @JsonKey(name: '_id') required String id,
     required String title,

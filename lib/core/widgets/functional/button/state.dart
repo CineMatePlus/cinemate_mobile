@@ -31,7 +31,7 @@ class ButtonState {
 
 class ButtonStateNotifier extends StateNotifier<ButtonState> {
   ButtonStateNotifier()
-      : super(ButtonState(isLoading: false, isDisabled: false));
+    : super(ButtonState(isLoading: false, isDisabled: false));
 
   void onPressed(Future<void> Function() callback) async {
     log('onPressed');
@@ -49,5 +49,5 @@ class ButtonStateNotifier extends StateNotifier<ButtonState> {
 
 final buttonStateNotifierProvider =
     StateNotifierProvider<ButtonStateNotifier, ButtonState>(
-  (ref) => ButtonStateNotifier(),
-);
+      (ref) => ButtonStateNotifier(),
+    );

@@ -7,7 +7,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'state.freezed.dart';
 
 @freezed
-class CollectionDetailState with _$CollectionDetailState {
+abstract class CollectionDetailState with _$CollectionDetailState {
   const factory CollectionDetailState({
     Collection? collection,
     @Default([]) List<Movie> movies,
@@ -15,13 +15,15 @@ class CollectionDetailState with _$CollectionDetailState {
   }) = _CollectionDetailState;
 }
 
-final collectionDetailProvider = StateNotifierProvider.autoDispose.family<
-    CollectionDetailNotifier,
-    AsyncValue<CollectionDetailState>,
-    String>((ref, collectionId) {
-  final collectionService = ref.watch(collectionServiceProvider);
-  return CollectionDetailNotifier(collectionService, collectionId);
-});
+final collectionDetailProvider = StateNotifierProvider.autoDispose
+    .family<
+      CollectionDetailNotifier,
+      AsyncValue<CollectionDetailState>,
+      String
+    >((ref, collectionId) {
+      final collectionService = ref.watch(collectionServiceProvider);
+      return CollectionDetailNotifier(collectionService, collectionId);
+    });
 
 class CollectionDetailNotifier
     extends StateNotifier<AsyncValue<CollectionDetailState>> {
@@ -29,7 +31,7 @@ class CollectionDetailNotifier
   final String _collectionId;
 
   CollectionDetailNotifier(this._collectionService, this._collectionId)
-      : super(const AsyncValue.loading()) {
+    : super(const AsyncValue.loading()) {
     fetchCollectionDetails();
   }
 
@@ -46,12 +48,16 @@ class CollectionDetailNotifier
       final movies = results[1] as List<Movie>;
       final recommendations = results[2] as List<Movie>;
 
-      state = AsyncValue.data(CollectionDetailState(
-        collection: collection,
-        movies: movies,
-        recommendations: recommendations,
-      ));
+      if (!mounted) return;
+      state = AsyncValue.data(
+        CollectionDetailState(
+          collection: collection,
+          movies: movies,
+          recommendations: recommendations,
+        ),
+      );
     } catch (e, s) {
+      if (!mounted) return;
       state = AsyncValue.error(e, s);
     }
   }
@@ -59,12 +65,23 @@ class CollectionDetailNotifier
   Future<void> removeMovieFromCollection(String movieId) async {
     try {
       await _collectionService.removeMovieFromCollection(
-          _collectionId, movieId);
+        _collectionId,
+        movieId,
+      );
       // Update the state to reflect the removal
       state = state.whenData((currentState) {
-        final updatedMovies =
-            currentState.movies.where((movie) => movie.id != movieId).toList();
-        return currentState.copyWith(movies: updatedMovies);
+        final updatedMovies = currentState.movies
+            .where((movie) => movie.id != movieId)
+            .toList();
+        return currentState.copyWith(
+          movies: updatedMovies,
+          collection: currentState.collection?.copyWith(
+            movieCount: (currentState.collection!.movieCount - 1).clamp(
+              0,
+              999999,
+            ),
+          ),
+        );
       });
     } catch (e) {
       // Optionally handle the error, e.g., show a toast or revert the state
@@ -78,6 +95,7 @@ class CollectionDetailNotifier
       await _collectionService.deleteCollection(_collectionId);
       return true;
     } catch (e, s) {
+      if (!mounted) return false;
       state = AsyncValue.error(e, s);
       return false;
     }

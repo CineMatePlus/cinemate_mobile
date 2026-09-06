@@ -21,7 +21,7 @@ class SearchView extends ConsumerWidget {
                 ref.read(searchProvider.notifier).searchMovies(query);
               },
               decoration: InputDecoration(
-                hintText: 'Film, dizi veya oyuncu ara...',
+                hintText: 'Bir hikâye veya film konusu ara...',
                 prefixIcon: const Icon(Icons.search),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12.0),
@@ -33,9 +33,7 @@ class SearchView extends ConsumerWidget {
             child: searchResults.when(
               data: (movies) {
                 if (movies.isEmpty) {
-                  return const Center(
-                    child: Text('Arama sonucu bulunamadı.'),
-                  );
+                  return const Center(child: Text('Arama sonucu bulunamadı.'));
                 }
                 return GridView.builder(
                   padding: const EdgeInsets.all(16.0),
@@ -65,8 +63,19 @@ class SearchView extends ConsumerWidget {
                 );
               },
               loading: () => const Center(child: CircularProgressIndicator()),
-              error: (error, stack) =>
-                  const Center(child: Text('Arama sırasında bir hata oluştu.')),
+              error: (error, stack) => Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(error.toString()),
+                    TextButton(
+                      onPressed: () =>
+                          ref.read(searchProvider.notifier).retry(),
+                      child: const Text('Tekrar dene'),
+                    ),
+                  ],
+                ),
+              ),
               skipLoadingOnRefresh: true,
             ),
           ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'state.dart';
 import '../../../constants/colors.dart';
 
@@ -23,7 +24,7 @@ class CoreDropdown<T> extends ConsumerStatefulWidget {
     this.multipleSelect = false,
     String? dropdownId,
     this.theme,
-  })  : dropdownId = dropdownId ?? UniqueKey().toString();
+  }) : dropdownId = dropdownId ?? UniqueKey().toString();
 
   @override
   ConsumerState<CoreDropdown<T>> createState() => _CoreDropdownState<T>();
@@ -35,9 +36,11 @@ class _CoreDropdownState<T> extends ConsumerState<CoreDropdown<T>> {
   final TextEditingController _searchController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
-  StateNotifierProvider<CoreDropdownNotifier<dynamic>,
-          CoreDropdownState<dynamic>>
-      get _provider => coreDropdownProvider(widget.dropdownId);
+  StateNotifierProvider<
+    CoreDropdownNotifier<dynamic>,
+    CoreDropdownState<dynamic>
+  >
+  get _provider => coreDropdownProvider(widget.dropdownId);
 
   @override
   void dispose() {
@@ -49,9 +52,8 @@ class _CoreDropdownState<T> extends ConsumerState<CoreDropdown<T>> {
 
   void _handleError(String message) {
     ref.read(_provider.notifier).setError(message);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
   }
 
   Widget _buildSelectedDisplay(Map<String, DropDownViewItem<T>> selectedItems) {
@@ -157,8 +159,9 @@ class _CoreDropdownState<T> extends ConsumerState<CoreDropdown<T>> {
     try {
       final state = ref.watch(_provider);
       final typedItems = Map<String, DropDownViewItem<T>>.from(
-        state.selectedItems
-            .map((key, value) => MapEntry(key, value as DropDownViewItem<T>)),
+        state.selectedItems.map(
+          (key, value) => MapEntry(key, value as DropDownViewItem<T>),
+        ),
       );
 
       return Column(
@@ -167,10 +170,7 @@ class _CoreDropdownState<T> extends ConsumerState<CoreDropdown<T>> {
           if (state.error != null)
             Padding(
               padding: const EdgeInsets.only(bottom: 8),
-              child: Text(
-                state.error!,
-                style: TextStyle(color: AppColors.red),
-              ),
+              child: Text(state.error!, style: TextStyle(color: AppColors.red)),
             ),
           Container(
             decoration: BoxDecoration(
@@ -197,7 +197,8 @@ class _CoreDropdownState<T> extends ConsumerState<CoreDropdown<T>> {
                         Expanded(
                           child: Text(
                             _getDisplayText(typedItems),
-                            style: widget.theme?.textStyle ??
+                            style:
+                                widget.theme?.textStyle ??
                                 TextStyle(
                                   fontSize: 15,
                                   color: Colors.grey.shade700,
@@ -226,22 +227,26 @@ class _CoreDropdownState<T> extends ConsumerState<CoreDropdown<T>> {
                               decoration: InputDecoration(
                                 hintText: 'Ara...',
                                 prefixIcon: const Icon(Icons.search, size: 22),
-                                hintStyle:
-                                    TextStyle(color: Colors.grey.shade400),
+                                hintStyle: TextStyle(
+                                  color: Colors.grey.shade400,
+                                ),
                                 filled: true,
                                 fillColor: Colors.grey.shade50,
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8),
-                                  borderSide:
-                                      BorderSide(color: Colors.grey.shade200),
+                                  borderSide: BorderSide(
+                                    color: Colors.grey.shade200,
+                                  ),
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8),
-                                  borderSide:
-                                      BorderSide(color: Colors.grey.shade200),
+                                  borderSide: BorderSide(
+                                    color: Colors.grey.shade200,
+                                  ),
                                 ),
-                                contentPadding:
-                                    const EdgeInsets.symmetric(horizontal: 16),
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                ),
                               ),
                               onChanged: (value) =>
                                   setState(() => _searchQuery = value),
@@ -292,8 +297,11 @@ class _CoreDropdownState<T> extends ConsumerState<CoreDropdown<T>> {
   List<DropDownViewItem<T>> get _filteredItems {
     if (_searchQuery.isEmpty) {
       if (!widget.multipleSelect) {
-        final selectedItem =
-            ref.read(_provider).selectedItems.values.firstOrNull;
+        final selectedItem = ref
+            .read(_provider)
+            .selectedItems
+            .values
+            .firstOrNull;
         if (selectedItem != null) {
           final items = List<DropDownViewItem<T>>.from(widget.items);
           items.removeWhere((item) => item.id == selectedItem.id);
@@ -326,11 +334,8 @@ class CoreDropdownTheme {
   });
 
   static CoreDropdownTheme get defaults => CoreDropdownTheme(
-        borderColor: const Color(0xFFE0E0E0),
-        backgroundColor: Colors.white,
-        textStyle: const TextStyle(
-          fontSize: 15,
-          color: Color(0xFF616161),
-        ),
-      );
+    borderColor: const Color(0xFFE0E0E0),
+    backgroundColor: Colors.white,
+    textStyle: const TextStyle(fontSize: 15, color: Color(0xFF616161)),
+  );
 }

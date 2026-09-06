@@ -101,7 +101,9 @@ class CoreDropdownNotifier<T> extends StateNotifier<CoreDropdownState<T>> {
   }
 }
 
-final coreDropdownProvider = StateNotifierProvider.family<
-    CoreDropdownNotifier<dynamic>,
-    CoreDropdownState<dynamic>,
-    String>((ref, id) => CoreDropdownNotifier.instance(id));
+final coreDropdownProvider =
+    StateNotifierProvider.family<
+      CoreDropdownNotifier<dynamic>,
+      CoreDropdownState<dynamic>,
+      String
+    >((ref, id) => CoreDropdownNotifier.instance(id));
