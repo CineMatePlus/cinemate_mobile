@@ -59,6 +59,8 @@ void main() {
     await binding.takeScreenshot('03-semantic-search');
     await tab(2);
     await waitFor(find.text('Ece'));
+    await tester.drag(find.byType(GridView), const Offset(0, 600));
+    await tester.pumpAndSettle();
     await binding.takeScreenshot('04-similar-users');
     await tab(3);
     await waitFor(find.byType(CollectionCard));
