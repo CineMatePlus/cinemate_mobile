@@ -34,9 +34,22 @@ void main() {
       await tester.pump(const Duration(seconds: 3));
     }
 
+    Future<void> waitForPosterLoads() async {
+      // Give newly inserted network images a frame to start their requests.
+      await tester.pump(const Duration(seconds: 5));
+      for (var i = 0; i < 20; i++) {
+        if (find.byType(CircularProgressIndicator).evaluate().isEmpty) {
+          return;
+        }
+        await tester.pump(const Duration(seconds: 1));
+      }
+      fail('Movie poster loading did not finish before the screenshot.');
+    }
+
     await waitFor(find.byType(BottomNavigationBar));
     await binding.convertFlutterSurfaceToImage();
     await waitFor(find.byType(MovieCard));
+    await waitForPosterLoads();
     await binding.takeScreenshot('01-discovery');
     await tester.tap(find.byType(MovieCard).first);
     await waitFor(find.byType(MovieDetailView));
@@ -56,6 +69,7 @@ void main() {
     await tester.enterText(find.byType(TextField).first, 'space adventure');
     await tester.testTextInput.receiveAction(TextInputAction.done);
     await waitFor(find.byType(MovieCard));
+    await waitForPosterLoads();
     await binding.takeScreenshot('03-semantic-search');
     await tab(2);
     await waitFor(find.text('Ece'));
@@ -67,6 +81,7 @@ void main() {
     await binding.takeScreenshot('05-collections');
     await tester.tap(find.byType(CollectionCard).first);
     await waitFor(find.byType(MovieCard));
+    await waitForPosterLoads();
     await binding.takeScreenshot('06-collection-detail');
     await tester.tap(find.byIcon(Icons.arrow_back).first);
     await tester.pump(const Duration(seconds: 1));
