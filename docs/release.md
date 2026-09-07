@@ -23,13 +23,13 @@ If a debug build with a different signer is installed, uninstall that app first 
 
 ## Evidence and limits
 
-Normal release packaging, signature verification and emulator installation passed. Automated debug-mode tests exercised real API registration/restoration/logout and seven populated demo screens. Physical-device release acceptance and a fully recorded interactive walkthrough remain pending; screenshots are real emulator captures. Do not describe the debug acceptance as a release-device test.
+Normal release packaging, signature verification and emulator installation passed. Automated debug-mode tests exercised real API registration/restoration/logout and seven populated demo screens. A recorded Android emulator walkthrough covers the main demo flow. Physical-device release acceptance remains pending; screenshots are real emulator captures. Do not describe the debug acceptance as a release-device test.
 
 [Completion status](https://github.com/CineMatePlus/cinemate_backend/blob/main/docs/completion-status.md) records remote CI and publication gates. iOS/web/desktop are unverified.
 
 ## Presentation artifact
 
-[70-second screen tour](demo-screen-tour.mp4) is assembled from seven real emulator captures. Recreate it with `python3 scripts/make_screen_tour.py --ffmpeg=/path/to/ffmpeg`. This is a screenshot tour, not a full interactive recording.
+[Android emulator walkthrough](demo-screen-tour.mp4) is a real screen recording of the integration-test flow: discovery, film details, semantic search, similar users, collections and profile. It uses synthetic demo data and does not represent a physical-device acceptance test.
 
 ## Main integration — 6 September 2026
 

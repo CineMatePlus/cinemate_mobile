@@ -1,4 +1,4 @@
-"""Render a 70-second tour from real emulator screenshots (requires ffmpeg)."""
+"""Render a static preview from real emulator screenshots (requires ffmpeg)."""
 import argparse
 from pathlib import Path
 import subprocess
@@ -18,5 +18,5 @@ with tempfile.TemporaryDirectory() as directory:
         args.ffmpeg, '-y', '-f', 'concat', '-safe', '0', '-i', str(playlist),
         '-vf', 'scale=480:-2,fps=24', '-t', '70', '-c:v', 'libx264',
         '-pix_fmt', 'yuv420p', '-movflags', '+faststart', '-crf', '23',
-        str(root / 'docs/demo-screen-tour.mp4'),
+        str(root / 'docs/demo-screenshot-preview.mp4'),
     ], check=True)
